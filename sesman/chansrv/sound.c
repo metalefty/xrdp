@@ -361,17 +361,21 @@ sound_process_output_format(int aindex, int wFormatTag, int nChannels,
         }
     }
 #endif
+    if (wFormatTag == 0x0001)
+    {
+        LOGM((LOG_LEVEL_INFO, ("wFormatTag, pcm")));
+    }
 
     if (wFormatTag == 0x0069)
     {
-        LOG(0, ("wFormatTag, opus"));
+        LOGM((LOG_LEVEL_INFO, ("wFormatTag, opus")));
         g_client_does_opus = 1;
         g_client_opus_index = aindex;
         g_bbuf_size = 11520;
     }
     else if (wFormatTag == 0x0055)
     {
-        LOG(0, ("wFormatTag, mp3"));
+        LOGM((LOG_LEVEL_INFO, ("wFormatTag, mp3")));
         g_client_does_mp3lame = 1;
         g_client_mp3lame_index = aindex;
         g_bbuf_size = 11520;
