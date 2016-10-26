@@ -23,6 +23,7 @@
 #include <signal.h>
 #include <sys/un.h>
 
+#include "log.h"
 #include "sound.h"
 #include "thread_calls.h"
 #include "defines.h"
