@@ -553,7 +553,7 @@ sound_wave_compress_mp3lame(char *data, int data_bytes, int *format_index)
         LOG(0, ("                             encoder padding  : %d", lame_get_encoder_padding(g_lame_encoder)));
         LOG(0, ("                             mode             : %d", lame_get_mode(g_lame_encoder)));
 
-        LOGM((LOG_LEVEL_INFO, ("sound_wave_compress_mp3lame: lame config:"));
+        LOGM((LOG_LEVEL_INFO, ("sound_wave_compress_mp3lame: lame config:")));
         LOGM((LOG_LEVEL_INFO, ("                             brate            : %d", lame_get_brate(g_lame_encoder))));
         LOGM((LOG_LEVEL_INFO, ("                             compression ratio: %f", lame_get_compression_ratio(g_lame_encoder))));
         LOGM((LOG_LEVEL_INFO, ("                             encoder delay    : %d", lame_get_encoder_delay(g_lame_encoder))));
