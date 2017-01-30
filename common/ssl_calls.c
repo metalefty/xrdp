@@ -33,6 +33,7 @@
 #include "arch.h"
 #include "ssl_calls.h"
 #include "trans.h"
+#include "log.h"
 
 #if defined(OPENSSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x0090800f)
 #undef OLD_RSA_GEN1
@@ -590,8 +591,9 @@ ssl_tls_print_error(const char *func, SSL *connection, int value)
     switch (SSL_get_error(connection, value))
     {
         case SSL_ERROR_ZERO_RETURN:
-            g_writeln("ssl_tls_print_error: %s: Server closed TLS connection",
-                      func);
+            log_message(LOG_LEVEL_DEBUG,
+                        "ssl_tls_print_error: %s: Server closed TLS connection",
+                        func);
             return 1;
 
         case SSL_ERROR_WANT_READ:
@@ -599,16 +601,20 @@ ssl_tls_print_error(const char *func, SSL *connection, int value)
             return 0;
 
         case SSL_ERROR_SYSCALL:
-            g_writeln("ssl_tls_print_error: %s: I/O error", func);
+            log_message(LOG_LEVEL_DEBUG,
+                        "ssl_tls_print_error: %s: I/O error", func);
             return 1;
 
         case SSL_ERROR_SSL:
-            g_writeln("ssl_tls_print_error: %s: Failure in SSL library (protocol error?)",
-                      func);
+            log_message(LOG_LEVEL_DEBUG,
+                        "ssl_tls_print_error: %s: "
+                        "Failure in SSL library (protocol error?)",
+                        func);
             return 1;
 
         default:
-            g_writeln("ssl_tls_print_error: %s: Unknown error", func);
+            log_message(LOG_LEVEL_DEBUG,
+                        "ssl_tls_print_error: %s: Unknown error", func);
             return 1;
     }
 }
@@ -672,7 +678,8 @@ ssl_tls_accept(struct ssl_tls *self, int disableSSLv3,
     {
         if (SSL_CTX_set_cipher_list(self->ctx, tls_ciphers) == 0)
         {
-            g_writeln("ssl_tls_accept: invalid cipher options");
+            log_message(LOG_LEVEL_DEBUG,
+                        "ssl_tls_accept: invalid cipher options");
             return 1;
         }
     }
@@ -681,20 +688,23 @@ ssl_tls_accept(struct ssl_tls *self, int disableSSLv3,
 
     if (self->ctx == NULL)
     {
-        g_writeln("ssl_tls_accept: SSL_CTX_new failed");
+        log_message(LOG_LEVEL_DEBUG,
+                    "ssl_tls_accept: SSL_CTX_new failed");
         return 1;
     }
 
     if (SSL_CTX_use_RSAPrivateKey_file(self->ctx, self->key, SSL_FILETYPE_PEM)
             <= 0)
     {
-        g_writeln("ssl_tls_accept: SSL_CTX_use_RSAPrivateKey_file failed");
+        log_message(LOG_LEVEL_DEBUG,
+                    "ssl_tls_accept: SSL_CTX_use_RSAPrivateKey_file failed");
         return 1;
     }
 
     if (SSL_CTX_use_certificate_chain_file(self->ctx, self->cert) <= 0)
     {
-        g_writeln("ssl_tls_accept: SSL_CTX_use_certificate_chain_file failed");
+        log_message(LOG_LEVEL_DEBUG,
+                    "ssl_tls_accept: SSL_CTX_use_certificate_chain_file failed");
         return 1;
     }
 
@@ -702,13 +712,13 @@ ssl_tls_accept(struct ssl_tls *self, int disableSSLv3,
 
     if (self->ssl == NULL)
     {
-        g_writeln("ssl_tls_accept: SSL_new failed");
+        log_message(LOG_LEVEL_DEBUG, "ssl_tls_accept: SSL_new failed");
         return 1;
     }
 
     if (SSL_set_fd(self->ssl, self->trans->sck) < 1)
     {
-        g_writeln("ssl_tls_accept: SSL_set_fd failed");
+        log_message(LOG_LEVEL_DEBUG, "ssl_tls_accept: SSL_set_fd failed");
         return 1;
     }
 
@@ -733,7 +743,7 @@ ssl_tls_accept(struct ssl_tls *self, int disableSSLv3,
         }
     }
 
-    g_writeln("ssl_tls_accept: TLS connection accepted");
+    log_message(LOG_LEVEL_DEBUG, "ssl_tls_accept: TLS connection accepted");
 
     return 0;
 }
