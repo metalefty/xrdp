@@ -82,6 +82,7 @@ xrdp_channel_init(struct xrdp_channel *self, struct stream *s)
 {
     if (xrdp_sec_init(self->sec_layer, s) != 0)
     {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
         return 1;
     }
 

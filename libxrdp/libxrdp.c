@@ -1243,6 +1243,7 @@ libxrdp_send_to_channel(struct xrdp_session *session, int channel_id,
 
     if (xrdp_channel_init(chan, s) != 0)
     {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
         free_stream(s);
         return 1;
     }
