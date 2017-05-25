@@ -245,6 +245,7 @@ xrdp_process_main_loop(struct xrdp_process *self)
 
     if (libxrdp_process_incoming(self->session) == 0)
     {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
         init_stream(self->server_trans->in_s, 32 * 1024);
 
         term_obj = g_get_term_event();
@@ -271,24 +272,29 @@ xrdp_process_main_loop(struct xrdp_process *self)
 
             if (g_is_wait_obj_set(term_obj)) /* term */
             {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
                 break;
             }
 
             if (g_is_wait_obj_set(self->self_term_event))
             {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
                 break;
             }
 
             if (xrdp_wm_check_wait_objs(self->wm) != 0)
             {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
                 break;
             }
 
             if (trans_check_wait_objs(self->server_trans) != 0)
             {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
                 break;
             }
         }
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
         /* send disconnect message if possible */
         libxrdp_disconnect(self->session);
     }
