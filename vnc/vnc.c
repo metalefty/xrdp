@@ -774,6 +774,7 @@ lib_clip_data(struct vnc *v)
     make_stream(s);
     init_stream(s, 8192);
     error = trans_force_read_s(v->trans, s, 7);
+    log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
 
     if (error == 0)
     {
@@ -782,6 +783,7 @@ lib_clip_data(struct vnc *v)
         make_stream(v->clip_data_s);
         init_stream(v->clip_data_s, size);
         error = trans_force_read_s(v->trans, v->clip_data_s, size);
+    log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
     }
 
     if (error == 0)
@@ -804,6 +806,7 @@ lib_clip_data(struct vnc *v)
         size = (int)(out_s->end - out_s->data);
         error = v->server_send_to_channel(v, v->clip_chanid, out_s->data, size, size, 3);
         free_stream(out_s);
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
     }
 
     free_stream(s);
