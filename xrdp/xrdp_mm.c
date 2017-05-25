@@ -3237,16 +3237,20 @@ server_send_to_channel(struct xrdp_mod *mod, int channel_id,
 
     if (is_channel_allowed(wm, channel_id))
     {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
         if (wm->mm->usechansrv)
         {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
             return 1;
         }
 
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
         return libxrdp_send_to_channel(wm->session, channel_id, data, data_len,
                                        total_data_len, flags);
     }
     else
     {
+        log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
         return 1;
     }
 }
