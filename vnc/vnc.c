@@ -807,6 +807,7 @@ lib_clip_data(struct vnc *v)
     }
 
     free_stream(s);
+    log_message(LOG_LEVEL_DEBUG, "lib_clip_data: error=%d", error);
     return error;
 }
 
