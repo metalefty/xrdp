@@ -1216,7 +1216,7 @@ libxrdp_get_channel_id(struct xrdp_session *session, const char *name)
 
         if (channel_item != 0)
         {
-	log_message(LOG_LEVEL_DEBUG, "%s:%d channel_item_name=%s", __FILE__, __LINE__, channel_item->name);
+	log_message(LOG_LEVEL_DEBUG, "%s:%d name=%s channel_item_name=%s", __FILE__, __LINE__, name, channel_item->name);
             if (g_strcasecmp(name, channel_item->name) == 0)
             {
                 return index;
