@@ -23,6 +23,7 @@
 #endif
 
 #include "libxrdp.h"
+#include "log.h"
 #include "xrdp_orders_rail.h"
 
 #define LOG_LEVEL 1
