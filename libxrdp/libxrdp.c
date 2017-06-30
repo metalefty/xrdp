@@ -1207,6 +1207,7 @@ libxrdp_get_channel_id(struct xrdp_session *session, const char *name)
 
     count = mcs->channel_list->count;
 
+	log_message(LOG_LEVEL_DEBUG, "%s:%d channel_name=%s", __FILE__, __LINE__, name);
     for (index = 0; index < count; index++)
     {
         channel_item = (struct mcs_channel_item *)
@@ -1214,12 +1215,14 @@ libxrdp_get_channel_id(struct xrdp_session *session, const char *name)
 
         if (channel_item != 0)
         {
+	log_message(LOG_LEVEL_DEBUG, "%s:%d channel_item_name=%s", __FILE__, __LINE__, channel_item->name);
             if (g_strcasecmp(name, channel_item->name) == 0)
             {
                 return index;
             }
         }
     }
+	log_message(LOG_LEVEL_DEBUG, "%s:%d", __FILE__, __LINE__);
 
     return -1;
 }
