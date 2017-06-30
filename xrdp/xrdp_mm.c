@@ -3213,18 +3213,18 @@ server_query_channel(struct xrdp_mod *mod, int index, char *channel_name,
 int
 server_get_channel_id(struct xrdp_mod *mod, const char *name)
 {
-	log_mesage(LOG_LEVEL_DEBUG, "%s:%d", __FILE__, __LINE__);
+	log_message(LOG_LEVEL_DEBUG, "%s:%d", __FILE__, __LINE__);
     struct xrdp_wm *wm;
 
     wm = (struct xrdp_wm *)(mod->wm);
 
     if (wm->mm->usechansrv)
     {
-	log_mesage(LOG_LEVEL_DEBUG, "%s:%d", __FILE__, __LINE__);
+	log_message(LOG_LEVEL_DEBUG, "%s:%d", __FILE__, __LINE__);
         return -1;
     }
 
-	log_mesage(LOG_LEVEL_DEBUG, "%s:%d", __FILE__, __LINE__);
+	log_message(LOG_LEVEL_DEBUG, "%s:%d", __FILE__, __LINE__);
     return libxrdp_get_channel_id(wm->session, name);
 }
 
