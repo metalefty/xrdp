@@ -952,6 +952,7 @@ lib_open_clip_channel(struct vnc *v)
     char init_data[12] = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     v->clip_chanid = v->server_get_channel_id(v, "cliprdr");
+    log_message(LOG_LEVEL_DEBUG, "lib_open_clip_channel: clip_chanid=%d", v->clip_chanid);
 
     if (v->clip_chanid >= 0)
     {
