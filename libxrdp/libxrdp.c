@@ -1208,8 +1208,6 @@ libxrdp_get_channel_id(struct xrdp_session *session, const char *name)
 
     count = mcs->channel_list->count;
 
-	log_message(LOG_LEVEL_DEBUG, "%s:%d channel_count=%s", __FILE__, __LINE__, count);
-	log_message(LOG_LEVEL_DEBUG, "%s:%d channel_name=%s", __FILE__, __LINE__, name);
     for (index = 0; index < count; index++)
     {
         channel_item = (struct mcs_channel_item *)
