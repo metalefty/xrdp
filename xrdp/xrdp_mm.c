@@ -3244,10 +3244,12 @@ server_send_to_channel(struct xrdp_mod *mod, int channel_id,
         if (wm->mm->usechansrv)
         {
         log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
-            return 1;
+	/* sesman-Xvnc reaches here */
+            return 0;
         }
 
         log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
+	/* vnc-proxy mode reaches here */
         return libxrdp_send_to_channel(wm->session, channel_id, data, data_len,
                                        total_data_len, flags);
     }
