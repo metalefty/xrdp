@@ -135,6 +135,7 @@ lib_process_channel_data(struct vnc *v, int chanid, int flags, int size,
                 out_uint8s(out_s, 4);    // pad
                 s_mark_end(out_s);
                 length = (int)(out_s->end - out_s->data);
+    		log_message(LOG_LEVEL_DEBUG, "debug: %s:%d", __FILE__, __LINE__);
                 v->server_send_to_channel(v, v->clip_chanid, out_s->data,
                                           length, length, 3);
                 free_stream(out_s);
