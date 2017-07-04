@@ -806,7 +806,6 @@ lib_clip_data(struct vnc *v)
         out_uint8s(out_s, 4);
         s_mark_end(out_s);
         size = (int)(out_s->end - out_s->data);
-	log_message(LOG_LEVEL_DEBUG, "debug: v->clip_chanid=%d, dize=%d",v->clip_chanid,size);
 
         if (v->clip_chanid < 0)
         {
