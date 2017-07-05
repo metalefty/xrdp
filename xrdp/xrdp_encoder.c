@@ -26,6 +26,7 @@
 #include "xrdp.h"
 #include "thread_calls.h"
 #include "fifo.h"
+#include "log.h"
 
 #ifdef XRDP_RFXCODEC
 #include "rfxcodec_encode.h"
@@ -93,7 +94,7 @@ xrdp_encoder_create(struct xrdp_mm *mm)
 #ifdef XRDP_RFXCODEC
     else if (client_info->rfx_codec_id != 0)
     {
-        LLOGLN(0, ("xrdp_encoder_create: starting rfx codec session"));
+        log_message(LOG_LEVEL_TRACE, "xrdp_encoder_create: starting rfx codec session");
         self->codec_id = client_info->rfx_codec_id;
         self->in_codec_mode = 1;
         client_info->capture_code = 2;
