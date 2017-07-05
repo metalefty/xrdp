@@ -81,7 +81,7 @@ xrdp_encoder_create(struct xrdp_mm *mm)
 
     if (client_info->jpeg_codec_id != 0)
     {
-        LLOGLN(0, ("xrdp_encoder_create: starting jpeg codec session"));
+        log_message(LOG_LEVEL_TRACE, "xrdp_encoder_create: starting jpeg codec session");
         self->codec_id = client_info->jpeg_codec_id;
         self->in_codec_mode = 1;
         self->codec_quality = client_info->jpeg_prop[0];
@@ -106,7 +106,7 @@ xrdp_encoder_create(struct xrdp_mm *mm)
 #endif
     else if (client_info->h264_codec_id != 0)
     {
-        LLOGLN(0, ("xrdp_encoder_create: starting h264 codec session"));
+        log_message(LOG_LEVEL_TRACE, "xrdp_encoder_create: starting h264 codec session");
         self->codec_id = client_info->h264_codec_id;
         self->in_codec_mode = 1;
         client_info->capture_code = 3;
@@ -121,7 +121,8 @@ xrdp_encoder_create(struct xrdp_mm *mm)
         return 0;
     }
 
-    LLOGLN(0, ("init_xrdp_encoder: initializing encoder codec_id %d", self->codec_id));
+    log_message(LOG_LEVEL_TRACE,
+                "init_xrdp_encoder: initializing encoder codec_id %d", self->codec_id);
 
     /* setup required FIFOs */
     self->fifo_to_proc = fifo_create();
@@ -325,9 +326,10 @@ process_enc_rfx(struct xrdp_encoder *self, XRDP_ENC_DATA *enc)
     struct rfx_rect *rfxrects;
     int alloc_bytes;
 
-    LLOGLN(10, ("process_enc_rfx:"));
-    LLOGLN(10, ("process_enc_rfx: num_crects %d num_drects %d",
-           enc->num_crects, enc->num_drects));
+    log_message(LOG_LEVEL_TRACE, "process_enc_rfx:");
+    log_message(LOG_LEVEL_TRACE,
+                "process_enc_rfx: num_crects %d num_drects %d",
+                enc->num_crects, enc->num_drects);
     fifo_processed = self->fifo_processed;
     mutex = self->mutex;
     event_processed = self->xrdp_encoder_event_processed;
