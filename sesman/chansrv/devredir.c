@@ -110,7 +110,7 @@ void xfuse_devredir_cb_write_file(void *vp, const char *buf, size_t length);
 
 /*****************************************************************************/
 int
-dev_redir_init(void)
+devredir_init(void)
 {
     struct  stream *s;
     int     bytes;
@@ -157,7 +157,7 @@ dev_redir_init(void)
 
 /*****************************************************************************/
 int
-dev_redir_deinit(void)
+devredir_deinit(void)
 {
     scard_deinit();
     return 0;
@@ -170,7 +170,7 @@ dev_redir_deinit(void)
  *****************************************************************************/
 
 int
-dev_redir_data_in(struct stream *s, int chan_id, int chan_flags, int length,
+devredir_data_in(struct stream *s, int chan_id, int chan_flags, int length,
                   int total_length)
 {
     struct stream *ls;
@@ -241,25 +241,25 @@ dev_redir_data_in(struct stream *s, int chan_id, int chan_flags, int length,
                 case RDP_CLIENT_60_61:
                     break;
             }
-            // LK_TODO dev_redir_send_server_clientID_confirm();
+            // LK_TODO devredir_send_server_clientID_confirm();
             break;
 
         case PAKID_CORE_CLIENT_NAME:
             /* client is telling us its computer name; do we even care? */
 
             /* let client know login was successful */
-            dev_redir_send_server_user_logged_on();
+            devredir_send_server_user_logged_on();
             usleep(1000 * 100);
 
             /* let client know our capabilities */
-            dev_redir_send_server_core_cap_req();
+            devredir_send_server_core_cap_req();
 
             /* send confirm clientID */
-            dev_redir_send_server_clientID_confirm();
+            devredir_send_server_clientID_confirm();
             break;
 
         case PAKID_CORE_CLIENT_CAPABILITY:
-            dev_redir_proc_client_core_cap_resp(ls);
+            devredir_proc_client_core_cap_resp(ls);
             break;
 
         case PAKID_CORE_DEVICELIST_ANNOUNCE:
@@ -267,7 +267,7 @@ dev_redir_data_in(struct stream *s, int chan_id, int chan_flags, int length,
             break;
 
         case PAKID_CORE_DEVICE_IOCOMPLETION:
-            dev_redir_proc_device_iocompletion(ls);
+            devredir_proc_device_iocompletion(ls);
             break;
 
         default:
@@ -288,7 +288,7 @@ done:
 
 /*****************************************************************************/
 int
-dev_redir_get_wait_objs(tbus *objs, int *count, int *timeout)
+devredir_get_wait_objs(tbus *objs, int *count, int *timeout)
 {
     if (g_is_smartcard_redir_supported)
     {
@@ -299,7 +299,7 @@ dev_redir_get_wait_objs(tbus *objs, int *count, int *timeout)
 
 /*****************************************************************************/
 int
-dev_redir_check_wait_objs(void)
+devredir_check_wait_objs(void)
 {
     if (g_is_smartcard_redir_supported)
     {
@@ -312,7 +312,7 @@ dev_redir_check_wait_objs(void)
  * @brief let client know our capabilities
  *****************************************************************************/
 
-void dev_redir_send_server_core_cap_req(void)
+void devredir_send_server_core_cap_req(void)
 {
     struct stream *s;
     int            bytes;
@@ -372,7 +372,7 @@ void dev_redir_send_server_core_cap_req(void)
     xstream_free(s);
 }
 
-void dev_redir_send_server_clientID_confirm(void)
+void devredir_send_server_clientID_confirm(void)
 {
     struct stream *s;
     int            bytes;
@@ -393,7 +393,7 @@ void dev_redir_send_server_clientID_confirm(void)
     xstream_free(s);
 }
 
-void dev_redir_send_server_user_logged_on(void)
+void devredir_send_server_user_logged_on(void)
 {
     struct stream *s;
     int            bytes;
@@ -435,7 +435,7 @@ void devredir_send_server_device_announce_resp(tui32 device_id)
  * @return 0 on success, -1 on failure
  *****************************************************************************/
 
-int dev_redir_send_drive_create_request(tui32 device_id,
+int devredir_send_drive_create_request(tui32 device_id,
                                         const char *path,
                                         tui32 DesiredAccess,
                                         tui32 CreateOptions,
@@ -481,10 +481,10 @@ int dev_redir_send_drive_create_request(tui32 device_id,
 }
 
 /**
- * Close a request previously created by dev_redir_send_drive_create_request()
+ * Close a request previously created by devredir_send_drive_create_request()
  *****************************************************************************/
 
-int dev_redir_send_drive_close_request(tui16 Component, tui16 PacketId,
+int devredir_send_drive_close_request(tui16 Component, tui16 PacketId,
                                        tui32 DeviceId,
                                        tui32 FileId,
                                        tui32 CompletionId,
@@ -520,7 +520,7 @@ int dev_redir_send_drive_close_request(tui16 Component, tui16 PacketId,
  *
  *****************************************************************************/
 // LK_TODO Path needs to be Unicode
-void dev_redir_send_drive_dir_request(IRP *irp, tui32 device_id,
+void devredir_send_drive_dir_request(IRP *irp, tui32 device_id,
                                       tui32 InitialQuery, char *Path)
 {
     struct stream *s;
@@ -586,7 +586,7 @@ void dev_redir_send_drive_dir_request(IRP *irp, tui32 device_id,
  *
  * @param   s   stream containing client's response
  *****************************************************************************/
-void dev_redir_proc_client_core_cap_resp(struct stream *s)
+void devredir_proc_client_core_cap_resp(struct stream *s)
 {
     int i;
     tui16 num_caps;
@@ -721,7 +721,7 @@ void devredir_proc_client_devlist_announce_req(struct stream *s)
 }
 
 void
-dev_redir_proc_device_iocompletion(struct stream *s)
+devredir_proc_device_iocompletion(struct stream *s)
 {
     FUSE_DATA *fuse_data = NULL;
     IRP       *irp       = NULL;
@@ -773,7 +773,7 @@ dev_redir_proc_device_iocompletion(struct stream *s)
         log_debug("got CID_CREATE_DIR_REQ IoStatus=0x%x FileId=%d",
                   IoStatus, irp->FileId);
 
-        dev_redir_send_drive_dir_request(irp, DeviceId, 1, irp->pathname);
+        devredir_send_drive_dir_request(irp, DeviceId, 1, irp->pathname);
         break;
 
     case CID_CREATE_OPEN_REQ:
@@ -838,7 +838,7 @@ dev_redir_proc_device_iocompletion(struct stream *s)
     case CID_DIRECTORY_CONTROL:
         log_debug("got CID_DIRECTORY_CONTROL");
 
-        dev_redir_proc_query_dir_response(irp, s, DeviceId,
+        devredir_proc_query_dir_response(irp, s, DeviceId,
                                           CompletionId, IoStatus);
         break;
 
@@ -885,7 +885,7 @@ done:
 }
 
 void
-dev_redir_proc_query_dir_response(IRP *irp,
+devredir_proc_query_dir_response(IRP *irp,
                                   struct stream *s_in,
                                   tui32 DeviceId,
                                   tui32 CompletionId,
@@ -915,7 +915,7 @@ dev_redir_proc_query_dir_response(IRP *irp,
         fuse_data = devredir_fuse_data_dequeue(irp);
         xfuse_devredir_cb_enum_dir_done(fuse_data->data_ptr, status);
         irp->completion_type = CID_CLOSE;
-        dev_redir_send_drive_close_request(RDPDR_CTYP_CORE,
+        devredir_send_drive_close_request(RDPDR_CTYP_CORE,
                                            PAKID_CORE_DEVICE_IOREQUEST,
                                            DeviceId,
                                            irp->FileId,
@@ -988,7 +988,7 @@ dev_redir_proc_query_dir_response(IRP *irp,
         xfuse_devredir_cb_enum_dir(fuse_data->data_ptr, xinode);
     }
 
-    dev_redir_send_drive_dir_request(irp, DeviceId, 0, NULL);
+    devredir_send_drive_dir_request(irp, DeviceId, 0, NULL);
 }
 
 /**
@@ -1002,7 +1002,7 @@ dev_redir_proc_query_dir_response(IRP *irp,
  *****************************************************************************/
 
 int
-dev_redir_get_dir_listing(void *fusep, tui32 device_id, const char *path)
+devredir_get_dir_listing(void *fusep, tui32 device_id, const char *path)
 {
     tui32  DesiredAccess;
     tui32  CreateOptions;
@@ -1030,17 +1030,17 @@ dev_redir_get_dir_listing(void *fusep, tui32 device_id, const char *path)
     CreateOptions = CO_FILE_DIRECTORY_FILE | CO_FILE_SYNCHRONOUS_IO_NONALERT;
     CreateDisposition = CD_FILE_OPEN;
 
-    rval = dev_redir_send_drive_create_request(device_id, irp->pathname,
+    rval = devredir_send_drive_create_request(device_id, irp->pathname,
                                                DesiredAccess, CreateOptions,
                                                CreateDisposition,
                                                irp->CompletionId);
 
     log_debug("looking for device_id=%d path=%s", device_id, irp->pathname);
 
-    /* when we get a response to dev_redir_send_drive_create_request(), we   */
-    /* call dev_redir_send_drive_dir_request(), which needs the following    */
+    /* when we get a response to devredir_send_drive_create_request(), we   */
+    /* call devredir_send_drive_dir_request(), which needs the following    */
     /* at the end of the path argument                                       */
-    if (dev_redir_string_ends_with(irp->pathname, '\\'))
+    if (devredir_string_ends_with(irp->pathname, '\\'))
         strcat(irp->pathname, "*");
     else
         strcat(irp->pathname, "\\*");
@@ -1049,7 +1049,7 @@ dev_redir_get_dir_listing(void *fusep, tui32 device_id, const char *path)
 }
 
 int
-dev_redir_file_open(void *fusep, tui32 device_id, const char *path,
+devredir_file_open(void *fusep, tui32 device_id, const char *path,
                     int mode, int type, const char *gen_buf)
 {
     tui32  DesiredAccess;
@@ -1122,7 +1122,7 @@ dev_redir_file_open(void *fusep, tui32 device_id, const char *path,
 #endif
     }
 
-    rval = dev_redir_send_drive_create_request(device_id, path,
+    rval = devredir_send_drive_create_request(device_id, path,
                                                DesiredAccess, CreateOptions,
                                                CreateDisposition,
                                                irp->CompletionId);
@@ -1153,7 +1153,7 @@ int devredir_file_close(void *fusep, tui32 device_id, tui32 FileId)
     irp->DeviceId = device_id;
     devredir_fuse_data_enqueue(irp, fusep);
 
-    return dev_redir_send_drive_close_request(RDPDR_CTYP_CORE,
+    return devredir_send_drive_close_request(RDPDR_CTYP_CORE,
                                               PAKID_CORE_DEVICE_IOREQUEST,
                                               device_id,
                                               FileId,
@@ -1195,7 +1195,7 @@ devredir_rmdir_or_file(void *fusep, tui32 device_id, const char *path, int mode)
     //CreateDisposition = CD_FILE_OPEN; // WAS 1
     CreateDisposition = 0x01; /* got this value from windows */
 
-    rval = dev_redir_send_drive_create_request(device_id, path,
+    rval = devredir_send_drive_create_request(device_id, path,
                                                DesiredAccess, CreateOptions,
                                                CreateDisposition,
                                                irp->CompletionId);
@@ -1261,7 +1261,7 @@ devredir_file_read(void *fusep, tui32 DeviceId, tui32 FileId,
 }
 
 int
-dev_redir_file_write(void *fusep, tui32 DeviceId, tui32 FileId,
+devredir_file_write(void *fusep, tui32 DeviceId, tui32 FileId,
                      const char *buf, int Length, tui64 Offset)
 {
     struct stream *s;
@@ -1514,7 +1514,7 @@ devredir_cvt_from_unicode_len(char *path, char *unicode, int len)
 }
 
 int
-dev_redir_string_ends_with(char *string, char c)
+devredir_string_ends_with(char *string, char c)
 {
     int len;
 
@@ -1586,7 +1586,7 @@ devredir_proc_cid_rmdir_or_file_resp(IRP *irp, tui32 IoStatus)
     }
 
     irp->completion_type = CID_CLOSE;
-    dev_redir_send_drive_close_request(RDPDR_CTYP_CORE,
+    devredir_send_drive_close_request(RDPDR_CTYP_CORE,
                                        PAKID_CORE_DEVICE_IOREQUEST,
                                        irp->DeviceId,
                                        irp->FileId,
@@ -1668,7 +1668,7 @@ devredir_proc_cid_rename_file_resp(IRP *irp, tui32 IoStatus)
     }
 
     irp->completion_type = CID_CLOSE;
-    dev_redir_send_drive_close_request(RDPDR_CTYP_CORE,
+    devredir_send_drive_close_request(RDPDR_CTYP_CORE,
                                        PAKID_CORE_DEVICE_IOREQUEST,
                                        irp->DeviceId,
                                        irp->FileId,

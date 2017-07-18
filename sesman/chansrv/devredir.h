@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-// LK_TODO dev_redir_xxx should become devredir_xxx
-
 #if !defined(DEVREDIR_H)
 #define DEVREDIR_H
 
@@ -31,31 +29,31 @@ FUSE_DATA *devredir_fuse_data_peek(IRP *irp);
 FUSE_DATA *devredir_fuse_data_dequeue(IRP *irp);
 int   devredir_fuse_data_enqueue(IRP *irp, void *vp);
 
-int dev_redir_init(void);
-int dev_redir_deinit(void);
+int devredir_init(void);
+int devredir_deinit(void);
 
-int dev_redir_data_in(struct stream* s, int chan_id, int chan_flags,
+int devredir_data_in(struct stream* s, int chan_id, int chan_flags,
                              int length, int total_length);
 
-int dev_redir_get_wait_objs(tbus* objs, int* count, int* timeout);
-int dev_redir_check_wait_objs(void);
+int devredir_get_wait_objs(tbus* objs, int* count, int* timeout);
+int devredir_check_wait_objs(void);
 
-void dev_redir_send_server_core_cap_req(void);
-void dev_redir_send_server_clientID_confirm(void);
-void dev_redir_send_server_user_logged_on(void);
+void devredir_send_server_core_cap_req(void);
+void devredir_send_server_clientID_confirm(void);
+void devredir_send_server_user_logged_on(void);
 void devredir_send_server_device_announce_resp(tui32 device_id);
 
-void dev_redir_send_drive_dir_request(IRP *irp, tui32 device_id,
+void devredir_send_drive_dir_request(IRP *irp, tui32 device_id,
                                       tui32 InitialQuery, char *Path);
 
-int  dev_redir_send_drive_create_request(tui32 device_id,
+int  devredir_send_drive_create_request(tui32 device_id,
                                          const char *path,
                                          tui32 DesiredAccess,
                                          tui32 CreateOptions,
                                          tui32 CreateDisposition,
                                          tui32 completion_id);
 
-int dev_redir_send_drive_close_request(tui16 Component, tui16 PacketId,
+int devredir_send_drive_close_request(tui16 Component, tui16 PacketId,
                                        tui32 DeviceId,
                                        tui32 FileId,
                                        tui32 CompletionId,
@@ -64,10 +62,10 @@ int dev_redir_send_drive_close_request(tui16 Component, tui16 PacketId,
                                        int pad_len);
 
 void devredir_proc_client_devlist_announce_req(struct stream *s);
-void dev_redir_proc_client_core_cap_resp(struct stream *s);
-void dev_redir_proc_device_iocompletion(struct stream *s);
+void devredir_proc_client_core_cap_resp(struct stream *s);
+void devredir_proc_device_iocompletion(struct stream *s);
 
-void dev_redir_proc_query_dir_response(IRP *irp,
+void devredir_proc_query_dir_response(IRP *irp,
                                        struct stream *s,
                                        tui32 DeviceId,
                                        tui32 CompletionId,
@@ -84,7 +82,7 @@ void devredir_insert_DeviceIoRequest(struct stream *s,
 void devredir_cvt_slash(char *path);
 void devredir_cvt_to_unicode(char *unicode, const char *path);
 void devredir_cvt_from_unicode_len(char *path, char *unicode, int len);
-int  dev_redir_string_ends_with(char *string, char c);
+int  devredir_string_ends_with(char *string, char c);
 
 void devredir_insert_RDPDR_header(struct stream *s, tui16 Component,
                                   tui16 PacketId);
@@ -95,9 +93,9 @@ void devredir_proc_cid_rename_file(IRP *irp, tui32 IoStatus);
 void devredir_proc_cid_rename_file_resp(IRP *irp, tui32 IoStatus);
 
 /* called from FUSE module */
-int dev_redir_get_dir_listing(void *fusep, tui32 device_id, const char *path);
+int devredir_get_dir_listing(void *fusep, tui32 device_id, const char *path);
 
-int dev_redir_file_open(void *fusep, tui32 device_id, const char *path,
+int devredir_file_open(void *fusep, tui32 device_id, const char *path,
                         int mode, int type, const char *gen_buf);
 
 int devredir_file_close(void *fusep, tui32 device_id, tui32 file_id);
@@ -106,7 +104,7 @@ int devredir_file_read(void *fusep, tui32 device_id, tui32 FileId,
                         tui32 Length, tui64 Offset);
 
 int
-dev_redir_file_write(void *fusep, tui32 DeviceId, tui32 FileId,
+devredir_file_write(void *fusep, tui32 DeviceId, tui32 FileId,
                      const char *buf, int Length, tui64 Offset);
 
 int

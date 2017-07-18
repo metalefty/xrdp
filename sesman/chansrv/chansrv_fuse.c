@@ -661,7 +661,7 @@ int xfuse_create_share(tui32 device_id, const char *dirname)
     fip->name[1023] = 0;
     fip->device_id = device_id;
 
-    dev_redir_get_dir_listing((void *) fip, device_id, "\\");
+    devredir_get_dir_listing((void *) fip, device_id, "\\");
 #endif
 
     return 0;
@@ -2233,7 +2233,7 @@ static void xfuse_remove_dir_or_file(fuse_req_t req, fuse_ino_t parent,
         /* get dev_redir to open the remote file */
         if (devredir_rmdir_or_file((void *) fip, device_id, "\\", O_RDWR))
         {
-            log_error("failed to send dev_redir_open_file() cmd");
+            log_error("failed to send devredir_open_file() cmd");
             fuse_reply_err(req, EREMOTEIO);
             free(fip);
             return;
@@ -2243,7 +2243,7 @@ static void xfuse_remove_dir_or_file(fuse_req_t req, fuse_ino_t parent,
     {
         if (devredir_rmdir_or_file((void *) fip, device_id, cptr, O_RDWR))
         {
-            log_error("failed to send dev_redir_get_dir_listing() cmd");
+            log_error("failed to send devredir_get_dir_listing() cmd");
             fuse_reply_err(req, EREMOTEIO);
             free(fip);
             return;
@@ -2366,10 +2366,10 @@ static void xfuse_cb_rename(fuse_req_t req,
     if ((cptr = strchr(old_full_path, '/')) == NULL)
     {
         /* get dev_redir to open the remote file */
-        if (dev_redir_file_open((void *) fip, device_id, "\\",
+        if (devredir_file_open((void *) fip, device_id, "\\",
                                 O_RDWR, S_IFREG | OP_RENAME_FILE, cp))
         {
-            log_error("failed to send dev_redir_file_open() cmd");
+            log_error("failed to send devredir_file_open() cmd");
             fuse_reply_err(req, EREMOTEIO);
             free(fip);
             return;
@@ -2377,10 +2377,10 @@ static void xfuse_cb_rename(fuse_req_t req,
     }
     else
     {
-        if (dev_redir_file_open((void *) fip, device_id, cptr,
+        if (devredir_file_open((void *) fip, device_id, cptr,
                                 O_RDWR, S_IFREG | OP_RENAME_FILE, cp))
         {
-            log_error("failed to send dev_redir_file_open() cmd");
+            log_error("failed to send devredir_file_open() cmd");
             fuse_reply_err(req, EREMOTEIO);
             free(fip);
             return;
@@ -2472,19 +2472,19 @@ static void xfuse_create_dir_or_file(fuse_req_t req, fuse_ino_t parent,
     if ((cptr = strchr(full_path, '/')) == NULL)
     {
        /* get dev_redir to open the remote file */
-       if (dev_redir_file_open((void *) fip, device_id, "\\",
+       if (devredir_file_open((void *) fip, device_id, "\\",
                                O_CREAT, type, NULL))
        {
-           log_error("failed to send dev_redir_open_file() cmd");
+           log_error("failed to send devredir_open_file() cmd");
            fuse_reply_err(req, EREMOTEIO);
        }
     }
     else
     {
-       if (dev_redir_file_open((void *) fip, device_id, cptr,
+       if (devredir_file_open((void *) fip, device_id, cptr,
                                O_CREAT, type, NULL))
        {
-           log_error("failed to send dev_redir_get_dir_listing() cmd");
+           log_error("failed to send devredir_get_dir_listing() cmd");
            fuse_reply_err(req, EREMOTEIO);
        }
     }
@@ -2565,19 +2565,19 @@ static void xfuse_cb_open(fuse_req_t req, fuse_ino_t ino,
     if ((cptr = strchr(full_path, '/')) == NULL)
     {
        /* get dev_redir to open the remote file */
-       if (dev_redir_file_open((void *) fip, device_id, "\\",
+       if (devredir_file_open((void *) fip, device_id, "\\",
                                fi->flags, S_IFREG, NULL))
        {
-           log_error("failed to send dev_redir_open_file() cmd");
+           log_error("failed to send devredir_open_file() cmd");
            fuse_reply_err(req, EREMOTEIO);
        }
     }
     else
     {
-       if (dev_redir_file_open((void *) fip, device_id, cptr,
+       if (devredir_file_open((void *) fip, device_id, cptr,
                                fi->flags, S_IFREG, NULL))
        {
-           log_error("failed to send dev_redir_get_dir_listing() cmd");
+           log_error("failed to send devredir_get_dir_listing() cmd");
            fuse_reply_err(req, EREMOTEIO);
        }
     }
@@ -2778,7 +2778,7 @@ static void xfuse_cb_write(fuse_req_t req, fuse_ino_t ino, const char *buf,
     log_debug("+++ created XFUSE_INFO=%p XFUSE_INFO->fi=%p XFUSE_INFO->fi->fh=0x%llx",
               fusep, fusep->fi, (long long) fusep->fi->fh);
 
-    dev_redir_file_write(fusep, fh->DeviceId, fh->FileId, buf, size, off);
+    devredir_file_write(fusep, fh->DeviceId, fh->FileId, buf, size, off);
     log_debug("exiting");
 }
 
@@ -3009,17 +3009,17 @@ do_remote_lookup:
     if ((cptr = strchr(full_path, '/')) == NULL)
     {
         /* enumerate root dir */
-        if (dev_redir_get_dir_listing((void *) fip, device_id, "\\"))
+        if (devredir_get_dir_listing((void *) fip, device_id, "\\"))
         {
-            log_error("failed to send dev_redir_get_dir_listing() cmd");
+            log_error("failed to send devredir_get_dir_listing() cmd");
             fuse_reply_buf(req, NULL, 0);
         }
     }
     else
     {
-        if (dev_redir_get_dir_listing((void *) fip, device_id, cptr))
+        if (devredir_get_dir_listing((void *) fip, device_id, cptr))
         {
-            log_error("failed to send dev_redir_get_dir_listing() cmd");
+            log_error("failed to send devredir_get_dir_listing() cmd");
             fuse_reply_buf(req, NULL, 0);
         }
     }
