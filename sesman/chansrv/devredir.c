@@ -710,8 +710,20 @@ void devredir_proc_client_devlist_announce_req(struct stream *s)
                 scard_device_announce(g_device_id);
                 break;
 
-            /* we don't yet support these devices */
             case RDPDR_DTYP_SERIAL:
+                /* get preferred DOS name */
+                for (j = 0; j < 8; j++)
+                {
+                    preferred_dos_name[j] = *s->p++;
+                }
+
+                /* DOS names that are 8 chars long are not NULL terminated */
+                preferred_dos_name[8] = 0;
+
+                log_debug("device_type=SERIAL device_id=0x%x dosname=%s",
+                          g_device_id, preferred_dos_name);
+		break;
+            /* we don't yet support these devices */
             case RDPDR_DTYP_PARALLEL:
             case RDPDR_DTYP_PRINT:
                 log_debug("unsupported dev: 0x%x", device_type);
