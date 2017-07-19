@@ -30,6 +30,7 @@
 
 #include "arch.h"
 #include "os_calls.h"
+#include "log.h"
 
 #include <stdio.h>
 #include <security/pam_appl.h>
@@ -99,6 +100,7 @@ get_service_name(char *service_name)
     {
         g_strncpy(service_name, "gdm", 255);
     }
+    log_message(LOG_LEVEL_DEBUG, "get_service_name: service_name=%s", service_name);
 }
 
 /******************************************************************************/
