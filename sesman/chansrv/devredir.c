@@ -720,8 +720,13 @@ void devredir_proc_client_devlist_announce_req(struct stream *s)
                 /* DOS names that are 8 chars long are not NULL terminated */
                 preferred_dos_name[8] = 0;
 
-                log_debug("device_type=SERIAL device_id=0x%x dosname=%s",
-                          g_device_id, preferred_dos_name);
+                log_debug("device_type=SERIAL device_id=0x%x dosname=%s "
+                          "device_data_len=%d full_name=%s", g_device_id,
+                          preferred_dos_name,
+                          device_data_len, g_full_name_for_filesystem);
+
+                devredir_send_server_device_announce_resp(g_device_id);
+
 		break;
             /* we don't yet support these devices */
             case RDPDR_DTYP_PARALLEL:
