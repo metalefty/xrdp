@@ -35,8 +35,6 @@
 #include "xrdp_sockets.h"
 #include "chansrv_common.h"
 
-#define XRDP_SOX 1
-
 #if defined(XRDP_OPUS)
 #include <opus/opus.h>
 static OpusEncoder *g_opus_encoder = 0;
@@ -49,7 +47,6 @@ static lame_global_flags *g_lame_encoder = 0;
 
 #if defined(XRDP_SOX)
 #include <sox.h>
-
 #endif
 
 extern int g_rdpsnd_chan_id;    /* in chansrv.c */
@@ -629,15 +626,6 @@ sound_wave_compress_mp3lame(char *data, int data_bytes, int *format_index)
 static int
 sound_wave_compress_mp3lame(char *data, int data_bytes, int *format_index)
 {
-    int rv;
-
-    rv = data_bytes;
-
-    if (g_client_does_ms_adpcm == 0)
-    {
-        return rv;
-    }
-
     return data_bytes;
 }
 
@@ -647,6 +635,26 @@ sound_wave_compress_mp3lame(char *data, int data_bytes, int *format_index)
 static int
 sound_wave_compress_ms_adpcm(char *data, int data_bytes, int *format_index)
 {
+    int rv;
+    sox_format_t *in;
+    sox_format_t *out;
+    sox_signalinfo_t signal;
+    sox_encodinginfo_t encoding;
+
+    encoding.encoding = SOX_ENCODING_MS_ADPCM;
+
+    // sox_init();
+    //in = sox_open_mem_read(data, data_bytes, NULL, NULL, NULL);
+    rv = data_bytes;
+    //sox_open_mem_write(data, data_bytes, 
+
+    if (g_client_does_ms_adpcm == 0)
+    {
+        return rv;
+    }
+    return data_bytes;
+
+
 }
 #else
 static int

@@ -139,6 +139,11 @@ AC_ARG_ENABLE(rfxcodec, AS_HELP_STRING([--disable-rfxcodec],
               [], [enable_rfxcodec=yes])
 AM_CONDITIONAL(XRDP_RFXCODEC, [test x$enable_rfxcodec = xyes])
 
+AC_ARG_ENABLE(sox, AS_HELP_STRING([--enable-sox],
+              [Use sox for additional audio codec (default: no)]),
+              [], [enable_sox=no])
+AM_CONDITIONAL(XRDP_SOX, [test x$enable_sox = xyes])
+
 # Don't fail without working nasm if rfxcodec is not enabled
 if test "x$enable_rfxcodec" != xyes; then
   with_simd=no
@@ -245,6 +250,7 @@ then
 fi
 
 AS_IF( [test "x$enable_pixman" = "xyes"] , [PKG_CHECK_MODULES(PIXMAN, pixman-1 >= 0.1.0)] )
+AS_IF( [test "x$enable_sox" =  "xyes"],[PKG_CHECK_MODULES(SOX, sox >= 14.4)])
 
 # checking for TurboJPEG
 if test "x$enable_tjpeg" = "xyes"
