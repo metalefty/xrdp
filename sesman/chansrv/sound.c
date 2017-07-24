@@ -45,6 +45,11 @@ static OpusEncoder *g_opus_encoder = 0;
 static lame_global_flags *g_lame_encoder = 0;
 #endif
 
+#if defined(XRDP_SOX)
+#include <sox.h>
+
+#endif
+
 extern int g_rdpsnd_chan_id;    /* in chansrv.c */
 extern int g_display_num;       /* in chansrv.c */
 
@@ -143,6 +148,25 @@ static struct xr_wave_format_ex g_mp3lame_44100 =
 };
 #endif
 
+#if defined(XRDP_SOX)
+static tui8 g_ms_adpcm_44100_data [] =
+{
+    0xf4, 0x01, 0x07, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00,
+    0xc0, 0x00, 0x40, 0x00, 0xf0, 0x00, 0x00, 0x00, 0xcc, 0x01, 0x30, 0xff, 0x88, 0x01, 0x18, 0xff
+};
+static struct xr_wave_format_ex g_ms_adpcm_44100 =
+{
+    WAVE_FORMAT_ADPCM,    /* wFormatTag */
+    2,                    /* num of channels */
+    44100,                /* samples per sec */
+    44359,                /* avg bytes per sec */
+    2048,                 /* block align */
+    4,                    /* bits per sample */
+    12,                   /* data size */
+    g_ms_adpcm_44100_data /* data */
+};
+#endif
+
 static struct xr_wave_format_ex *g_wave_outp_formats[] =
 {
     &g_pcm_44100,
@@ -153,6 +177,9 @@ static struct xr_wave_format_ex *g_wave_outp_formats[] =
 #if defined(XRDP_MP3LAME)
     &g_mp3lame_44100,
 #endif
+#if defined(XRDP_SOX)
+    &g_ms_adpcm_44100,
+#endif
     0
 };
 
@@ -161,6 +188,9 @@ static int g_client_opus_index = 0;
 
 static int g_client_does_mp3lame = 0;
 static int g_client_mp3lame_index = 0;
+
+static int g_client_does_ms_adpcm = 0;
+static int g_client_ms_adpcm_index = 0;
 
 /* index into list from client */
 static int g_current_client_format_index = 0;
@@ -369,6 +399,11 @@ sound_process_output_format(int aindex, int wFormatTag, int nChannels,
 
     switch(wFormatTag)
     {
+        case WAVE_FORMAT_ADPCM:
+            g_client_does_ms_adpcm = 1;
+            g_client_ms_adpcm_index = aindex;
+            g_bbuf_size = 11520; /* TBD */
+            break;
         case WAVE_FORMAT_MPEGLAYER3:
             LOG(0, ("wFormatTag, mp3"));
             g_client_does_mp3lame = 1;
@@ -592,9 +627,31 @@ sound_wave_compress_mp3lame(char *data, int data_bytes, int *format_index)
 static int
 sound_wave_compress_mp3lame(char *data, int data_bytes, int *format_index)
 {
+    int rv;
+
+    rv = data_bytes;
+
+    if (g_client_does_ms_adpcm == 0)
+    {
+        return rv;
+    }
+
     return data_bytes;
 }
 
+#endif
+
+#if defined(XRDP_SOX)
+static int
+sound_wave_compress_ms_adpcm(char *data, int data_bytes, int *format_index)
+{
+}
+#else
+static int
+sound_wave_compress_ms_adpcm(char *data, int data_bytes, int *format_index)
+{
+    return data_bytes;
+}
 #endif
 
 /*****************************************************************************/
@@ -608,6 +665,10 @@ sound_wave_compress(char *data, int data_bytes, int *format_index)
     else if (g_client_does_mp3lame)
     {
         return sound_wave_compress_mp3lame(data, data_bytes, format_index);
+    }
+    else if (g_client_does_ms_adpcm)
+    {
+        return sound_wave_compress_ms_adpcm(data, data_bytes, format_index);
     }
     return data_bytes;
 }
@@ -962,6 +1023,9 @@ sound_init(void)
 
     g_client_does_mp3lame = 0;
     g_client_mp3lame_index = 0;
+
+    g_client_does_ms_adpcm = 0;
+    g_client_ms_adpcm_index = 0;
 
     return 0;
 }
