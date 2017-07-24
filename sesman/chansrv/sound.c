@@ -35,6 +35,8 @@
 #include "xrdp_sockets.h"
 #include "chansrv_common.h"
 
+#define XRDP_SOX 1
+
 #if defined(XRDP_OPUS)
 #include <opus/opus.h>
 static OpusEncoder *g_opus_encoder = 0;
