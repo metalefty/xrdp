@@ -27,20 +27,6 @@
 #include "trans.h"
 #include "ssl_calls.h"
 
-#define LLOG_LEVEL 1
-#define LLOGLN(_level, _args) \
-  do \
-  { \
-    if (_level < LLOG_LEVEL) \
-    { \
-        g_write("xrdp:vnc [%10.10u]: ", g_time3()); \
-        g_writeln _args ; \
-    } \
-  } \
-  while (0)
-
-#define AS_LOG_MESSAGE log_message
-
 static int
 lib_mod_process_message(struct vnc *v, struct stream *s);
 
@@ -120,13 +106,13 @@ lib_process_channel_data(struct vnc *v, int chanid, int flags, int size,
         in_uint16_le(s, status);
         in_uint32_le(s, length);
 
-        //g_writeln("clip data type %d status %d length %d", type, status, length);
+        //log_message(LOG_LEVEL_TRACE, "clip data type=%d status=%d length=%d", type, status, length);
         //g_hexdump(s->p, s->end - s->p);
         switch (type)
         {
             case 2: /* CLIPRDR_FORMAT_ANNOUNCE */
-                AS_LOG_MESSAGE(LOG_LEVEL_DEBUG, "CLIPRDR_FORMAT_ANNOUNCE - "
-                               "status %d length %d", status, length);
+                log_message(LOG_LEVEL_DEBUG, "CLIPRDR_FORMAT_ANNOUNCE - "
+                            "status=%d length=%d", status, length);
                 make_stream(out_s);
                 init_stream(out_s, 8192);
                 out_uint16_le(out_s, 3); // msg-type:  CLIPRDR_FORMAT_ACK
@@ -157,12 +143,12 @@ lib_process_channel_data(struct vnc *v, int chanid, int flags, int size,
                 break;
 
             case 3: /* CLIPRDR_FORMAT_ACK */
-                AS_LOG_MESSAGE(LOG_LEVEL_DEBUG, "CLIPRDR_FORMAT_ACK - "
-                               "status %d length %d", status, length);
+                log_message(LOG_LEVEL_DEBUG, "CLIPRDR_FORMAT_ACK - "
+                            "status=%d length=%d", status, length);
                 break;
             case 4: /* CLIPRDR_DATA_REQUEST */
-                AS_LOG_MESSAGE(LOG_LEVEL_DEBUG, "CLIPRDR_DATA_REQUEST - "
-                               "status %d length %d", status, length);
+                log_message(LOG_LEVEL_DEBUG, "CLIPRDR_DATA_REQUEST - "
+                               "status=%d length=%d", status, length);
                 format = 0;
 
                 if (length >= 4)
@@ -214,8 +200,8 @@ lib_process_channel_data(struct vnc *v, int chanid, int flags, int size,
                 break;
 
             case 5: /* CLIPRDR_DATA_RESPONSE */
-                AS_LOG_MESSAGE(LOG_LEVEL_DEBUG, "CLIPRDR_DATA_RESPONSE - "
-                               "status %d length %d", status, length);
+                log_message(LOG_LEVEL_DEBUG, "CLIPRDR_DATA_RESPONSE - "
+                               "status=%d length=%d", status, length);
                 clip_bytes = MIN(length, 256);
                 // - Read the response data from the cliprdr channel, stream 's'.
                 // - Send the response data to the vnc server, stream 'out_s'.
@@ -880,7 +866,7 @@ lib_bell_trigger(struct vnc *v)
 int
 lib_mod_signal(struct vnc *v)
 {
-    g_writeln("lib_mod_signal: not used");
+    log_message(LOG_LEVEL_TRACE, "%s: not used", __func__);
     return 0;
 }
 
@@ -961,7 +947,7 @@ lib_data_in(struct trans *trans)
     struct vnc *self;
     struct stream *s;
 
-    LLOGLN(10, ("lib_data_in:"));
+    log_message(LOG_LEVEL_TRACE, "%s:", __func__);
 
     if (trans == 0)
     {
@@ -978,7 +964,7 @@ lib_data_in(struct trans *trans)
 
     if (lib_mod_process_message(self, s) != 0)
     {
-        g_writeln("lib_data_in: lib_mod_process_message failed");
+        log_message(LOG_LEVEL_TRACE, "%s: lib_mod_process_message failed", __func__);
         return 1;
     }
 
@@ -1460,7 +1446,7 @@ int
 lib_mod_get_wait_objs(struct vnc *v, tbus *read_objs, int *rcount,
                       tbus *write_objs, int *wcount, int *timeout)
 {
-    LLOGLN(10, ("lib_mod_get_wait_objs:"));
+    log_message(LOG_LEVEL_TRACE, "%s:", __func__);
 
     if (v != 0)
     {

@@ -27,6 +27,7 @@
 #include "arch.h"
 #include "parse.h"
 #include "ssl_calls.h"
+#include "log.h"
 
 #define MAX_SBYTES 0
 
