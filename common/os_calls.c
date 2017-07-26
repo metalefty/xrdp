@@ -355,13 +355,15 @@ g_tcp_set_no_delay(int sck)
             }
             else
             {
-                g_writeln("Error setting tcp_nodelay");
+                log_message(LOG_LEVEL_TRACE,
+                            "%s: error at %s:%d", __func__, __FILE__, __LINE__);
             }
         }
     }
     else
     {
-        g_writeln("Error getting tcp_nodelay");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: error at %s:%d", __func__, __FILE__, __LINE__);
     }
 
     return ret;
@@ -394,13 +396,15 @@ g_tcp_set_keepalive(int sck)
             }
             else
             {
-                g_writeln("Error setting tcp_keepalive");
+                log_message(LOG_LEVEL_TRACE,
+                            "%s: error at %s:%d", __func__, __FILE__, __LINE__);
             }
         }
     }
     else
     {
-        g_writeln("Error getting tcp_keepalive");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: error at %s:%d", __func__, __FILE__, __LINE__);
     }
 
     return ret;
@@ -1869,7 +1873,9 @@ g_obj_wait(tintptr *read_objs, int rcount, tintptr *write_objs, int wcount,
     }
     else if (rcount > 0)
     {
-        g_writeln("Programming error read_objs is null");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: programming error read_objs is null at %s:%d",
+                    __func__, __FILE__, __LINE__);
         return 1; /* error */
     }
 
@@ -1892,7 +1898,9 @@ g_obj_wait(tintptr *read_objs, int rcount, tintptr *write_objs, int wcount,
     }
     else if (wcount > 0)
     {
-        g_writeln("Programming error write_objs is null");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: programming error write_objs is null at %s:%d",
+                    __func__, __FILE__, __LINE__);
         return 1; /* error */
     }
 
@@ -3506,7 +3514,8 @@ g_save_to_bmp(const char* filename, char* data, int stride_bytes,
     }
     else
     {
-        g_writeln("g_save_to_bpp: unimp");
+        log_message(LOG_LEVEL_TRACE, "%s: unimp at %s:%d",
+                    __func__, __FILE__, __LINE__);
         return 1;
     }
     bm.magic[0] = 'B';
@@ -3539,23 +3548,27 @@ g_save_to_bmp(const char* filename, char* data, int stride_bytes,
     fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fd == -1)
     {
-        g_writeln("g_save_to_bpp: open error");
+        log_message(LOG_LEVEL_TRACE, "%s: open error at %s:%d",
+                    __func__, __FILE__, __LINE__);
         return 1;
     }
     bytes = write(fd, &bm, sizeof(bm));
     if (bytes != sizeof(bm))
     {
-        g_writeln("g_save_to_bpp: write error");
+        log_message(LOG_LEVEL_TRACE, "%s: write error at %s:%d",
+                    __func__, __FILE__, __LINE__);
     }
     bytes = write(fd, &bh, sizeof(bh));
     if (bytes != sizeof(bh))
     {
-        g_writeln("g_save_to_bpp: write error");
+        log_message(LOG_LEVEL_TRACE, "%s: write error at %s:%d",
+                    __func__, __FILE__, __LINE__);
     }
     bytes = write(fd, &dh, sizeof(dh));
     if (bytes != sizeof(dh))
     {
-        g_writeln("g_save_to_bpp: write error");
+        log_message(LOG_LEVEL_TRACE, "%s: write error at %s:%d",
+                    __func__, __FILE__, __LINE__);
     }
     data += stride_bytes * height;
     data -= stride_bytes;
@@ -3576,7 +3589,8 @@ g_save_to_bmp(const char* filename, char* data, int stride_bytes,
             bytes = write(fd, line, file_stride_bytes);
             if (bytes != file_stride_bytes)
             {
-                g_writeln("g_save_to_bpp: write error");
+                log_message(LOG_LEVEL_TRACE, "%s: write error at %s:%d",
+                            __func__, __FILE__, __LINE__);
             }
             data -= stride_bytes;
         }
@@ -3589,14 +3603,16 @@ g_save_to_bmp(const char* filename, char* data, int stride_bytes,
             bytes = write(fd, data, width * (bits_per_pixel / 8));
             if (bytes != width * (bits_per_pixel / 8))
             {
-                g_writeln("g_save_to_bpp: write error");
+                log_message(LOG_LEVEL_TRACE, "%s: write error at %s:%d",
+                            __func__, __FILE__, __LINE__);
             }
             data -= stride_bytes;
         }
     }
     else
     {
-        g_writeln("g_save_to_bpp: unimp");
+        log_message(LOG_LEVEL_TRACE, "%s: unimp at %s:%d",
+                    __func__, __FILE__, __LINE__);
     }
     close(fd);
     return 0;
