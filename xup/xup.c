@@ -26,10 +26,6 @@
 #include "log.h"
 #include "trans.h"
 
-#define LOG_LEVEL 1
-#define LLOGLN(_level, _args) \
-    do { if (_level < LOG_LEVEL) { g_writeln _args ; } } while (0)
-
 static int
 lib_mod_process_message(struct mod *mod, struct stream *s);
 
@@ -88,7 +84,7 @@ lib_data_in(struct trans *trans)
     struct stream *s;
     int len;
 
-    LLOGLN(10, ("lib_data_in:"));
+    log_message(LOG_LEVEL_TRACE, "lib_data_in:");
     if (trans == 0)
     {
         return 1;
@@ -110,7 +106,7 @@ lib_data_in(struct trans *trans)
             in_uint32_le(s, len);
             if (len < 0 || len > 128 * 1024)
             {
-                g_writeln("lib_data_in: bad size");
+                log_message(LOG_LEVEL_TRACE, "lib_data_in: bad size");
                 return 1;
             }
             if (len > 0)
@@ -124,7 +120,8 @@ lib_data_in(struct trans *trans)
             s->p = s->data;
             if (lib_mod_process_message(self, s) != 0)
             {
-                g_writeln("lib_data_in: lib_mod_process_message failed");
+                log_message(LOG_LEVEL_TRACE,
+                            "lib_data_in: lib_mod_process_message failed");
                 return 1;
             }
             init_stream(s, 0);
@@ -213,9 +210,9 @@ lib_mod_connect(struct mod *mod)
         error = -1;
         if (trans_connect(mod->trans, mod->ip, con_port, 3000) == 0)
         {
-            LLOGLN(0, ("lib_mod_connect: connected to Xserver "
-                   "(Xorg or X11rdp) sck %lld",
-                   (long long) (mod->trans->sck)));
+            log_message(LOG_LEVEL_TRACE, "lib_mod_connect: "
+                        "connected to Xserver (Xorg or X11rdp) sck %lld",
+                        (long long) (mod->trans->sck));
             error = 0;
         }
 
@@ -349,7 +346,7 @@ lib_mod_event(struct mod *mod, int msg, tbus param1, tbus param2,
             {
                 if (mod->shift_state)
                 {
-                    g_writeln("special");
+                    log_message(LOG_LEVEL_TRACE, "%s: special", __func__);
                     /* fix for mstsc sending left control down with altgr */
                     /* control down / up
                     msg param1 param2 param3 param4
@@ -1233,7 +1230,7 @@ process_server_paint_rect_shmem_ex(struct mod *amod, struct stream *s)
         rv = 1;
     }
 
-    //g_writeln("frame_id %d", frame_id);
+    //log_message(LOG_LEVEL_TRACE, "frame_id %d", frame_id);
     //send_paint_rect_ex_ack(amod, flags, frame_id);
 
     g_free(lcrects);
@@ -1249,7 +1246,7 @@ lib_mod_process_orders(struct mod *mod, int type, struct stream *s)
 {
     int rv;
 
-    LLOGLN(10, ("lib_mod_process_orders: type %d", type));
+    log_message(LOG_LEVEL_TRACE, "lib_mod_process_orders: type %d", type);
     rv = 0;
     switch (type)
     {
@@ -1344,7 +1341,8 @@ lib_mod_process_orders(struct mod *mod, int type, struct stream *s)
             rv = process_server_paint_rect_shmem_ex(mod, s);
             break;
         default:
-            g_writeln("lib_mod_process_orders: unknown order type %d", type);
+            log_message(LOG_LEVEL_TRACE,
+                        "lib_mod_process_orders: unknown order type %d", type);
             rv = 0;
             break;
     }
@@ -1359,7 +1357,7 @@ lib_send_client_info(struct mod *mod)
     struct stream *s;
     int len;
 
-    g_writeln("lib_send_client_info:");
+    log_message(LOG_LEVEL_TRACE, "%s:", __func__);
     make_stream(s);
     init_stream(s, 8192);
     s_push_layer(s, iso_hdr, 4);
@@ -1387,14 +1385,14 @@ lib_mod_process_message(struct mod *mod, struct stream *s)
     int type;
     char *phold;
 
-    LLOGLN(10, ("lib_mod_process_message:"));
+    log_message(LOG_LEVEL_TRACE, "lib_mod_process_message:");
     rv = 0;
     if (rv == 0)
     {
         in_uint16_le(s, type);
         in_uint16_le(s, num_orders);
         in_uint32_le(s, len);
-        LLOGLN(10, ("lib_mod_process_message: type %d", type));
+        log_message(LOG_LEVEL_TRACE, "lib_mod_process_message: type %d", type);
 
         if (type == 1) /* original order list */
         {
@@ -1411,7 +1409,7 @@ lib_mod_process_message(struct mod *mod, struct stream *s)
         }
         else if (type == 2) /* caps */
         {
-            g_writeln("lib_mod_process_message: type 2 len %d", len);
+            log_message(LOG_LEVEL_TRACE, "%s: type 2 len %d", __func__, len);
             for (index = 0; index < num_orders; index++)
             {
                 phold = s->p;
@@ -1421,8 +1419,9 @@ lib_mod_process_message(struct mod *mod, struct stream *s)
                 switch (type)
                 {
                     default:
-                        g_writeln("lib_mod_process_message: unknown cap type %d len %d",
-                                  type, len);
+                        log_message(LOG_LEVEL_TRACE,
+                                    "%s: unknown cap type %d len %d",
+                                    __func__, type, len);
                         break;
                 }
 
@@ -1450,7 +1449,7 @@ lib_mod_process_message(struct mod *mod, struct stream *s)
         }
         else
         {
-            g_writeln("unknown type %d", type);
+            log_message(LOG_LEVEL_TRACE, "%s: unknown type %d", __func__, type);
         }
     }
 
@@ -1462,7 +1461,7 @@ lib_mod_process_message(struct mod *mod, struct stream *s)
 int
 lib_mod_signal(struct mod *mod)
 {
-    g_writeln("lib_mod_signal: not used");
+    log_message(LOG_LEVEL_TRACE, "%s: not used", __func__);
     return 0;
 }
 
@@ -1549,7 +1548,8 @@ lib_mod_check_wait_objs(struct mod *mod)
 int
 lib_mod_frame_ack(struct mod *amod, int flags, int frame_id)
 {
-    LLOGLN(10, ("lib_mod_frame_ack: flags 0x%8.8x frame_id %d", flags, frame_id));
+    log_message(LOG_LEVEL_TRACE,
+                "lib_mod_frame_ack: flags=0x%8.8x frame_id=%d", flags, frame_id);
     send_paint_rect_ex_ack(amod, flags, frame_id);
     return 0;
 }
