@@ -888,13 +888,15 @@ trans_set_tls_mode(struct trans *self, const char *key, const char *cert,
     self->tls = ssl_tls_create(self, key, cert);
     if (self->tls == NULL)
     {
-        g_writeln("trans_set_tls_mode: ssl_tls_create malloc error");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: ssl_tls_create malloc error", __func__);
         return 1;
     }
 
     if (ssl_tls_accept(self->tls, ssl_protocols, tls_ciphers) != 0)
     {
-        g_writeln("trans_set_tls_mode: ssl_tls_accept failed");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: ssl_tls_accept failed", __func__);
         return 1;
     }
 
