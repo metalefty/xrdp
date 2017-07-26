@@ -514,8 +514,9 @@ ssl_tls_print_error(const char *func, SSL *connection, int value)
     switch (SSL_get_error(connection, value))
     {
         case SSL_ERROR_ZERO_RETURN:
-            g_writeln("ssl_tls_print_error: %s: Server closed TLS connection",
-                      func);
+            log_message(LOG_LEVEL_TRACE,
+                        "%s: %s: TLS/SSL connection has been closed",
+                        __func__, func);
             return 1;
 
         case SSL_ERROR_WANT_READ:
@@ -523,16 +524,18 @@ ssl_tls_print_error(const char *func, SSL *connection, int value)
             return 0;
 
         case SSL_ERROR_SYSCALL:
-            g_writeln("ssl_tls_print_error: %s: I/O error", func);
+            log_message(LOG_LEVEL_TRACE, "%s: %s: I/O error", __func__, func);
             return 1;
 
         case SSL_ERROR_SSL:
-            g_writeln("ssl_tls_print_error: %s: Failure in SSL library (protocol error?)",
-                      func);
+            log_message(LOG_LEVEL_TRACE,
+                        "%s: %s: Failure in SSL libary (protocol error?)",
+                        __func__, func);
             return 1;
 
         default:
-            g_writeln("ssl_tls_print_error: %s: Unknown error", func);
+            log_message(LOG_LEVEL_TRACE,
+                        "%s: %s: Unknown error", __func__, func);
             return 1;
     }
 }
@@ -597,7 +600,8 @@ ssl_tls_accept(struct ssl_tls *self, long ssl_protocols,
     {
         if (SSL_CTX_set_cipher_list(self->ctx, tls_ciphers) == 0)
         {
-            g_writeln("ssl_tls_accept: invalid cipher options");
+            log_message(LOG_LEVEL_ERROR,
+                        "Error in cipher list. Check tls_ciphers in xrdp.ini.");
             return 1;
         }
     }
@@ -606,20 +610,23 @@ ssl_tls_accept(struct ssl_tls *self, long ssl_protocols,
 
     if (self->ctx == NULL)
     {
-        g_writeln("ssl_tls_accept: SSL_CTX_new failed");
+	    log_message(LOG_LEVEL_TRACE,
+                   "%s: SSL_CTX_new failed", __func__);
         return 1;
     }
 
     if (SSL_CTX_use_RSAPrivateKey_file(self->ctx, self->key, SSL_FILETYPE_PEM)
             <= 0)
     {
-        g_writeln("ssl_tls_accept: SSL_CTX_use_RSAPrivateKey_file failed");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: SSL_CTX_use_RSAPrivateKey_file failed", __func__);
         return 1;
     }
 
     if (SSL_CTX_use_certificate_chain_file(self->ctx, self->cert) <= 0)
     {
-        g_writeln("ssl_tls_accept: SSL_CTX_use_certificate_chain_file failed");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: SSL_CTX_use_certificate_chain_file failed", __func__);
         return 1;
     }
 
@@ -627,13 +634,15 @@ ssl_tls_accept(struct ssl_tls *self, long ssl_protocols,
 
     if (self->ssl == NULL)
     {
-        g_writeln("ssl_tls_accept: SSL_new failed");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: SSL_new failed", __func__);
         return 1;
     }
 
     if (SSL_set_fd(self->ssl, self->trans->sck) < 1)
     {
-        g_writeln("ssl_tls_accept: SSL_set_fd failed");
+        log_message(LOG_LEVEL_TRACE,
+                    "%s: SSL_set_fd failed", __func__);
         return 1;
     }
 
@@ -658,7 +667,7 @@ ssl_tls_accept(struct ssl_tls *self, long ssl_protocols,
         }
     }
 
-    g_writeln("ssl_tls_accept: TLS connection accepted");
+    log_message(LOG_LEVEL_TRACE, "%s: TLS connection accepted", __func__);
 
     return 0;
 }
