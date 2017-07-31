@@ -49,6 +49,24 @@ enum logReturns
     LOG_GENERAL_ERROR
 };
 
+#define log_always(args...)  log_message(LOG_LEVEL_ALWAYS, args);
+#define log_error(args...)   log_message(LOG_LEVEL_ERROR, args);
+#define log_warning(args...) log_message(LOG_LEVEL_WARNING, args);
+#define log_info(args...)    log_message(LOG_LEVEL_INFO, args);
+#define log_debug(args...)   log_message(LOG_LEVEL_DEBUG, args);
+#define log_trace(args...)   log_message(LOG_LEVEL_TRACE, args);
+#if defined(XRDP_DEBUG)
+#define log_trace_verbose(args...) log_message(LOG_LEVEL_TRACE, args);
+#else
+#define log_trace_verbose(args...)
+#endif
+#define log_where_am_i() \
+    do { \
+        log_message(LOG_LEVEL_TRACE, \
+                    "executing function `%s` at %s:%d", \
+                    __func__, __FILE__, __LINE__); \
+    } while(0)
+
 #define SESMAN_CFG_LOGGING           "Logging"
 #define SESMAN_CFG_LOG_FILE          "LogFile"
 #define SESMAN_CFG_LOG_LEVEL         "LogLevel"
