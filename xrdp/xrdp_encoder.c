@@ -31,18 +31,6 @@
 #include "rfxcodec_encode.h"
 #endif
 
-#define LLOG_LEVEL 1
-#define LLOGLN(_level, _args) \
-  do \
-  { \
-    if (_level < LLOG_LEVEL) \
-    { \
-        g_write("xrdp:xrdp_encoder [%10.10u]: ", g_time3()); \
-        g_writeln _args ; \
-    } \
-  } \
-  while (0)
-
 #define XRDP_SURCMD_PREFIX_BYTES 256
 
 /*****************************************************************************/
@@ -80,7 +68,7 @@ xrdp_encoder_create(struct xrdp_mm *mm)
 
     if (client_info->jpeg_codec_id != 0)
     {
-        LLOGLN(0, ("xrdp_encoder_create: starting jpeg codec session"));
+        log_debug("xrdp_encoder_create: starting jpeg codec session");
         self->codec_id = client_info->jpeg_codec_id;
         self->in_codec_mode = 1;
         self->codec_quality = client_info->jpeg_prop[0];
@@ -93,7 +81,7 @@ xrdp_encoder_create(struct xrdp_mm *mm)
 #ifdef XRDP_RFXCODEC
     else if (client_info->rfx_codec_id != 0)
     {
-        LLOGLN(0, ("xrdp_encoder_create: starting rfx codec session"));
+        log_debug("xrdp_encoder_create: starting rfx codec session");
         self->codec_id = client_info->rfx_codec_id;
         self->in_codec_mode = 1;
         client_info->capture_code = 2;
@@ -105,7 +93,7 @@ xrdp_encoder_create(struct xrdp_mm *mm)
 #endif
     else if (client_info->h264_codec_id != 0)
     {
-        LLOGLN(0, ("xrdp_encoder_create: starting h264 codec session"));
+        log_debug("xrdp_encoder_create: starting h264 codec session");
         self->codec_id = client_info->h264_codec_id;
         self->in_codec_mode = 1;
         client_info->capture_code = 3;
@@ -120,7 +108,7 @@ xrdp_encoder_create(struct xrdp_mm *mm)
         return 0;
     }
 
-    LLOGLN(0, ("init_xrdp_encoder: initializing encoder codec_id %d", self->codec_id));
+    log_debug("init_xrdp_encoder: initializing encoder codec_id %d", self->codec_id);
 
     /* setup required FIFOs */
     self->fifo_to_proc = fifo_create();
@@ -154,7 +142,7 @@ xrdp_encoder_delete(struct xrdp_encoder *self)
     XRDP_ENC_DATA_DONE *enc_done;
     FIFO *fifo;
 
-    LLOGLN(0, ("xrdp_encoder_delete:"));
+    log_debug("xrdp_encoder_delete:");
     if (self == 0)
     {
         return;
@@ -231,7 +219,7 @@ process_enc_jpg(struct xrdp_encoder *self, XRDP_ENC_DATA *enc)
     tbus mutex;
     tbus event_processed;
 
-    LLOGLN(10, ("process_enc_jpg:"));
+    log_trace_verbose("process_enc_jpg:");
     quality = self->codec_quality;
     fifo_processed = self->fifo_processed;
     mutex = self->mutex;
@@ -245,22 +233,22 @@ process_enc_jpg(struct xrdp_encoder *self, XRDP_ENC_DATA *enc)
         cy = enc->crects[index * 4 + 3];
         if (cx < 1 || cy < 1)
         {
-            LLOGLN(0, ("process_enc_jpg: error 1"));
+            log_trace("process_enc_jpg: error 1");
             continue;
         }
 
-        LLOGLN(10, ("process_enc_jpg: x %d y %d cx %d cy %d", x, y, cx, cy));
+        log_trace_verbose("process_enc_jpg: x %d y %d cx %d cy %d", x, y, cx, cy);
 
         out_data_bytes = MAX((cx + 4) * cy * 4, 8192);
         if ((out_data_bytes < 1) || (out_data_bytes > 16 * 1024 * 1024))
         {
-            LLOGLN(0, ("process_enc_jpg: error 2"));
+            log_trace("process_enc_jpg: error 2");
             return 1;
         }
         out_data = (char *) g_malloc(out_data_bytes + 256 + 2, 0);
         if (out_data == 0)
         {
-            LLOGLN(0, ("process_enc_jpg: error 3"));
+            log_trace("process_enc_jpg: error 3");
             return 1;
         }
 
@@ -273,12 +261,12 @@ process_enc_jpg(struct xrdp_encoder *self, XRDP_ENC_DATA *enc)
                                             out_data + 256 + 2, &out_data_bytes);
         if (error < 0)
         {
-            LLOGLN(0, ("process_enc_jpg: jpeg error %d bytes %d",
-                   error, out_data_bytes));
+            log_trace("process_enc_jpg: jpeg error %d bytes %d",
+                      error, out_data_bytes);
             g_free(out_data);
             return 1;
         }
-        LLOGLN(10, ("jpeg error %d bytes %d", error, out_data_bytes));
+        log_trace_verbose("jpeg error %d bytes %d", error, out_data_bytes);
         enc_done = (XRDP_ENC_DATA_DONE *)
                    g_malloc(sizeof(XRDP_ENC_DATA_DONE), 1);
         enc_done->comp_bytes = out_data_bytes + 2;
@@ -324,9 +312,9 @@ process_enc_rfx(struct xrdp_encoder *self, XRDP_ENC_DATA *enc)
     struct rfx_rect *rfxrects;
     int alloc_bytes;
 
-    LLOGLN(10, ("process_enc_rfx:"));
-    LLOGLN(10, ("process_enc_rfx: num_crects %d num_drects %d",
-           enc->num_crects, enc->num_drects));
+    log_trace_verbose("process_enc_rfx:");
+    log_trace_verbose("process_enc_rfx: num_crects %d num_drects %d",
+                      enc->num_crects, enc->num_drects);
     fifo_processed = self->fifo_processed;
     mutex = self->mutex;
     event_processed = self->xrdp_encoder_event_processed;
@@ -388,7 +376,7 @@ process_enc_rfx(struct xrdp_encoder *self, XRDP_ENC_DATA *enc)
         }
     }
 
-    LLOGLN(10, ("process_enc_rfx: rfxcodec_encode rv %d", error));
+    log_trace_verbose("process_enc_rfx: rfxcodec_encode rv %d", error);
     /* only if enc_done->comp_bytes is not zero is something sent
        to the client but you must always send something back even
        on error so Xorg can get ack */
@@ -422,7 +410,7 @@ process_enc_rfx(struct xrdp_encoder *self, XRDP_ENC_DATA *enc)
 static int
 process_enc_h264(struct xrdp_encoder *self, XRDP_ENC_DATA *enc)
 {
-    LLOGLN(0, ("process_enc_x264:"));
+    log_trace("process_enc_x264:");
     return 0;
 }
 
@@ -446,12 +434,12 @@ proc_enc_msg(void *arg)
     tbus wobjs[32];
     struct xrdp_encoder *self;
 
-    LLOGLN(0, ("proc_enc_msg: thread is running"));
+    log_trace("proc_enc_msg: thread is running");
 
     self = (struct xrdp_encoder *) arg;
     if (self == 0)
     {
-        LLOGLN(0, ("proc_enc_msg: self nil"));
+        log_trace("proc_enc_msg: self null");
         return 0;
     }
 
@@ -480,13 +468,13 @@ proc_enc_msg(void *arg)
 
         if (g_is_wait_obj_set(term_obj)) /* global term */
         {
-            LLOGLN(0, ("proc_enc_msg: global term"));
+            log_trace("proc_enc_msg: global term");
             break;
         }
 
         if (g_is_wait_obj_set(lterm_obj)) /* xrdp_mm term */
         {
-            LLOGLN(0, ("proc_enc_msg: xrdp_mm term"));
+            log_trace("proc_enc_msg: xrdp_mm term");
             break;
         }
 
@@ -510,6 +498,6 @@ proc_enc_msg(void *arg)
         }
 
     } /* end while (cont) */
-    LLOGLN(0, ("proc_enc_msg: thread exit"));
+    log_trace("proc_enc_msg: thread exit");
     return 0;
 }
