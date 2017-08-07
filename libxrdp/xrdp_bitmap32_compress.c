@@ -29,6 +29,7 @@ http://msdn.microsoft.com/en-us/library/cc241877.aspx
 #endif
 
 #include "libxrdp.h"
+#include "log.h"
 
 #define FLAGS_RLE     0x10
 #define FLAGS_NOALPHA 0x20
@@ -258,7 +259,8 @@ fout(int collen, int replen, char *colptr, struct stream *s)
     int lreplen;
     int cont;
 
-    LLOGLN(10, ("fout: collen %d replen %d", collen, replen));
+    log_trace_verbose("fout: collen=%d replen=%d", collen, replen);
+
     cont = collen > 13;
     while (cont)
     {
@@ -285,7 +287,7 @@ fout(int collen, int replen, char *colptr, struct stream *s)
             {
                 lreplen = 47;
             }
-            LLOGLN(10, ("fout: big run lreplen %d", lreplen));
+            log_trace_verbose("fout: big run lreplen %d", lreplen);
             replen -= lreplen;
             code = ((lreplen & 0xF) << 4) | ((lreplen & 0xF0) >> 4);
             out_uint8(s, code);
@@ -326,11 +328,11 @@ fpack(char *plane, int cx, int cy, struct stream *s)
     int collen;
     int replen;
 
-    LLOGLN(10, ("fpack:"));
+    log_where_am_i();
     holdp = s->p;
     for (jndex = 0; jndex < cy; jndex++)
     {
-        LLOGLN(10, ("line start line %d cx %d cy %d", jndex, cx, cy));
+        log_trace_verbose("line start line %d cx %d cy %d", jndex, cx, cy);
         ptr8 = plane + jndex * cx;
         LHEXDUMP(10, (ptr8, cx));
         lend = ptr8 + (cx - 1);
@@ -437,7 +439,7 @@ xrdp_bitmap32_compress(char *in_data, int width, int height,
     int total_bytes;
     int header;
 
-    LLOGLN(10, ("xrdp_bitmap32_compress:"));
+    log_where_am_i();
     max_bytes = 4 * 1024;
     /* need max 8, 4K planes for work */
     if (max_bytes * 8 > temp_s->size)

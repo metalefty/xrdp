@@ -111,7 +111,7 @@ xrdp_caps_process_order(struct xrdp_rdp *self, struct stream *s,
     int ex_flags;
     int cap_flags;
 
-    DEBUG(("order capabilities"));
+    log_where_am_i();
     if (len < 20 + 2 + 2 + 2 + 2 + 2 + 2 + 32 + 2 + 2 + 4 + 4 + 4 + 4)
     {
         log_trace("xrdp_caps_process_order: error");
@@ -126,22 +126,22 @@ xrdp_caps_process_order(struct xrdp_rdp *self, struct stream *s,
     in_uint16_le(s, cap_flags); /* Capability flags */
     in_uint8a(s, order_caps, 32); /* Orders supported */
     g_memcpy(self->client_info.orders, order_caps, 32);
-    DEBUG(("dest blt-0 %d", order_caps[0]));
-    DEBUG(("pat blt-1 %d", order_caps[1]));
-    DEBUG(("screen blt-2 %d", order_caps[2]));
-    DEBUG(("memblt-3-13 %d %d", order_caps[3], order_caps[13]));
-    DEBUG(("triblt-4-14 %d %d", order_caps[4], order_caps[14]));
-    DEBUG(("line-8 %d", order_caps[8]));
-    DEBUG(("line-9 %d", order_caps[9]));
-    DEBUG(("rect-10 %d", order_caps[10]));
-    DEBUG(("desksave-11 %d", order_caps[11]));
-    DEBUG(("polygon-20 %d", order_caps[20]));
-    DEBUG(("polygon2-21 %d", order_caps[21]));
-    DEBUG(("polyline-22 %d", order_caps[22]));
-    DEBUG(("ellipse-25 %d", order_caps[25]));
-    DEBUG(("ellipse2-26 %d", order_caps[26]));
-    DEBUG(("text2-27 %d", order_caps[27]));
-    DEBUG(("order_caps dump"));
+    log_trace_verbose("dest blt-0 %d", order_caps[0]);
+    log_trace_verbose("pat blt-1 %d", order_caps[1]);
+    log_trace_verbose("screen blt-2 %d", order_caps[2]);
+    log_trace_verbose("memblt-3-13 %d %d", order_caps[3], order_caps[13]);
+    log_trace_verbose("triblt-4-14 %d %d", order_caps[4], order_caps[14]);
+    log_trace_verbose("line-8 %d", order_caps[8]);
+    log_trace_verbose("line-9 %d", order_caps[9]);
+    log_trace_verbose("rect-10 %d", order_caps[10]);
+    log_trace_verbose("desksave-11 %d", order_caps[11]);
+    log_trace_verbose("polygon-20 %d", order_caps[20]);
+    log_trace_verbose("polygon2-21 %d", order_caps[21]);
+    log_trace_verbose("polyline-22 %d", order_caps[22]);
+    log_trace_verbose("ellipse-25 %d", order_caps[25]);
+    log_trace_verbose("ellipse2-26 %d", order_caps[26]);
+    log_trace_verbose("text2-27 %d", order_caps[27]);
+    log_trace_verbose("order_caps dump");
 #if defined(XRDP_DEBUG)
     g_hexdump(order_caps, 32);
 #endif
@@ -162,7 +162,7 @@ xrdp_caps_process_order(struct xrdp_rdp *self, struct stream *s,
 
     in_uint32_le(s, i); /* desktop cache size, usually 0x38400 */
     self->client_info.desktop_cache = i;
-    DEBUG(("desktop cache size %d", i));
+    log_trace_verbose("desktop cache size %d", i);
     in_uint8s(s, 4); /* Unknown */
     in_uint8s(s, 4); /* Unknown */
 
@@ -210,12 +210,15 @@ xrdp_caps_process_bmpcache(struct xrdp_rdp *self, struct stream *s,
     i = MAX(i, 0);
     self->client_info.cache3_entries = i;
     in_uint16_le(s, self->client_info.cache3_size);
-    DEBUG(("cache1 entries %d size %d", self->client_info.cache1_entries,
-           self->client_info.cache1_size));
-    DEBUG(("cache2 entries %d size %d", self->client_info.cache2_entries,
-           self->client_info.cache2_size));
-    DEBUG(("cache3 entries %d size %d", self->client_info.cache3_entries,
-           self->client_info.cache3_size));
+    log_trace_verbose("cache1 entries %d size %d",
+                      self->client_info.cache1_entries,
+                      self->client_info.cache1_size);
+    log_trace_verbose("cache2 entries %d size %d",
+                      self->client_info.cache2_entries,
+                      self->client_info.cache2_size);
+    log_trace_verbose("cache3 entries %d size %d",
+                      self->client_info.cache3_entries,
+                      self->client_info.cache3_size);
     return 0;
 }
 
@@ -254,12 +257,15 @@ xrdp_caps_process_bmpcache2(struct xrdp_rdp *self, struct stream *s,
     i = MAX(i, 0);
     self->client_info.cache3_entries = i;
     self->client_info.cache3_size = 4096 * Bpp;
-    DEBUG(("cache1 entries %d size %d", self->client_info.cache1_entries,
-           self->client_info.cache1_size));
-    DEBUG(("cache2 entries %d size %d", self->client_info.cache2_entries,
-           self->client_info.cache2_size));
-    DEBUG(("cache3 entries %d size %d", self->client_info.cache3_entries,
-           self->client_info.cache3_size));
+    log_trace_verbose("cache1 entries %d size %d",
+                      self->client_info.cache1_entries,
+                      self->client_info.cache1_size);
+    log_trace_verbose("cache2 entries %d size %d",
+                      self->client_info.cache2_entries,
+                      self->client_info.cache2_size);
+    log_trace_verbose("cache3 entries %d size %d",
+                      self->client_info.cache3_entries,
+                      self->client_info.cache3_size);
     return 0;
 }
 
@@ -541,6 +547,7 @@ xrdp_caps_process_multifragmentupdate(struct xrdp_rdp *self, struct stream *s,
 static int
 xrdp_caps_process_frame_ack(struct xrdp_rdp *self, struct stream *s, int len)
 {
+    log_where_am_i();
     log_trace("xrdp_caps_process_frame_ack:");
     self->client_info.use_frame_acks = 1;
     in_uint32_le(s, self->client_info.max_unacknowledged_frame_count);
@@ -578,7 +585,7 @@ xrdp_caps_process_confirm_active(struct xrdp_rdp *self, struct stream *s)
     int len;
     char *p;
 
-    DEBUG(("in xrdp_caps_process_confirm_active"));
+    log_where_am_i();
     in_uint8s(s, 4); /* rdp_shareid */
     in_uint8s(s, 2); /* userid */
     in_uint16_le(s, source_len); /* sizeof RDP_SOURCE */
@@ -612,70 +619,70 @@ xrdp_caps_process_confirm_active(struct xrdp_rdp *self, struct stream *s)
         switch (type)
         {
             case RDP_CAPSET_GENERAL: /* 1 */
-                DEBUG(("RDP_CAPSET_GENERAL"));
+                log_trace_verbose("RDP_CAPSET_GENERAL");
                 xrdp_caps_process_general(self, s, len);
                 break;
             case RDP_CAPSET_BITMAP: /* 2 */
-                DEBUG(("RDP_CAPSET_BITMAP"));
+                log_trace_verbose("RDP_CAPSET_BITMAP");
                 break;
             case RDP_CAPSET_ORDER: /* 3 */
-                DEBUG(("RDP_CAPSET_ORDER"));
+                log_trace_verbose("RDP_CAPSET_ORDER");
                 xrdp_caps_process_order(self, s, len);
                 break;
             case RDP_CAPSET_BMPCACHE: /* 4 */
-                DEBUG(("RDP_CAPSET_BMPCACHE"));
+                log_trace_verbose("RDP_CAPSET_BMPCACHE");
                 xrdp_caps_process_bmpcache(self, s, len);
                 break;
             case RDP_CAPSET_CONTROL: /* 5 */
-                DEBUG(("RDP_CAPSET_CONTROL"));
+                log_trace_verbose("RDP_CAPSET_CONTROL");
                 break;
             case 6:
                 xrdp_caps_process_cache_v3_codec_id(self, s, len);
                 break;
             case RDP_CAPSET_ACTIVATE: /* 7 */
-                DEBUG(("RDP_CAPSET_ACTIVATE"));
+                log_trace_verbose("RDP_CAPSET_ACTIVATE");
                 break;
             case RDP_CAPSET_POINTER: /* 8 */
-                DEBUG(("RDP_CAPSET_POINTER"));
+                log_trace_verbose("RDP_CAPSET_POINTER");
                 xrdp_caps_process_pointer(self, s, len);
                 break;
             case RDP_CAPSET_SHARE: /* 9 */
-                DEBUG(("RDP_CAPSET_SHARE"));
+                log_trace_verbose("RDP_CAPSET_SHARE");
                 break;
             case RDP_CAPSET_COLCACHE: /* 10 */
-                DEBUG(("RDP_CAPSET_COLCACHE"));
+                log_trace_verbose("RDP_CAPSET_COLCACHE");
                 break;
             case 12: /* 12 */
-                DEBUG(("--12"));
+                log_trace_verbose("--12");
                 break;
             case 13: /* 13 */
                 xrdp_caps_process_input(self, s, len);
                 break;
             case 14: /* 14 */
-                DEBUG(("--14"));
+                log_trace_verbose("--14");
                 break;
             case RDP_CAPSET_BRUSHCACHE: /* 15 */
                 xrdp_caps_process_brushcache(self, s, len);
                 break;
             case 16: /* 16 */
-                DEBUG(("--16"));
+                log_trace_verbose("--16");
                 break;
             case 17: /* 17 */
-                DEBUG(("CAPSET_TYPE_OFFSCREEN_CACHE"));
+                log_trace_verbose("CAPSET_TYPE_OFFSCREEN_CACHE");
                 xrdp_caps_process_offscreen_bmpcache(self, s, len);
                 break;
             case RDP_CAPSET_BMPCACHE2: /* 19 */
-                DEBUG(("RDP_CAPSET_BMPCACHE2"));
+                log_trace_verbose("RDP_CAPSET_BMPCACHE2");
                 xrdp_caps_process_bmpcache2(self, s, len);
                 break;
             case 20: /* 20 */
-                DEBUG(("--20"));
+                log_trace_verbose("--20");
                 break;
             case 21: /* 21 */
-                DEBUG(("--21"));
+                log_trace_verbose("--21");
                 break;
             case 22: /* 22 */
-                DEBUG(("--22"));
+                log_trace_verbose("--22");
                 break;
             case 0x0017: /* 23 CAPSETTYPE_RAIL */
                 xrdp_caps_process_rail(self, s, len);
@@ -714,7 +721,7 @@ xrdp_caps_process_confirm_active(struct xrdp_rdp *self, struct stream *s)
         self->client_info.offscreen_cache_entries = 0;
     }
 
-    DEBUG(("out xrdp_caps_process_confirm_active"));
+    log_trace_verbose("out xrdp_caps_process_confirm_active");
     return 0;
 }
 /*****************************************************************************/
@@ -736,7 +743,7 @@ xrdp_caps_send_demand_active(struct xrdp_rdp *self)
     make_stream(s);
     init_stream(s, 8192);
 
-    DEBUG(("in xrdp_caps_send_demand_active"));
+    log_where_am_i();
 
     if (xrdp_rdp_init(self, s) != 0)
     {
@@ -1000,13 +1007,13 @@ xrdp_caps_send_demand_active(struct xrdp_rdp *self)
         free_stream(s);
         return 1;
     }
-    DEBUG(("out (1) xrdp_caps_send_demand_active"));
+    log_trace_verbose("out (1) xrdp_caps_send_demand_active");
 
     /* send Monitor Layout PDU for dual monitor */
     if (self->client_info.monitorCount > 0 &&
         self->client_info.multimon == 1)
     {
-        DEBUG(("xrdp_caps_send_demand_active: sending monitor layout pdu"));
+        log_trace_verbose("xrdp_caps_send_demand_active: sending monitor layout pdu");
         if (xrdp_caps_send_monitorlayout(self) != 0)
         {
           log_trace("xrdp_caps_send_demand_active: error sending monitor layout pdu");

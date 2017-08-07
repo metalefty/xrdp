@@ -23,6 +23,7 @@
 #endif
 
 #include "libxrdp.h"
+#include "log.h"
 
 #if defined(XRDP_TJPEG)
 
@@ -32,7 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <turbojpeg.h>
-#include "log.h"
 
 /*****************************************************************************/
 int
@@ -55,12 +55,12 @@ xrdp_jpeg_compress(void *handle, char *in_data, int width, int height,
 
     if (bpp != 24)
     {
-        g_writeln("xrdp_jpeg_compress: bpp wrong %d", bpp);
+        log_trace("xrdp_jpeg_compress: bpp wrong %d", bpp);
         return height;
     }
     if (handle == 0)
     {
-        g_writeln("xrdp_jpeg_compress: handle is nil");
+        log_trace("xrdp_jpeg_compress: handle is null");
         return height;
     }
     tj_han = (tjhandle) handle;
@@ -147,7 +147,7 @@ xrdp_codec_jpeg_compress(void *handle,
 
     if (handle == 0)
     {
-        g_writeln("xrdp_codec_jpeg_compress: handle is nil");
+        log_trace("xrdp_codec_jpeg_compress: handle is null");
         return height;
     }
 
@@ -400,7 +400,7 @@ jpeg_compress(char *in_data, int width, int height,
     }
     else
     {
-        g_writeln("bpp wrong %d", bpp);
+        log_trace("bpp wrong %d", bpp);
     }
 
     cdata_bytes = byte_limit;

@@ -466,7 +466,7 @@ xrdp_sec_delete(struct xrdp_sec *self)
 {
     if (self == 0)
     {
-        g_writeln("xrdp_sec_delete: self is null");
+        log_trace("xrdp_sec_delete: self is null");
         return;
     }
 

@@ -23,6 +23,7 @@
 #endif
 
 #include "libxrdp.h"
+#include "log.h"
 
 /* todo, move these to constants.h */
 //#define CHANNEL_CHUNK_LENGTH 1600 /* todo, why is this so small? */
@@ -40,7 +41,7 @@ xrdp_channel_get_item(struct xrdp_channel *self, int channel_id)
 
     if (self->mcs_layer->channel_list == NULL)
     {
-        g_writeln("xrdp_channel_get_item - No channel initialized");
+        log_trace("xrdp_channel_get_item: no channel initialized");
         return NULL ;
     }
 
@@ -102,7 +103,7 @@ xrdp_channel_send(struct xrdp_channel *self, struct stream *s, int channel_id,
 
     if (channel == NULL)
     {
-        g_writeln("xrdp_channel_send - no such channel");
+        log_trace("xrdp_channel_send: no such channel");
         return 1;
     }
 
@@ -129,7 +130,7 @@ xrdp_channel_send(struct xrdp_channel *self, struct stream *s, int channel_id,
 
     if (xrdp_sec_send(self->sec_layer, s, channel->chanid) != 0)
     {
-        g_writeln("xrdp_channel_send - failure sending data");
+        log_trace("xrdp_channel_send: failure sending data");
         return 1;
     }
 
@@ -164,12 +165,12 @@ xrdp_channel_call_callback(struct xrdp_channel *self, struct stream *s,
         }
         else
         {
-            g_writeln("in xrdp_channel_call_callback, session->callback is nil");
+            log_trace("xrdp_channel_call_callback: session->callback is nil");
         }
     }
     else
     {
-        g_writeln("in xrdp_channel_call_callback, session is nil");
+        log_trace("xrdp_channel_call_callback: session is nil");
     }
 
     return rv;
@@ -201,7 +202,7 @@ xrdp_channel_process(struct xrdp_channel *self, struct stream *s,
 
     if (channel == NULL)
     {
-        g_writeln("xrdp_channel_process, channel not found");
+        log_trace("xrdp_channel_process: channel is null");
         return 1;
     }
 

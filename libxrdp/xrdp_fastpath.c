@@ -22,6 +22,7 @@
 #endif
 
 #include "libxrdp.h"
+#include "log.h"
 
 /*****************************************************************************/
 struct xrdp_fastpath *
@@ -29,12 +30,12 @@ xrdp_fastpath_create(struct xrdp_sec *owner, struct trans *trans)
 {
     struct xrdp_fastpath *self;
 
-    DEBUG(("  in xrdp_fastpath_create"));
+    log_where_am_i();
     self = (struct xrdp_fastpath *)g_malloc(sizeof(struct xrdp_fastpath), 1);
     self->sec_layer = owner;
     self->trans = trans;
     self->session = owner->rdp_layer->session;
-    DEBUG(("  out xrdp_fastpath_create"));
+    log_where_am_i();
     return self;
 }
 
@@ -66,7 +67,7 @@ xrdp_fastpath_recv(struct xrdp_fastpath *self, struct stream *s)
     int byte;
     char *holdp;
 
-    DEBUG(("   in xrdp_fastpath_recv"));
+    log_where_am_i();
     holdp = s->p;
     if (!s_check_rem(s, 2))
     {
@@ -96,7 +97,7 @@ xrdp_fastpath_recv(struct xrdp_fastpath *self, struct stream *s)
         len = byte;
     }
     s->next_packet = holdp + len;
-    DEBUG(("  out xrdp_fastpath_recv"));
+    log_where_am_i();
     return 0;
 }
 
@@ -361,7 +362,7 @@ xrdp_fastpath_process_input_event(struct xrdp_fastpath *self,
                 }
                 break;
             default:
-                g_writeln("xrdp_fastpath_process_input_event: unknown "
+                log_trace("xrdp_fastpath_process_input_event: unknown "
                           "eventCode %d", eventCode);
                 break;
         }
