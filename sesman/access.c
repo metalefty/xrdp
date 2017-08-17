@@ -42,14 +42,13 @@ access_login_allowed(const char *user)
     if ((0 == g_strncmp(user, "root", 5)) && (0 == g_cfg->sec.allow_root))
     {
         log_message(LOG_LEVEL_WARNING,
-                    "ROOT login attempted, but root login is disabled");
+                    "root login attempted, but root login is disabled");
         return 0;
     }
 
     if ((0 == g_cfg->sec.ts_users_enable) && (0==g_cfg->sec.ts_always_group_check))
     {
-        LOG_DBG("Terminal Server Users group is disabled, allowing authentication",
-                1);
+        log_trace("Terminal Server Users group is disabled, allowing authentication");
         return 1;
     }
 
@@ -97,8 +96,8 @@ access_login_mng_allowed(const char *user)
 
     if (0 == g_cfg->sec.ts_admins_enable)
     {
-        LOG_DBG("[MNG] Terminal Server Admin group is disabled, "
-                "allowing authentication", 1);
+        log_trace("[MNG] Terminal Server Admin group is disabled, "
+                  "allowing authentication");
         return 1;
     }
 
@@ -110,7 +109,7 @@ access_login_mng_allowed(const char *user)
 
     if (g_cfg->sec.ts_admins == gid)
     {
-        LOG_DBG("[MNG] ts_users is user's primary group");
+        log_trace("[MNG] ts_users is user's primary group");
         return 1;
     }
 
