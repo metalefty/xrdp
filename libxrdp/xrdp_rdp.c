@@ -359,6 +359,8 @@ xrdp_rdp_create(struct xrdp_session *session, struct trans *trans)
     self->client_info.cache2_size = 1024;
     self->client_info.cache3_entries = 262;
     self->client_info.cache3_size = 4096;
+    /* load socker number  */
+    self->client_info.client_sck = trans->sck;
     /* load client ip info */
     bytes = sizeof(self->client_info.client_ip) - 1;
     g_write_ip_address(trans->sck, self->client_info.client_ip, bytes);

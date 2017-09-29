@@ -154,6 +154,9 @@ struct xrdp_client_info
   int client_os_minor;
 
   int no_orders_supported;
+
+  /* client_addr and client_port will be filled by client_sck */
+  int client_sck;
 };
 
 #endif
