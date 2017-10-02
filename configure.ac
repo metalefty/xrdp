@@ -141,6 +141,13 @@ AM_CONDITIONAL(XRDP_PAINTER, [test x$enable_painter = xyes])
 AC_ARG_ENABLE(rfxcodec, AS_HELP_STRING([--disable-rfxcodec],
               [Do not use included librfxcodec library (default: no)]),
               [], [enable_rfxcodec=yes])
+
+AC_ARG_ENABLE(blacklistd, AS_HELP_STRING([--enable-blacklistd],
+              [Use blacklistd (default: no)]),
+	      [], [enable_blacklistd=yes])
+AM_CONDITIONAL(XRDP_BLACKLISTD, [test x$enable_blacklistd = xyes])
+AM_CONDITIONAL(USE_BLACKLIST, [test x$enable_blacklistd = xyes])
+
 AM_CONDITIONAL(XRDP_RFXCODEC, [test x$enable_rfxcodec = xyes])
 
 # Don't fail without working nasm if rfxcodec is not enabled
