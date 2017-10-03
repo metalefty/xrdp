@@ -1371,6 +1371,81 @@ g_write_ip_address(int rcv_sck, char *ip_address, int bytes)
 }
 
 /*****************************************************************************/
+/* solves peer IP address and port from socket */
+void
+g_sck_get_peer_addrport(int rcv_sck, int *port, char *addr, int addr_bytes)
+{
+    char *peer_addr;
+    int peer_port;
+    int ok;
+
+    union
+    {
+        struct sockaddr sock_addr;
+        struct sockaddr_in sock_addr_in;
+#if defined(XRDP_ENABLE_IPV6)
+        struct sockaddr_in6 sock_addr_in6;
+#endif
+        struct sockaddr_un sock_addr_un;
+    } sock_info;
+
+    ok = 0;
+    socklen_t sock_len = sizeof(sock_info);
+    memset(&sock_info, 0, sock_len);
+#if defined(XRDP_ENABLE_IPV6)
+    peer_addr = (char *)g_malloc(INET6_ADDRSTRLEN, 1);
+#else
+    peer_addr = (char *)g_malloc(INET_ADDRSTRLEN, 1);
+#endif
+
+    if (getpeername(rcv_sck, (struct sockaddr *)&sock_info, &sock_len) == 0)
+    {
+        switch(sock_info.sock_addr.sa_family)
+        {
+            case AF_INET:
+            {
+                struct sockaddr_in *sock_addr_in = &sock_info.sock_addr_in;
+                g_snprintf(peer_addr, INET_ADDRSTRLEN, "%s", inet_ntoa(sock_addr_in->sin_addr));
+                peer_port = ntohs(sock_addr_in->sin_port);
+                ok = 1;
+                break;
+            }
+
+#if defined(XRDP_ENABLE_IPV6)
+            case AF_INET6:
+            {
+                struct sockaddr_in6 *sock_addr_in6 = &sock_info.sock_addr_in6;
+                inet_ntop(sock_addr_in6->sin6_family,
+                          &sock_addr_in6->sin6_addr, peer_addr, INET6_ADDRSTRLEN);
+                peer_port = ntohs(sock_addr_in6->sin6_port);
+                ok = 1;
+                break;
+            }
+#endif
+
+            default:
+            {
+                break;
+            }
+
+        }
+
+        if (ok)
+        {
+            addr = g_strndup(peer_addr, addr_bytes);
+            *port = peer_port;
+        }
+    }
+
+    if (!ok)
+    {
+        addr = g_strndup("unknown", addr_bytes);
+    }
+
+    g_free(peer_addr);
+}
+
+/*****************************************************************************/
 void
 g_sleep(int msecs)
 {
