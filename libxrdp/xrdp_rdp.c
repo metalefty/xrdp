@@ -363,7 +363,7 @@ xrdp_rdp_create(struct xrdp_session *session, struct trans *trans)
     self->client_info.client_sck = trans->sck;
     /* load client ip info */
     bytes = sizeof(self->client_info.client_ip) - 1;
-    g_write_ip_address(trans->sck, self->client_info.client_ip, bytes);
+    g_snprintf(self->client_info.client_ip, bytes, "%lld", (long long)trans->sck); /* TODO: temporarily use socket instead */
     self->mppc_enc = mppc_enc_new(PROTO_RDP_50);
 #if defined(XRDP_NEUTRINORDP)
     self->rfx_enc = rfx_context_new();
