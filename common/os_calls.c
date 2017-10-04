@@ -1375,6 +1375,7 @@ g_write_ip_address(int rcv_sck, char *ip_address, int bytes)
 void
 g_sck_get_peer_addrport(int rcv_sck, int *port, char *addr, int addr_bytes)
 {
+    log_message(LOG_LEVEL_DEBUG, "%s:%s", __func__, __LINE__);
     char *peer_addr;
     int peer_port;
     int ok;
@@ -1430,12 +1431,14 @@ g_sck_get_peer_addrport(int rcv_sck, int *port, char *addr, int addr_bytes)
 
         }
 
+    log_message(LOG_LEVEL_DEBUG, "%s:%s", __func__, __LINE__);
         if (ok)
         {
-            g_writeln("peer_addr=%s", peer_addr);
+    log_message(LOG_LEVEL_DEBUG, "%s:%s", __func__, __LINE__);
             addr = g_strndup(peer_addr, addr_bytes);
-            g_writeln("addr=%s", addr);
             *port = peer_port;
+            log_message(LOG_LEVEL_DEBUG, "peer_addr=%s", peer_addr);
+            log_message(LOG_LEVEL_DEBUG, "addr=%s",addr);
         }
     }
 
