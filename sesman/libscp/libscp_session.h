@@ -80,6 +80,9 @@ int
 scp_session_set_client_ip(struct SCP_SESSION* s, const char *str);
 
 int
+scp_session_set_client_addrport(struct SCP_SESSION* s, const char *str);
+
+int
 scp_session_set_hostname(struct SCP_SESSION* s, const char *str);
 
 int

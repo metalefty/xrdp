@@ -87,8 +87,10 @@ struct SCP_SESSION
     char *domain;
     char *program;
     char *directory;
-    char *client_ip;
+    char *client_ip; /* client socket */
     tui8 guid[16];
+    char *client_addr;
+    int  client_port;
 };
 
 struct SCP_DISCONNECTED_SESSION

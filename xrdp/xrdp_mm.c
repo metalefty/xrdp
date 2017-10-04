@@ -264,7 +264,7 @@ xrdp_mm_send_login(struct xrdp_mm *self)
     out_uint16_be(s, index);
     out_uint8a(s, self->wm->client_info->directory, index);
 
-    /* send client ip */
+    /* send client socket */
     index = g_strlen(self->wm->client_info->client_ip);
     out_uint16_be(s, index);
     out_uint8a(s, self->wm->client_info->client_ip, index);

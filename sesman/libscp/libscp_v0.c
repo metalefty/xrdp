@@ -306,7 +306,7 @@ scp_v0s_accept(struct SCP_CONNECTION *c, struct SCP_SESSION **s, int skipVchk)
 
         if (s_check_rem(c->in_s, 2))
         {
-            /* reading client IP address */
+            /* reading client socket */
             in_uint16_be(c->in_s, sz);
 
             if (sz > 0)
@@ -314,6 +314,7 @@ scp_v0s_accept(struct SCP_CONNECTION *c, struct SCP_SESSION **s, int skipVchk)
                 in_uint8a(c->in_s, buf, sz);
                 buf[sz] = '\0';
                 scp_session_set_client_ip(session, buf);
+                scp_session_set_client_addrport(session, buf);
             }
         }
     }

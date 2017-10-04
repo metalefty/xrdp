@@ -339,6 +339,50 @@ scp_session_set_client_ip(struct SCP_SESSION *s, const char *str)
 }
 
 /*******************************************************************/
+/**
+ * resolve client IP address and port by socket number, and set
+ */
+int
+scp_session_set_client_addrport(struct SCP_SESSION* s, const char *str)
+{
+    int sck;
+    char *addr;
+    int port;
+
+    addr = 0;
+    port = 0;
+    sck = atoi(str);
+
+    if (0 == str)
+    {
+        return 1;
+    }
+
+    if (0 != s->client_addr)
+    {
+        g_free(s->client_addr);
+    }
+
+#if defined(XRDP_ENABLE_IPV6)
+    g_sck_get_peer_addrport(sck, &port, addr, INET6_ADDRSTRLEN);
+#else
+    g_sck_get_peer_addrport(sck, &port, addr, INET_ADDRSTRLEN);
+#endif
+
+    s->client_addr = g_strdup(addr);
+    s->client_port = port;
+
+    if (0 == s->client_addr)
+    {
+        log_message(LOG_LEVEL_WARNING, "[session:%d] set_client_addr: strdup error", __LINE__);
+        return 1;
+    }
+
+    g_free(addr);
+
+    return 0;
+}
+/*******************************************************************/
 int
 scp_session_set_hostname(struct SCP_SESSION *s, const char *str)
 {
@@ -445,6 +489,7 @@ scp_session_destroy(struct SCP_SESSION *s)
     g_free(s->program);
     g_free(s->directory);
     g_free(s->client_ip);
+    g_free(s->client_addr);
     g_free(s->errstr);
     g_free(s->mng);
     g_free(s);
