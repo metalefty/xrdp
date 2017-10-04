@@ -1399,12 +1399,15 @@ g_sck_get_peer_addrport(int rcv_sck, int *port, char *addr, int addr_bytes)
     peer_addr = (char *)g_malloc(INET_ADDRSTRLEN, 1);
 #endif
 
+    log_message(LOG_LEVEL_DEBUG, "%s:%d rcv_sck=%d", __func__, __LINE__, rcv_sck);
     if (getpeername(rcv_sck, (struct sockaddr *)&sock_info, &sock_len) == 0)
     {
+    log_message(LOG_LEVEL_DEBUG, "%s:%d rcv_sck=%d", __func__, __LINE__, rcv_sck);
         switch(sock_info.sock_addr.sa_family)
         {
             case AF_INET:
             {
+    log_message(LOG_LEVEL_DEBUG, "%s:%d rcv_sck=%d", __func__, __LINE__, rcv_sck);
                 struct sockaddr_in *sock_addr_in = &sock_info.sock_addr_in;
                 g_snprintf(peer_addr, INET_ADDRSTRLEN, "%s", inet_ntoa(sock_addr_in->sin_addr));
                 peer_port = ntohs(sock_addr_in->sin_port);
@@ -1415,6 +1418,7 @@ g_sck_get_peer_addrport(int rcv_sck, int *port, char *addr, int addr_bytes)
 #if defined(XRDP_ENABLE_IPV6)
             case AF_INET6:
             {
+    log_message(LOG_LEVEL_DEBUG, "%s:%d rcv_sck=%d", __func__, __LINE__, rcv_sck);
                 struct sockaddr_in6 *sock_addr_in6 = &sock_info.sock_addr_in6;
                 inet_ntop(sock_addr_in6->sin6_family,
                           &sock_addr_in6->sin6_addr, peer_addr, INET6_ADDRSTRLEN);
