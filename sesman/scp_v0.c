@@ -111,8 +111,9 @@ scp_v0_process(struct SCP_CONNECTION *c, struct SCP_SESSION *s)
 
                 if (0 != s->client_ip)
                 {
-                    log_message(LOG_LEVEL_INFO, "++ created session (access granted): "
-                                "username %s, ip %s", s->username, s->client_ip);
+                    log_message(LOG_LEVEL_INFO,
+                                "++ created session (access granted): "
+                                "username %s, ip %s, port=%d", s->username, s->client_addr, s->client_port);
                 }
                 else
                 {
