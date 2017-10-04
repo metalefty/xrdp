@@ -369,7 +369,7 @@ scp_session_set_client_addrport(struct SCP_SESSION* s, const char *str)
     g_sck_get_peer_addrport(sck, &port, addr, INET_ADDRSTRLEN);
 #endif
 
-    log_message(LOG_LEVEL_DEBUG, "%s: addr=", __func__, addr);
+    log_message(LOG_LEVEL_DEBUG, "%s: addr=%s", __func__, addr);
 
     s->client_addr = g_strdup(addr);
     s->client_port = port;
