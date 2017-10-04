@@ -115,9 +115,10 @@ scp_v1_process(struct SCP_CONNECTION *c, struct SCP_SESSION *s)
         log_message(LOG_LEVEL_DEBUG, "No disconnected sessions for this user "
                     "- we create a new one");
 
-        if (0 != s->client_ip)
+        if (0 != s->client_addr)
         {
-            log_message(LOG_LEVEL_INFO, "++ created session (access granted): username %s, ip %s", s->username, s->client_ip);
+            log_message(LOG_LEVEL_INFO,
+                        "++ created session (access granted): username %s, ip %s", s->username, s->client_addr);
         }
         else
         {
