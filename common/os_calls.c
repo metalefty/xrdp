@@ -1432,7 +1432,9 @@ g_sck_get_peer_addrport(int rcv_sck, int *port, char *addr, int addr_bytes)
 
         if (ok)
         {
+            log_message(LOG_LEVEL_DEBUG, "peer_addr=%s", peer_addr);
             addr = g_strndup(peer_addr, addr_bytes);
+            log_message(LOG_LEVEL_DEBUG, "addr=%s", addr);
             *port = peer_port;
         }
     }
