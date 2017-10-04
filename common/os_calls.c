@@ -1436,7 +1436,7 @@ g_sck_get_peer_addrport(int rcv_sck, int *port, char *addr, int addr_bytes)
         }
     }
 
-    log_message(LOG_LEVEL_DEBUG, "%s:%d", __func__, __LINE__);
+    log_message(LOG_LEVEL_DEBUG, "%s:%d %s", __func__, __LINE__, g_get_strerror());
     if (ok)
     {
         log_message(LOG_LEVEL_DEBUG, "%s:%d", __func__, __LINE__);
