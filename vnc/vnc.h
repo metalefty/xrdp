@@ -113,6 +113,7 @@ struct vnc
   int clip_chanid;
   struct stream *clip_data_s;
   int delay_ms;
+  int incremental;
   struct trans *trans;
   int got_guid;
   tui8 guid[16];
