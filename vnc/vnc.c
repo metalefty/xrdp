@@ -760,6 +760,7 @@ lib_framebuffer_update(struct vnc *v)
 
     if (v->mod_width != v->server_width || v->mod_height != v->server_height)
     {
+        log_message(LOG_LEVEL_DEBUG, "SetDesktopSize: mod_width=%d, mod_height=%d", v->mod_width, v->mod_height);
         /* SetDesktopSize */
         init_stream(s, 8192);
         out_uint8(s, 251); /* SetDesktopSize */
