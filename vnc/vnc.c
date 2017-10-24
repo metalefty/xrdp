@@ -760,10 +760,29 @@ lib_framebuffer_update(struct vnc *v)
 
     if (v->mod_width != v->server_width || v->mod_height != v->server_height)
     {
+        /* SetDesktopSize */
+        init_stream(s, 8192);
+        out_uint8(s, 251); /* SetDesktopSize */
+        out_uint8(s, 0);   /* Padding */
+        out_uint16_be(s, v->mod_width);
+        out_uint16_be(s, v->mod_height);
+        out_uint8(s, 1); /* number of screens */
+        out_uint8(s, 0);   /* Paddinog */
+        out_uint32_be(s, 1); /* screens */
+        out_uint16_be(s, 0);
+        out_uint16_be(s, 0);
+        out_uint16_be(s, 0);
+        out_uint16_be(s, 0);
+        out_uint32_be(s, 0);
+        s_mark_end(s);
+        trans_force_write_s(v->trans, s);
+
+#if 0
         /* perform actual resize outside the update */
         v->mod_width = v->server_width;
         v->mod_height = v->server_height;
         error = v->server_reset(v, v->mod_width, v->mod_height, v->mod_bpp);
+#endif
         v->incremental = 0;
     }
 
@@ -1077,7 +1096,7 @@ lib_mod_connect(struct vnc *v)
         v->server_msg(v, text, 0);
         g_sleep(v->delay_ms);
     }
-    
+
     g_sprintf(text, "VNC connecting to %s %s", v->ip, con_port);
     v->server_msg(v, text, 0);
 
