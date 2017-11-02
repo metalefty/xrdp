@@ -56,7 +56,7 @@ void verifyColorMap(struct mod *mod)
 }
 /*****************************************************************************/
 /* return error */
-static int DEFAULT_CC
+static int
 lxrdp_start(struct mod *mod, int w, int h, int bpp)
 {
     rdpSettings *settings;
@@ -78,7 +78,7 @@ lxrdp_start(struct mod *mod, int w, int h, int bpp)
 
 /******************************************************************************/
 /* return error */
-static int DEFAULT_CC
+static int
 lxrdp_connect(struct mod *mod)
 {
     BOOL ok;
@@ -152,20 +152,20 @@ lxrdp_connect(struct mod *mod)
         }
 
 #endif
-        log_message(LOG_LEVEL_INFO,"freerdp_connect Failed to destination :%s:%d",mod->inst->settings->ServerHostname,mod->inst->settings->ServerPort);   
+        log_message(LOG_LEVEL_INFO,"freerdp_connect Failed to destination :%s:%d",mod->inst->settings->ServerHostname,mod->inst->settings->ServerPort);
         return 1;
     }
     else
     {
         log_message(LOG_LEVEL_INFO,"freerdp_connect returned Success to destination :%s:%d",mod->inst->settings->ServerHostname,mod->inst->settings->ServerPort);
-    }	
+    }
 
     return 0;
 }
 
 /******************************************************************************/
 /* return error */
-static int DEFAULT_CC
+static int
 lxrdp_event(struct mod *mod, int msg, long param1, long param2,
             long param3, long param4)
 {
@@ -355,7 +355,7 @@ lxrdp_event(struct mod *mod, int msg, long param1, long param2,
 
 /******************************************************************************/
 /* return error */
-static int DEFAULT_CC
+static int
 lxrdp_signal(struct mod *mod)
 {
     LLOGLN(10, ("lxrdp_signal:"));
@@ -364,7 +364,7 @@ lxrdp_signal(struct mod *mod)
 
 /******************************************************************************/
 /* return error */
-static int DEFAULT_CC
+static int
 lxrdp_end(struct mod *mod)
 {
     int i;
@@ -392,7 +392,7 @@ lxrdp_end(struct mod *mod)
 
 /******************************************************************************/
 /* return error */
-static int DEFAULT_CC
+static int
 lxrdp_set_param(struct mod *mod, char *name, char *value)
 {
     rdpSettings *settings;
@@ -445,7 +445,7 @@ lxrdp_set_param(struct mod *mod, char *name, char *value)
 }
 
 /******************************************************************************/
-static int DEFAULT_CC
+static int
 lxrdp_session_change(struct mod *mod, int a, int b)
 {
     LLOGLN(0, ("lxrdp_session_change: - no code here"));
@@ -453,7 +453,7 @@ lxrdp_session_change(struct mod *mod, int a, int b)
 }
 
 /******************************************************************************/
-static int DEFAULT_CC
+static int
 lxrdp_get_wait_objs(struct mod *mod, tbus *read_objs, int *rcount,
                     tbus *write_objs, int *wcount, int *timeout)
 {
@@ -476,7 +476,7 @@ lxrdp_get_wait_objs(struct mod *mod, tbus *read_objs, int *rcount,
 }
 
 /******************************************************************************/
-static int DEFAULT_CC
+static int
 lxrdp_check_wait_objs(struct mod *mod)
 {
     BOOL ok;
@@ -494,7 +494,7 @@ lxrdp_check_wait_objs(struct mod *mod)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_begin_paint(rdpContext *context)
 {
     struct mod *mod;
@@ -505,7 +505,7 @@ lfreerdp_begin_paint(rdpContext *context)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_end_paint(rdpContext *context)
 {
     struct mod *mod;
@@ -516,7 +516,7 @@ lfreerdp_end_paint(rdpContext *context)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_set_bounds(rdpContext *context, rdpBounds *bounds)
 {
     struct mod *mod;
@@ -543,7 +543,7 @@ lfreerdp_set_bounds(rdpContext *context, rdpBounds *bounds)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_bitmap_update(rdpContext *context, BITMAP_UPDATE *bitmap)
 {
     struct mod *mod;
@@ -614,7 +614,7 @@ lfreerdp_bitmap_update(rdpContext *context, BITMAP_UPDATE *bitmap)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_dst_blt(rdpContext *context, DSTBLT_ORDER *dstblt)
 {
     struct mod *mod;
@@ -628,7 +628,7 @@ lfreerdp_dst_blt(rdpContext *context, DSTBLT_ORDER *dstblt)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_pat_blt(rdpContext *context, PATBLT_ORDER *patblt)
 {
     struct mod *mod;
@@ -689,7 +689,7 @@ lfreerdp_pat_blt(rdpContext *context, PATBLT_ORDER *patblt)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_scr_blt(rdpContext *context, SCRBLT_ORDER *scrblt)
 {
     struct mod *mod;
@@ -704,7 +704,7 @@ lfreerdp_scr_blt(rdpContext *context, SCRBLT_ORDER *scrblt)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_opaque_rect(rdpContext *context, OPAQUE_RECT_ORDER *opaque_rect)
 {
     struct mod *mod;
@@ -724,7 +724,7 @@ lfreerdp_opaque_rect(rdpContext *context, OPAQUE_RECT_ORDER *opaque_rect)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_mem_blt(rdpContext *context, MEMBLT_ORDER *memblt)
 {
     int id;
@@ -768,7 +768,7 @@ lfreerdp_mem_blt(rdpContext *context, MEMBLT_ORDER *memblt)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_glyph_index(rdpContext *context, GLYPH_INDEX_ORDER *glyph_index)
 {
     struct mod *mod;
@@ -798,7 +798,7 @@ lfreerdp_glyph_index(rdpContext *context, GLYPH_INDEX_ORDER *glyph_index)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_line_to(rdpContext *context, LINE_TO_ORDER *line_to)
 {
     struct mod *mod;
@@ -825,7 +825,7 @@ lfreerdp_line_to(rdpContext *context, LINE_TO_ORDER *line_to)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_cache_bitmap(rdpContext *context, CACHE_BITMAP_ORDER *cache_bitmap_order)
 {
     LLOGLN(0, ("lfreerdp_cache_bitmap: - no code here"));
@@ -833,7 +833,7 @@ lfreerdp_cache_bitmap(rdpContext *context, CACHE_BITMAP_ORDER *cache_bitmap_orde
 
 /******************************************************************************/
 /* Turn the bitmap upside down*/
-static void DEFAULT_CC
+static void
 lfreerdp_upsidedown(UINT8 *destination, CACHE_BITMAP_V2_ORDER *cache_bitmap_v2_order, int server_Bpp)
 {
     tui8 *src;
@@ -860,7 +860,7 @@ lfreerdp_upsidedown(UINT8 *destination, CACHE_BITMAP_V2_ORDER *cache_bitmap_v2_o
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_cache_bitmapV2(rdpContext *context,
                         CACHE_BITMAP_V2_ORDER *cache_bitmap_v2_order)
 {
@@ -943,7 +943,7 @@ lfreerdp_cache_bitmapV2(rdpContext *context,
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_cache_glyph(rdpContext *context, CACHE_GLYPH_ORDER *cache_glyph_order)
 {
     int index;
@@ -971,7 +971,7 @@ lfreerdp_cache_glyph(rdpContext *context, CACHE_GLYPH_ORDER *cache_glyph_order)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_cache_brush(rdpContext *context, CACHE_BRUSH_ORDER *cache_brush_order)
 {
     int idx;
@@ -1035,7 +1035,7 @@ lfreerdp_cache_brush(rdpContext *context, CACHE_BRUSH_ORDER *cache_brush_order)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_pointer_position(rdpContext *context,
                           POINTER_POSITION_UPDATE *pointer_position)
 {
@@ -1043,15 +1043,15 @@ lfreerdp_pointer_position(rdpContext *context,
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_pointer_system(rdpContext *context,
                         POINTER_SYSTEM_UPDATE *pointer_system)
 {
-    LLOGLN(0, ("lfreerdp_pointer_system: - no code here type value = %d",pointer_system->type));    
+    LLOGLN(0, ("lfreerdp_pointer_system: - no code here type value = %d",pointer_system->type));
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_pointer_color(rdpContext *context,
                        POINTER_COLOR_UPDATE *pointer_color)
 {
@@ -1059,7 +1059,7 @@ lfreerdp_pointer_color(rdpContext *context,
 }
 
 /******************************************************************************/
-static int APP_CC
+static int
 lfreerdp_get_pixel(void *bits, int width, int height, int bpp,
                    int delta, int x, int y)
 {
@@ -1085,7 +1085,7 @@ lfreerdp_get_pixel(void *bits, int width, int height, int bpp,
 }
 
 /******************************************************************************/
-static int APP_CC
+static int
 lfreerdp_set_pixel(int pixel, void *bits, int width, int height, int bpp,
                    int delta, int x, int y)
 {
@@ -1125,7 +1125,7 @@ lfreerdp_set_pixel(int pixel, void *bits, int width, int height, int bpp,
 }
 
 /******************************************************************************/
-static int APP_CC
+static int
 lfreerdp_convert_color_image(void *dst, int dst_width, int dst_height,
                              int dst_bpp, int dst_delta,
                              void *src, int src_width, int src_height,
@@ -1150,7 +1150,7 @@ lfreerdp_convert_color_image(void *dst, int dst_width, int dst_height,
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_pointer_new(rdpContext *context,
                      POINTER_NEW_UPDATE *pointer_new)
 {
@@ -1175,10 +1175,10 @@ lfreerdp_pointer_new(rdpContext *context,
         LLOGLN(0,("pointer index too big"));
         return ;
     }
-    // In this fix we remove the xorBpp check, even if 
+    // In this fix we remove the xorBpp check, even if
     // the mouse pointers are not correct we can use them.
     // Configure your destination not to use windows Aero as pointer scheme
-    else if ( // pointer_new->xorBpp == 1 && 
+    else if ( // pointer_new->xorBpp == 1 &&
             pointer_new->colorPtrAttr.width == 32 &&
             pointer_new->colorPtrAttr.height == 32 &&
             index < 32)
@@ -1220,7 +1220,7 @@ lfreerdp_pointer_new(rdpContext *context,
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_pointer_cached(rdpContext *context,
                         POINTER_CACHED_UPDATE *pointer_cached)
 {
@@ -1235,24 +1235,24 @@ lfreerdp_pointer_cached(rdpContext *context,
                            mod->pointer_cache[index].mask);
 }
 
-static void DEFAULT_CC lfreerdp_polygon_cb(rdpContext* context, POLYGON_CB_ORDER* polygon_cb)
+static void lfreerdp_polygon_cb(rdpContext* context, POLYGON_CB_ORDER* polygon_cb)
 {
-    LLOGLN(0, ("lfreerdp_polygon_sc called:- not supported!!!!!!!!!!!!!!!!!!!!"));    
+    LLOGLN(0, ("lfreerdp_polygon_sc called:- not supported!!!!!!!!!!!!!!!!!!!!"));
 }
 
-static void DEFAULT_CC lfreerdp_polygon_sc(rdpContext* context, POLYGON_SC_ORDER* polygon_sc)
+static void lfreerdp_polygon_sc(rdpContext* context, POLYGON_SC_ORDER* polygon_sc)
 {
     struct mod *mod;
     int i, npoints;
     XPoint points[4];
     int fgcolor;
-    int server_bpp, client_bpp;    
-    
+    int server_bpp, client_bpp;
+
     mod = ((struct mod_context *)context)->modi;
     LLOGLN(10, ("lfreerdp_polygon_sc :%d(points) %d(color) %d(fillmode) %d(bRop) %d(cbData) %d(x) %d(y)", polygon_sc->numPoints,polygon_sc->brushColor,polygon_sc->fillMode,polygon_sc->bRop2,polygon_sc->cbData,polygon_sc->xStart,polygon_sc->yStart));
     if(polygon_sc->numPoints==3)
     {
-        server_bpp = mod->inst->settings->ColorDepth;	
+        server_bpp = mod->inst->settings->ColorDepth;
         client_bpp = mod->bpp;
 
         points[0].x = polygon_sc->xStart;
@@ -1265,7 +1265,7 @@ static void DEFAULT_CC lfreerdp_polygon_sc(rdpContext* context, POLYGON_SC_ORDER
         }
         fgcolor = convert_color(server_bpp, client_bpp,
                             polygon_sc->brushColor, mod->colormap);
-   
+
         mod->server_set_opcode(mod, polygon_sc->bRop2);
         mod->server_set_bgcolor(mod, 255);
         mod->server_set_fgcolor(mod, fgcolor);
@@ -1281,18 +1281,18 @@ static void DEFAULT_CC lfreerdp_polygon_sc(rdpContext* context, POLYGON_SC_ORDER
     else
     {
         LLOGLN(0, ("Not handled number of points in lfreerdp_polygon_sc"));
-    }   
+    }
 }
 
-static void DEFAULT_CC lfreerdp_syncronize(rdpContext* context)
+static void lfreerdp_syncronize(rdpContext* context)
 {
     struct mod *mod;
-    mod = ((struct mod_context *)context)->modi;    
+    mod = ((struct mod_context *)context)->modi;
     LLOGLN(0, ("lfreerdp_synchronize received - not handled"));
 }
 
 /******************************************************************************/
-static BOOL DEFAULT_CC
+static BOOL
 lfreerdp_pre_connect(freerdp *instance)
 {
     struct mod *mod;
@@ -1327,7 +1327,7 @@ lfreerdp_pre_connect(freerdp *instance)
 
     // TODO
     // instance->settings->offscreen_bitmap_cache = false;
-    instance->settings->OffscreenSupportLevel = 0;  
+    instance->settings->OffscreenSupportLevel = 0;
     instance->settings->DrawNineGridEnabled = 0 ;
 
     // TODO
@@ -1356,7 +1356,7 @@ lfreerdp_pre_connect(freerdp *instance)
     instance->settings->BitmapCacheV2CellInfo[4].numEntries = 0; // 2048;
     instance->settings->BitmapCacheV2CellInfo[4].persistent = FALSE;
 
-    // instance->settings->BitmapCacheV3Enabled = FALSE; 
+    // instance->settings->BitmapCacheV3Enabled = FALSE;
     instance->settings->OrderSupport[NEG_MULTIDSTBLT_INDEX] = FALSE;
     instance->settings->OrderSupport[NEG_MULTIPATBLT_INDEX] = FALSE;
     instance->settings->OrderSupport[NEG_MULTISCRBLT_INDEX] = FALSE;
@@ -1380,8 +1380,8 @@ lfreerdp_pre_connect(freerdp *instance)
         instance->settings->PerformanceFlags = PERF_DISABLE_WALLPAPER | PERF_DISABLE_FULLWINDOWDRAG | PERF_DISABLE_MENUANIMATIONS | PERF_DISABLE_THEMING ; // | PERF_DISABLE_CURSOR_SHADOW | PERF_DISABLE_CURSORSETTINGS ;
     }
     instance->settings->CompressionEnabled = FALSE ;
-    instance->settings->IgnoreCertificate = TRUE ;    
-    
+    instance->settings->IgnoreCertificate = TRUE ;
+
     // here
     //instance->settings->RdpVersion = 4;
 
@@ -1424,7 +1424,7 @@ lfreerdp_pre_connect(freerdp *instance)
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_WindowCreate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
                    WINDOW_STATE_ORDER *window_state)
 {
@@ -1502,7 +1502,7 @@ lrail_WindowCreate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_WindowUpdate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
                    WINDOW_STATE_ORDER *window_state)
 {
@@ -1511,7 +1511,7 @@ lrail_WindowUpdate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_WindowDelete(rdpContext *context, WINDOW_ORDER_INFO *orderInfo)
 {
     struct mod *mod;
@@ -1522,7 +1522,7 @@ lrail_WindowDelete(rdpContext *context, WINDOW_ORDER_INFO *orderInfo)
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_WindowIcon(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
                  WINDOW_ICON_ORDER *window_icon)
 {
@@ -1548,7 +1548,7 @@ lrail_WindowIcon(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_WindowCachedIcon(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
                        WINDOW_CACHED_ICON_ORDER *window_cached_icon)
 {
@@ -1563,7 +1563,7 @@ lrail_WindowCachedIcon(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_NotifyIconCreate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
                        NOTIFY_ICON_STATE_ORDER *notify_icon_state)
 {
@@ -1579,7 +1579,7 @@ lrail_NotifyIconCreate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
 
     if (orderInfo->fieldFlags & WINDOW_ORDER_FIELD_NOTIFY_TIP)
     {
-        freerdp_UnicodeToAsciiAlloc(notify_icon_state->toolTip.string, 
+        freerdp_UnicodeToAsciiAlloc(notify_icon_state->toolTip.string,
                     &rnso.tool_tip, notify_icon_state->toolTip.length / 2);
     }
 
@@ -1587,9 +1587,9 @@ lrail_NotifyIconCreate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
     {
         rnso.infotip.timeout = notify_icon_state->infoTip.timeout;
         rnso.infotip.flags = notify_icon_state->infoTip.flags;
-        freerdp_UnicodeToAsciiAlloc(notify_icon_state->infoTip.text.string, 
+        freerdp_UnicodeToAsciiAlloc(notify_icon_state->infoTip.text.string,
                     &rnso.infotip.text, notify_icon_state->infoTip.text.length / 2);
-        freerdp_UnicodeToAsciiAlloc(notify_icon_state->infoTip.title.string, 
+        freerdp_UnicodeToAsciiAlloc(notify_icon_state->infoTip.title.string,
                     &rnso.infotip.title, notify_icon_state->infoTip.title.length / 2);
     }
 
@@ -1617,7 +1617,7 @@ lrail_NotifyIconCreate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_NotifyIconUpdate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
                        NOTIFY_ICON_STATE_ORDER *notify_icon_state)
 {
@@ -1626,7 +1626,7 @@ lrail_NotifyIconUpdate(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_NotifyIconDelete(rdpContext *context, WINDOW_ORDER_INFO *orderInfo)
 {
     struct mod *mod;
@@ -1638,7 +1638,7 @@ lrail_NotifyIconDelete(rdpContext *context, WINDOW_ORDER_INFO *orderInfo)
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_MonitoredDesktop(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
                        MONITORED_DESKTOP_ORDER *monitored_desktop)
 {
@@ -1670,7 +1670,7 @@ lrail_MonitoredDesktop(rdpContext *context, WINDOW_ORDER_INFO *orderInfo,
 }
 
 /*****************************************************************************/
-void DEFAULT_CC
+void
 lrail_NonMonitoredDesktop(rdpContext *context, WINDOW_ORDER_INFO *orderInfo)
 {
     struct mod *mod;
@@ -1683,7 +1683,7 @@ lrail_NonMonitoredDesktop(rdpContext *context, WINDOW_ORDER_INFO *orderInfo)
 }
 
 /******************************************************************************/
-static BOOL DEFAULT_CC
+static BOOL
 lfreerdp_post_connect(freerdp *instance)
 {
     struct mod *mod;
@@ -1707,21 +1707,21 @@ lfreerdp_post_connect(freerdp *instance)
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_context_new(freerdp *instance, rdpContext *context)
 {
     LLOGLN(0, ("lfreerdp_context_new: %p", context));
 }
 
 /******************************************************************************/
-static void DEFAULT_CC
+static void
 lfreerdp_context_free(freerdp *instance, rdpContext *context)
 {
     LLOGLN(0, ("lfreerdp_context_free: - no code here"));
 }
 
 /******************************************************************************/
-static int DEFAULT_CC
+static int
 lfreerdp_receive_channel_data(freerdp *instance, int channelId, UINT8 *data,
                               int size, int flags, int total_size)
 {
@@ -1762,7 +1762,7 @@ lfreerdp_receive_channel_data(freerdp *instance, int channelId, UINT8 *data,
 }
 
 /******************************************************************************/
-static BOOL DEFAULT_CC
+static BOOL
 lfreerdp_authenticate(freerdp *instance, char **username,
                       char **password, char **domain)
 {
@@ -1771,7 +1771,7 @@ lfreerdp_authenticate(freerdp *instance, char **username,
 }
 
 /******************************************************************************/
-static BOOL DEFAULT_CC
+static BOOL
 lfreerdp_verify_certificate(freerdp *instance, char *subject, char *issuer,
                             char *fingerprint)
 {
@@ -1780,7 +1780,7 @@ lfreerdp_verify_certificate(freerdp *instance, char *subject, char *issuer,
 }
 
 /******************************************************************************/
-struct mod *EXPORT_CC
+struct mod *
 mod_init(void)
 {
     struct mod *mod;
@@ -1818,13 +1818,13 @@ mod_init(void)
 
     lcon = (modContext *)(mod->inst->context);
     lcon->modi = mod;
-    LLOGLN(10, ("mod_init: mod %p", mod));    
+    LLOGLN(10, ("mod_init: mod %p", mod));
 
     return mod;
 }
 
 /******************************************************************************/
-int EXPORT_CC
+int
 mod_exit(struct mod *mod)
 {
     LLOGLN(0, ("mod_exit:"));
