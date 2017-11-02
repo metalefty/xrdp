@@ -1,6 +1,6 @@
 EXTRA_DIST = xrdp-freerdp.h
 EXTRA_DEFINES =
- 
+
 if XRDP_DEBUG
 EXTRA_DEFINES += -DXRDP_DEBUG
 else
@@ -19,10 +19,10 @@ INCLUDES = \
   $(FREERDP_CFLAGS)
 
 lib_LTLIBRARIES = \
-  libxrdpfreerdp1.la
+  libxrdpfreerdp2.la
 
-libxrdpfreerdp1_la_SOURCES = xrdp-freerdp.c xrdp-color.c
+libxrdpfreerdp2_la_SOURCES = xrdp-freerdp.c xrdp-color.c
 
-libxrdpfreerdp1_la_LIBADD = \
+libxrdpfreerdp2_la_LIBADD = \
   $(top_builddir)/common/libcommon.la \
   $(FREERDP_LIBS)
