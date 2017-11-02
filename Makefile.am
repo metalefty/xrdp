@@ -30,8 +30,8 @@ else
 NEUTRINORDPDIR =
 endif
 
-if XRDP_FREERDP1
-FREERDPDIR = freerdp1
+if XRDP_FREERDP2
+FREERDPDIR = freerdp2
 else
 FREERDPDIR =
 endif
