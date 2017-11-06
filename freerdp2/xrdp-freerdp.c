@@ -68,7 +68,6 @@ lxrdp_start(struct mod *mod, int w, int h, int bpp)
     settings->ColorDepth = bpp;
     mod->bpp = bpp;
     // TODO what does this really become
-    settings->DisableEncryption = 1; // settings->encryption = 1;
     settings->TlsSecurity = 1;
     settings->NlaSecurity = 0;
     settings->RdpSecurity = 1;
@@ -400,7 +399,7 @@ lxrdp_set_param(struct mod *mod, char *name, char *value)
     LLOGLN(10, ("lxrdp_set_param: name [%s] value [%s]", name, value));
     settings = mod->inst->settings;
 
-    LLOGLN(10, ("%p %d", settings->ServerHostname, settings->DisableEncryption));
+    LLOGLN(10, ("%p", settings->ServerHostname));
 
     if (g_strcmp(name, "hostname") == 0)
     {
@@ -1315,7 +1314,7 @@ lfreerdp_pre_connect(freerdp *instance)
         num_chans++;
         LLOGLN(10, ("lfreerdp_pre_connect: got channel [%s], flags [0x%8.8x]",
                     ch_name, ch_flags));
-        dst_ch_name = instance->settings->ChannelDefArray[index].Name;
+        dst_ch_name = instance->settings->ChannelDefArray[index].name;
         g_memset(dst_ch_name, 0, 8);
         g_snprintf(dst_ch_name, 8, "%s", ch_name);
         instance->settings->ChannelDefArray[index].options = ch_flags;
@@ -1807,7 +1806,7 @@ mod_init(void)
     mod->inst = freerdp_new();
     mod->inst->PreConnect = lfreerdp_pre_connect;
     mod->inst->PostConnect = lfreerdp_post_connect;
-    mod->inst->context_size = sizeof(modContext);
+    mod->inst->ContextSize = sizeof(modContext);
     mod->inst->ContextNew = lfreerdp_context_new;
     mod->inst->ContextFree = lfreerdp_context_free;
     mod->inst->ReceiveChannelData = lfreerdp_receive_channel_data;

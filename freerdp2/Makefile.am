@@ -16,6 +16,7 @@ AM_CFLAGS = \
 
 INCLUDES = \
   -I$(top_srcdir)/common \
+  -I/usr/local/include \
   $(FREERDP_CFLAGS)
 
 lib_LTLIBRARIES = \
