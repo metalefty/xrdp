@@ -438,7 +438,9 @@ sound_process_output_formats(struct stream *s, int size)
     char *data;
 
     if (size < 16)
+    {
         return 1;
+    }
 
     in_uint8s(s, 14);
     in_uint16_le(s, num_formats);
@@ -1114,10 +1116,14 @@ sound_sndsrvr_sink_data_in(struct trans *trans)
     int error;
 
     if (trans == 0)
+    {
         return 0;
+    }
 
     if (trans != g_audio_c_trans_out)
+    {
         return 1;
+    }
 
     s = trans_get_in_s(trans);
     in_uint32_le(s, id);
@@ -1152,16 +1158,24 @@ sound_sndsrvr_sink_conn_in(struct trans *trans, struct trans *new_trans)
     LOG(0, ("sound_sndsrvr_sink_conn_in:"));
 
     if (trans == 0)
+    {
         return 1;
+    }
 
     if (trans != g_audio_l_trans_out)
+    {
         return 1;
+    }
 
     if (g_audio_c_trans_out != 0) /* if already set, error */
+    {
         return 1;
+    }
 
     if (new_trans == 0)
+    {
         return 1;
+    }
 
     g_audio_c_trans_out = new_trans;
     g_audio_c_trans_out->trans_data_in = sound_sndsrvr_sink_data_in;
@@ -1182,16 +1196,24 @@ sound_sndsrvr_source_conn_in(struct trans *trans, struct trans *new_trans)
     LOG(0, ("sound_sndsrvr_source_conn_in: client connected"));
 
     if (trans == 0)
+    {
         return 1;
+    }
 
     if (trans != g_audio_l_trans_in)
+    {
         return 1;
+    }
 
     if (g_audio_c_trans_in != 0) /* if already set, error */
+    {
         return 1;
+    }
 
     if (new_trans == 0)
+    {
         return 1;
+    }
 
     g_audio_c_trans_in = new_trans;
     g_audio_c_trans_in->trans_data_in = sound_sndsrvr_source_data_in;
@@ -1697,14 +1719,20 @@ sound_sndsrvr_source_data_in(struct trans *trans)
     int      i;
 
     if (trans == 0)
+    {
         return 0;
+    }
 
     if (trans != g_audio_c_trans_in)
+    {
         return 1;
+    }
 
     ts = trans_get_in_s(trans);
     if (trans_force_read(trans, 3))
+    {
         log_message(LOG_LEVEL_ERROR, "sound.c: error reading from transport");
+    }
 
     ts->p = ts->data + 8;
     in_uint8(ts, cmd);
@@ -1796,7 +1824,9 @@ sound_start_source_listener(void)
     g_snprintf(port, 255, CHANSRV_PORT_IN_STR, g_display_num);
     g_audio_l_trans_in->trans_conn_in = sound_sndsrvr_source_conn_in;
     if (trans_listen(g_audio_l_trans_in, port) != 0)
+    {
         LOG(0, ("trans_listen failed"));
+    }
     return 0;
 }
 
@@ -1813,7 +1843,9 @@ sound_start_sink_listener(void)
     g_snprintf(port, 255, CHANSRV_PORT_OUT_STR, g_display_num);
     g_audio_l_trans_out->trans_conn_in = sound_sndsrvr_sink_conn_in;
     if (trans_listen(g_audio_l_trans_out, port) != 0)
+    {
         LOG(0, ("trans_listen failed"));
+    }
     return 0;
 }
 
