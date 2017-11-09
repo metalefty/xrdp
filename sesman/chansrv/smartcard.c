@@ -67,7 +67,7 @@
 #undef LOG_LEVEL
 #define LOG_LEVEL   LOG_INFO
 
-#define log_error(_params...)                           \
+#define clog_error(_params...)                           \
 do                                                      \
 {                                                       \
     g_write("[%10.10u]: SMART_CARD %s: %d : ERROR: ",   \
@@ -75,7 +75,7 @@ do                                                      \
     g_writeln (_params);                                \
 } while (0)
 
-#define log_info(_params...)                            \
+#define clog_info(_params...)                            \
 do                                                      \
 {                                                       \
     if (LOG_INFO <= LOG_LEVEL)                          \
@@ -86,7 +86,7 @@ do                                                      \
     }                                                   \
 } while (0)
 
-#define log_debug(_params...)                           \
+#define clog_debug(_params...)                           \
 do                                                      \
 {                                                       \
     if (LOG_DEBUG <= LOG_LEVEL)                         \
@@ -301,11 +301,11 @@ static void scard_handle_GetAttrib_Return(struct stream *s, IRP *irp,
 void
 scard_device_announce(tui32 device_id)
 {
-    log_debug("entered: device_id=%d", device_id);
+    clog_debug("entered: device_id=%d", device_id);
 
     if (g_smartcards_inited)
     {
-        log_error("already init");
+        clog_error("already init");
         return;
     }
 
@@ -315,9 +315,9 @@ scard_device_announce(tui32 device_id)
     g_scard_index = scard_add_new_device(device_id);
 
     if (g_scard_index < 0)
-        log_debug("scard_add_new_device failed with DeviceId=%d", g_device_id);
+        clog_debug("scard_add_new_device failed with DeviceId=%d", g_device_id);
     else
-        log_debug("added smartcard with DeviceId=%d to list", g_device_id);
+        clog_debug("added smartcard with DeviceId=%d to list", g_device_id);
 }
 
 /**
@@ -372,7 +372,7 @@ scard_send_establish_context(void *user_data, int scope)
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -400,7 +400,7 @@ scard_send_release_context(void *user_data,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -427,7 +427,7 @@ scard_send_is_valid_context(void *user_data, char *context, int context_bytes)
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -455,7 +455,7 @@ scard_send_list_readers(void *user_data, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
     irp->scard_index = g_scard_index;
@@ -490,7 +490,7 @@ scard_send_get_status_change(void *user_data, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -522,7 +522,7 @@ scard_send_connect(void *user_data, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -558,7 +558,7 @@ scard_send_reconnect(void *user_data, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -589,7 +589,7 @@ scard_send_begin_transaction(void *user_data, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -622,7 +622,7 @@ scard_send_end_transaction(void *user_data, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -655,7 +655,7 @@ scard_send_status(void *user_data, int wide, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -687,7 +687,7 @@ scard_send_disconnect(void *user_data, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -720,7 +720,7 @@ scard_send_transmit(void *user_data, char *context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -752,7 +752,7 @@ scard_send_control(void *user_data, char* context, int context_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -782,7 +782,7 @@ scard_send_cancel(void *user_data, char *context, int context_bytes)
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -810,7 +810,7 @@ scard_send_get_attrib(void *user_data, char *card, int card_bytes,
     /* setup up IRP */
     if ((irp = devredir_irp_new()) == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return 1;
     }
 
@@ -900,14 +900,14 @@ scard_add_new_device(tui32 device_id)
 
     if ((index = scard_get_free_slot()) < 0)
     {
-        log_error("scard_get_free_slot failed");
+        clog_error("scard_get_free_slot failed");
         return -1;
     }
 
     sc = g_new0(SMARTCARD, 1);
     if (sc == NULL)
     {
-        log_error("system out of memory");
+        clog_error("system out of memory");
         return -1;
     }
 
@@ -932,12 +932,12 @@ scard_get_free_slot(void)
     {
         if (smartcards[i] == NULL)
         {
-            log_debug("found free slot at index %d", i);
+            clog_debug("found free slot at index %d", i);
             return i;
         }
     }
 
-    log_error("too many smart card devices; rejecting this one");
+    clog_error("too many smart card devices; rejecting this one");
     return -1;
 }
 
@@ -970,7 +970,7 @@ scard_send_EstablishContext(IRP *irp, int scope)
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_ESTABLISH_CONTEXT)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1013,13 +1013,13 @@ scard_send_ReleaseContext(IRP *irp, char *context, int context_bytes)
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_RELEASE_CONTEXT)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1064,13 +1064,13 @@ scard_send_IsContextValid(IRP *irp, char *context, int context_bytes)
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_IS_VALID_CONTEXT)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1134,7 +1134,7 @@ scard_send_ListReaders(IRP *irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
@@ -1143,7 +1143,7 @@ scard_send_ListReaders(IRP *irp, char *context, int context_bytes,
 
     if ((s = scard_make_new_ioctl(irp, ioctl)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1267,7 +1267,7 @@ scard_send_GetStatusChange(IRP* irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
@@ -1276,7 +1276,7 @@ scard_send_GetStatusChange(IRP* irp, char *context, int context_bytes,
 
     if ((s = scard_make_new_ioctl(irp, ioctl)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1395,7 +1395,7 @@ scard_send_Connect(IRP* irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
@@ -1404,7 +1404,7 @@ scard_send_Connect(IRP* irp, char *context, int context_bytes,
 
     if ((s = scard_make_new_ioctl(irp, ioctl)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1488,13 +1488,13 @@ scard_send_Reconnect(IRP *irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_RECONNECT)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1558,13 +1558,13 @@ scard_send_BeginTransaction(IRP *irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_BEGIN_TRANSACTION)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1626,13 +1626,13 @@ scard_send_EndTransaction(IRP *irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_END_TRANSACTION)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1694,14 +1694,14 @@ scard_send_Status(IRP *irp, int wide, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
     ioctl = wide ? SCARD_IOCTL_STATUS_W : SCARD_IOCTL_STATUS_A;
     if ((s = scard_make_new_ioctl(irp, ioctl)) == NULL)
     {
-        log_error("scard_make_new_ioctl");
+        clog_error("scard_make_new_ioctl");
         return;
     }
 /*
@@ -1780,13 +1780,13 @@ scard_send_Disconnect(IRP *irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_DISCONNECT)) == NULL)
     {
-        log_error("scard_make_new_ioctl failed");
+        clog_error("scard_make_new_ioctl failed");
         return;
     }
 
@@ -1848,17 +1848,17 @@ scard_send_Transmit(IRP *irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return 1;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_TRANSMIT)) == NULL)
     {
-        log_error("scard_make_new_ioctl");
+        clog_error("scard_make_new_ioctl");
         return 1;
     }
 
-    log_debug("send_bytes %d recv_bytes %d send dwProtocol %d cbPciLength %d "
+    clog_debug("send_bytes %d recv_bytes %d send dwProtocol %d cbPciLength %d "
               "extra_bytes %d recv dwProtocol %d cbPciLength %d extra_bytes %d",
               send_bytes, recv_bytes, send_ior->dwProtocol, send_ior->cbPciLength,
               send_ior->extra_bytes, recv_ior->dwProtocol, recv_ior->cbPciLength,
@@ -2039,13 +2039,13 @@ scard_send_Control(IRP *irp, char *context, int context_bytes,
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return 1;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_CONTROL)) == NULL)
     {
-        log_error("scard_make_new_ioctl");
+        clog_error("scard_make_new_ioctl");
         return 1;
     }
 
@@ -2112,13 +2112,13 @@ scard_send_Cancel(IRP *irp, char *context, int context_bytes)
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return 1;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_CANCEL)) == NULL)
     {
-        log_error("scard_make_new_ioctl");
+        clog_error("scard_make_new_ioctl");
         return 1;
     }
 
@@ -2164,13 +2164,13 @@ scard_send_GetAttrib(IRP *irp, char *card, int card_bytes, READER_STATE *rs)
 
     if ((sc = smartcards[irp->scard_index]) == NULL)
     {
-        log_error("smartcards[%d] is NULL", irp->scard_index);
+        clog_error("smartcards[%d] is NULL", irp->scard_index);
         return 1;
     }
 
     if ((s = scard_make_new_ioctl(irp, SCARD_IOCTL_GETATTRIB)) == NULL)
     {
-        log_error("scard_make_new_ioctl");
+        clog_error("scard_make_new_ioctl");
         return 1;
     }
 
@@ -2230,18 +2230,18 @@ scard_handle_EstablishContext_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
     /* get OutputBufferLen */
     xstream_rd_u32_le(s, len);
     scard_function_establish_context_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2254,18 +2254,18 @@ scard_handle_ReleaseContext_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
     /* get OutputBufferLen */
     xstream_rd_u32_le(s, len);
     scard_function_release_context_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2278,12 +2278,12 @@ scard_handle_IsContextValid_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2291,7 +2291,7 @@ scard_handle_IsContextValid_Return(struct stream *s, IRP *irp,
     xstream_rd_u32_le(s, len);
     scard_function_is_context_valid_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2304,18 +2304,18 @@ scard_handle_ListReaders_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
     /* get OutputBufferLen */
     xstream_rd_u32_le(s, len);
     scard_function_list_readers_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2328,18 +2328,18 @@ scard_handle_GetStatusChange_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
     /* get OutputBufferLen */
     xstream_rd_u32_le(s, len);
     scard_function_get_status_change_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2352,12 +2352,12 @@ scard_handle_Connect_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2367,7 +2367,7 @@ scard_handle_Connect_Return(struct stream *s, IRP *irp,
     scard_function_connect_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
 
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2380,12 +2380,12 @@ scard_handle_Reconnect_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2393,7 +2393,7 @@ scard_handle_Reconnect_Return(struct stream *s, IRP *irp,
     xstream_rd_u32_le(s, len);
     scard_function_reconnect_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2406,12 +2406,12 @@ scard_handle_BeginTransaction_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2419,7 +2419,7 @@ scard_handle_BeginTransaction_Return(struct stream *s, IRP *irp,
     xstream_rd_u32_le(s, len);
     scard_function_begin_transaction_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2432,12 +2432,12 @@ scard_handle_EndTransaction_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2445,7 +2445,7 @@ scard_handle_EndTransaction_Return(struct stream *s, IRP *irp,
     xstream_rd_u32_le(s, len);
     scard_function_end_transaction_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2458,12 +2458,12 @@ scard_handle_Status_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2471,7 +2471,7 @@ scard_handle_Status_Return(struct stream *s, IRP *irp,
     xstream_rd_u32_le(s, len);
     scard_function_status_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2484,12 +2484,12 @@ scard_handle_Disconnect_Return(struct stream *s, IRP *irp,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2497,7 +2497,7 @@ scard_handle_Disconnect_Return(struct stream *s, IRP *irp,
     xstream_rd_u32_le(s, len);
     scard_function_disconnect_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2509,12 +2509,12 @@ scard_handle_Transmit_Return(struct stream *s, IRP *irp, tui32 DeviceId,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2522,7 +2522,7 @@ scard_handle_Transmit_Return(struct stream *s, IRP *irp, tui32 DeviceId,
     xstream_rd_u32_le(s, len);
     scard_function_transmit_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2534,12 +2534,12 @@ scard_handle_Control_Return(struct stream *s, IRP *irp, tui32 DeviceId,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2547,7 +2547,7 @@ scard_handle_Control_Return(struct stream *s, IRP *irp, tui32 DeviceId,
     xstream_rd_u32_le(s, len);
     scard_function_control_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2559,12 +2559,12 @@ scard_handle_Cancel_Return(struct stream *s, IRP *irp, tui32 DeviceId,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2572,7 +2572,7 @@ scard_handle_Cancel_Return(struct stream *s, IRP *irp, tui32 DeviceId,
     xstream_rd_u32_le(s, len);
     scard_function_cancel_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
 
 /**
@@ -2584,12 +2584,12 @@ scard_handle_GetAttrib_Return(struct stream *s, IRP *irp, tui32 DeviceId,
 {
     tui32 len;
 
-    log_debug("entered");
+    clog_debug("entered");
 
     /* sanity check */
     if ((DeviceId != irp->DeviceId) || (CompletionId != irp->CompletionId))
     {
-        log_error("DeviceId/CompletionId do not match those in IRP");
+        clog_error("DeviceId/CompletionId do not match those in IRP");
         return;
     }
 
@@ -2597,5 +2597,5 @@ scard_handle_GetAttrib_Return(struct stream *s, IRP *irp, tui32 DeviceId,
     xstream_rd_u32_le(s, len);
     scard_function_get_attrib_return(irp->user_data, s, len, IoStatus);
     devredir_irp_delete(irp);
-    log_debug("leaving");
+    clog_debug("leaving");
 }
