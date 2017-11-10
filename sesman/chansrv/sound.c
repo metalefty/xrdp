@@ -509,12 +509,12 @@ sound_wave_compress_fdk_aac(char *data, int data_bytes, int *format_index)
     if (g_fdk_aac_encoder == 0)
     {
         /* init fdk aac encoder */
-        LOG(0, ("sound_wave_compress_fdk_aac: using fdk aac"));
+        log_trace("%s: using fdk aac", __func__);
 
         error = aacEncOpen(&g_fdk_aac_encoder, 0, 2);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncOpen() failed"));
+            log_trace("%s: aacEncOpen() failed", __func__);
             return rv;
         }
 
@@ -522,8 +522,7 @@ sound_wave_compress_fdk_aac(char *data, int data_bytes, int *format_index)
         error = aacEncoder_SetParam(g_fdk_aac_encoder, AACENC_AOT, aot);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncoder_SetParam() "
-                    "AACENC_AOT failed"));
+            log_trace("%s: aacEncoder_SetParam() AACENC_AOT failed", __func__);
         }
 
         sample_rate = g_fdk_aac_44100.nSamplesPerSec;
@@ -531,8 +530,7 @@ sound_wave_compress_fdk_aac(char *data, int data_bytes, int *format_index)
                                     sample_rate);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncoder_SetParam() "
-                    "AACENC_SAMPLERATE failed"));
+            log_trace("%s: aacEncoder_SetParam() AACENC_SAMPLERATE failed", __func__);
         }
 
         mode = MODE_2;
@@ -540,8 +538,7 @@ sound_wave_compress_fdk_aac(char *data, int data_bytes, int *format_index)
                                     AACENC_CHANNELMODE, mode);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncoder_SetParam() "
-                    "AACENC_CHANNELMODE failed"));
+            log_trace("%s: aacEncoder_SetParam() AACENC_CHANNELMODE failed", __func__);
         }
 
         channel_order = 1; /* WAVE file format channel ordering */
@@ -549,8 +546,7 @@ sound_wave_compress_fdk_aac(char *data, int data_bytes, int *format_index)
                                     channel_order);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncoder_SetParam() "
-                    "AACENC_CHANNELORDER failed"));
+            log_trace("%s: aacEncoder_SetParam() AACENC_CHANNELORDER failed", __func__);
         }
 
         /* bytes rate to bit rate */
@@ -559,15 +555,13 @@ sound_wave_compress_fdk_aac(char *data, int data_bytes, int *format_index)
                                     bitrate);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncoder_SetParam() "
-                    "AACENC_BITRATE failed"));
+            log_trace("%s: aacEncoder_SetParam() AACENC_BITRATE failed", __func__);
         }
 
         error = aacEncoder_SetParam(g_fdk_aac_encoder, AACENC_TRANSMUX, 0);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncoder_SetParam() "
-                    "AACENC_TRANSMUX failed"));
+            log_trace("%s: aacEncoder_SetParam() AACENC_TRANSMUX failed", __func__);
         }
 
         afterburner = 1;
@@ -575,34 +569,32 @@ sound_wave_compress_fdk_aac(char *data, int data_bytes, int *format_index)
                                     afterburner);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncoder_SetParam() "
-                    "AACENC_AFTERBURNER failed"));
+            log_trace("%s: aacEncoder_SetParam() AACENC_AFTERBURNER failed", __func__);
         }
 
         error = aacEncEncode(g_fdk_aac_encoder, NULL, NULL, NULL, NULL);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: Unable to initialize "
-                    "the encoder"));
+            log_trace("%s: Unable to initialize the encoder", __func__);
         }
 
         g_memset(&info, 0, sizeof(info));
         error = aacEncInfo(g_fdk_aac_encoder, &info);
         if (error != AACENC_OK)
         {
-            LOG(0, ("sound_wave_compress_fdk_aac: aacEncInfo failed"));
+            log_trace("%s: aacEncInfo failed", __func__);
         }
 
-        LOG(0, ("sound_wave_compress_fdk_aac:"));
-        LOG(0, ("  AACENC_InfoStruct"));
-        LOG(0, ("    maxOutBufBytes %d", info.maxOutBufBytes));
-        LOG(0, ("    maxAncBytes %d", info.maxAncBytes));
-        LOG(0, ("    inBufFillLevel %d", info.inBufFillLevel));
-        LOG(0, ("    inputChannels %d", info.inputChannels));
-        LOG(0, ("    frameLength %d", info.frameLength));
-        LOG(0, ("    encoderDelay %d", info.encoderDelay));
-        LOG(0, ("    confBuf"));
-        LOG(0, ("    confSize %d", info.confSize));
+        log_trace("%s:", __func__);
+        log_trace("  AACENC_InfoStruct");
+        log_trace("    maxOutBufBytes %d", info.maxOutBufBytes);
+        log_trace("    maxAncBytes %d",    info.maxAncBytes);
+        log_trace("    inBufFillLevel %d", info.inBufFillLevel);
+        log_trace("    inputChannels %d",  info.inputChannels);
+        log_trace("    frameLength %d",    info.frameLength);
+        log_trace("    encoderDelay %d",   info.encoderDelay);
+        log_trace("    confBuf");
+        log_trace("    confSize %d",       info.confSize);
     }
 
     rv = data_bytes;
@@ -646,15 +638,14 @@ sound_wave_compress_fdk_aac(char *data, int data_bytes, int *format_index)
     if (error == AACENC_OK)
     {
         cdata_bytes = out_args.numOutBytes;
-        LOG(10, ("sound_wave_compress_fdk_aac: aacEncEncode ok "
-                 "cdata_bytes %d", cdata_bytes));
+        log_trace_verbose("%s: aacEncEncode ok, cdata_bytes=%d", __func__, cdata_bytes);
         *format_index = g_client_fdk_aac_index;
         g_memcpy(data, cdata, cdata_bytes);
         rv = cdata_bytes;
     }
     else
     {
-        LOG(0, ("sound_wave_compress_fdk_aac: aacEncEncode failed"));
+        log_trace("%s: aacEncEncode failed", __func__);
     }
     g_free(cdata);
 
