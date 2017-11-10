@@ -692,7 +692,7 @@ sound_wave_compress_opus(char *data, int data_bytes, int *format_index)
                                              &error);
         if (g_opus_encoder == 0)
         {
-            LOG(0, ("sound_wave_compress_opus: opus_encoder_create failed"));
+            log_trace("%s: opus_encoder_create failed", __func__);
             return data_bytes;
         }
     }
