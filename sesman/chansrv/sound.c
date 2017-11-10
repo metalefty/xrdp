@@ -758,29 +758,29 @@ sound_wave_compress_mp3lame(char *data, int data_bytes, int *format_index)
     if (g_lame_encoder == 0)
     {
         /* init mp3 lame encoder */
-        LOG(0, ("sound_wave_compress_mp3lame: using mp3lame"));
+        log_trace("%s: using mp3lame", __func__);
 
         g_lame_encoder = lame_init();
         if (g_lame_encoder == 0)
         {
-            LOG(0, ("sound_wave_compress_mp3lame: lame_init() failed"));
+            log_trace("%s: lame_init() failed", __func__);
             return rv;
         }
         lame_set_num_channels(g_lame_encoder, g_mp3lame_44100.nChannels);
         lame_set_in_samplerate(g_lame_encoder, g_mp3lame_44100.nSamplesPerSec);
         if (lame_init_params(g_lame_encoder) == -1)
         {
-            LOG(0, ("sound_wave_compress_mp3lame: lame_init_params() failed"));
+            log_trace("%s: lame_init_params() failed", __func__);
             return rv;
         }
 
-        LOG(0, ("sound_wave_compress_mp3lame: lame config:"));
-        LOG(0, ("                             brate            : %d", lame_get_brate(g_lame_encoder)));
-        LOG(0, ("                             compression ratio: %f", lame_get_compression_ratio(g_lame_encoder)));
-        LOG(0, ("                             encoder delay    : %d", lame_get_encoder_delay(g_lame_encoder)));
-        LOG(0, ("                             frame size       : %d", lame_get_framesize(g_lame_encoder)));
-        LOG(0, ("                             encoder padding  : %d", lame_get_encoder_padding(g_lame_encoder)));
-        LOG(0, ("                             mode             : %d", lame_get_mode(g_lame_encoder)));
+        log_trace("sound_wave_compress_mp3lame: lame config:");
+        log_trace("                             brate            : %d", lame_get_brate(g_lame_encoder));
+        log_trace("                             compression ratio: %f", lame_get_compression_ratio(g_lame_encoder));
+        log_trace("                             encoder delay    : %d", lame_get_encoder_delay(g_lame_encoder));
+        log_trace("                             frame size       : %d", lame_get_framesize(g_lame_encoder));
+        log_trace("                             encoder padding  : %d", lame_get_encoder_padding(g_lame_encoder));
+        log_trace("                             mode             : %d", lame_get_mode(g_lame_encoder));
     }
 
     odata_bytes = data_bytes;
@@ -798,8 +798,8 @@ sound_wave_compress_mp3lame(char *data, int data_bytes, int *format_index)
                                                  cdata_bytes);
     if (cdata_bytes < 0)
     {
-        LOG(0, ("sound_wave_compress: lame_encode_buffer_interleaved() "
-                "failed, error %d", cdata_bytes));
+        log_trace("%s: lame_encode_buffer_interleaved() "
+                  "failed, error %d", __func__, cdata_bytes);
         return rv;
     }
     if ((cdata_bytes > 0) && (cdata_bytes < odata_bytes))
