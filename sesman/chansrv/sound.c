@@ -985,7 +985,7 @@ sound_send_close(void)
     int bytes;
     char *size_ptr;
 
-    LOG(10, ("sound_send_close:"));
+    log_where_am_i();
 
     /* send any left over data */
     if (g_buf_index)
@@ -1146,7 +1146,7 @@ sound_sndsrvr_sink_data_in(struct trans *trans)
 static int
 sound_sndsrvr_sink_conn_in(struct trans *trans, struct trans *new_trans)
 {
-    LOG(0, ("sound_sndsrvr_sink_conn_in:"));
+    log_where_am_i();
 
     if (trans == 0)
     {
@@ -1184,7 +1184,7 @@ sound_sndsrvr_sink_conn_in(struct trans *trans, struct trans *new_trans)
 static int
 sound_sndsrvr_source_conn_in(struct trans *trans, struct trans *new_trans)
 {
-    LOG(0, ("sound_sndsrvr_source_conn_in: client connected"));
+    log_trace("%s: client connected", __func__);
 
     if (trans == 0)
     {
@@ -1219,7 +1219,7 @@ sound_sndsrvr_source_conn_in(struct trans *trans, struct trans *new_trans)
 int
 sound_init(void)
 {
-    LOG(0, ("sound_init:"));
+    log_where_am_i();
 
     g_memset(g_sent_flag, 0, sizeof(g_sent_flag));
     g_stream_incoming_packet = NULL;
@@ -1251,7 +1251,8 @@ sound_init(void)
 int
 sound_deinit(void)
 {
-    LOG(10, ("sound_deinit:"));
+    log_where_am_i();
+
     if (g_audio_l_trans_out != 0)
     {
         trans_delete(g_audio_l_trans_out);
@@ -1606,7 +1607,7 @@ sound_input_start_recording(void)
 {
     struct stream* s;
 
-    LOG(10, ("sound_input_start_recording:"));
+    log_where_am_i();
 
     /* if there is any data in FIFO, discard it */
     while ((s = (struct stream *) fifo_remove(&g_in_fifo)) != NULL)
@@ -1645,7 +1646,7 @@ sound_input_stop_recording(void)
 {
     struct stream* s;
 
-    LOG(10, ("sound_input_stop_recording:"));
+    log_where_am_i();
 
     xstream_new(s, 1024);
 
