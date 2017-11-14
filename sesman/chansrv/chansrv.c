@@ -298,8 +298,9 @@ send_data_from_chan_item(struct chan_item *chan_item)
     out_uint32_le(s, cod->s->size);
     out_uint8a(s, cod->s->p, size);
     s_mark_end(s);
-    LOGM((LOG_LEVEL_DEBUG, "chansrv::send_data_from_chan_item: -- "
-          "size %d chan_flags 0x%8.8x", size, chan_flags));
+
+    log_trace("chansrv::send_data_from_chan_item: -- "
+              "size=%d, chan_flags=0x%8.8x", size, chan_flags);
 
     error = trans_write_copy(g_con_trans);
     if (error != 0)
@@ -350,9 +351,7 @@ send_channel_data(int chan_id, char *data, int size)
 {
     int index;
 
-    //g_writeln("send_channel_data chan_id %d size %d", chan_id, size);
-
-    LOGM((LOG_LEVEL_DEBUG, "chansrv::send_channel_data: size %d", size));
+    log_trace("chansrv::%s: size=%d", __func__, size);
 
     if (chan_id == -1)
     {
@@ -378,7 +377,7 @@ send_channel_data(int chan_id, char *data, int size)
 int
 send_rail_drawing_orders(char* data, int size)
 {
-    LOGM((LOG_LEVEL_DEBUG, "chansrv::send_rail_drawing_orders: size %d", size));
+    log_trace("chansrv::%s: size=%d", __func__, size);
 
     struct stream* s;
     int error;
@@ -405,7 +404,7 @@ send_init_response_message(void)
 {
     struct stream *s = (struct stream *)NULL;
 
-    LOGM((LOG_LEVEL_INFO, "send_init_response_message:"));
+    log_where_am_i();
     s = trans_get_out_s(g_con_trans, 8192);
 
     if (s == 0)
@@ -428,7 +427,7 @@ send_channel_setup_response_message(void)
 {
     struct stream *s = (struct stream *)NULL;
 
-    LOGM((LOG_LEVEL_DEBUG, "send_channel_setup_response_message:"));
+    log_where_am_i();
     s = trans_get_out_s(g_con_trans, 8192);
 
     if (s == 0)
@@ -451,7 +450,7 @@ send_channel_data_response_message(void)
 {
     struct stream *s = (struct stream *)NULL;
 
-    LOGM((LOG_LEVEL_DEBUG, "send_channel_data_response_message:"));
+    log_where_am_i();
     s = trans_get_out_s(g_con_trans, 8192);
 
     if (s == 0)
@@ -472,7 +471,7 @@ send_channel_data_response_message(void)
 static int
 process_message_init(struct stream *s)
 {
-    LOGM((LOG_LEVEL_DEBUG, "process_message_init:"));
+    log_where_am_i();
     return send_init_response_message();
 }
 
@@ -498,10 +497,9 @@ process_message_channel_setup(struct stream *s)
     g_rdpdr_chan_id = -1;
     g_rail_chan_id = -1;
     g_drdynvc_chan_id = -1;
-    LOGM((LOG_LEVEL_DEBUG, "process_message_channel_setup:"));
+    log_where_am_i();
     in_uint16_le(s, num_chans);
-    LOGM((LOG_LEVEL_DEBUG, "process_message_channel_setup: num_chans %d",
-          num_chans));
+    log_trace("%s: num_chans=%d", __func__, num_chans);
 
     for (index = 0; index < num_chans; index++)
     {
@@ -529,11 +527,8 @@ process_message_channel_setup(struct stream *s)
         ci->head = 0;
         ci->tail = 0;
         in_uint16_le(s, ci->flags);
-        LOGM((LOG_LEVEL_DEBUG, "process_message_channel_setup: chan name '%s' "
-              "id %d flags %8.8x", ci->name, ci->id, ci->flags));
-
-        g_writeln("process_message_channel_setup: chan name '%s' "
-                  "id %d flags %8.8x", ci->name, ci->id, ci->flags);
+        log_trace("%s: channel_name='%s', id=%d, flags=%8.8x", __func__,
+                  ci->name, ci->id, ci->flags);
 
         if (g_strcasecmp(ci->name, "cliprdr") == 0)
         {
@@ -621,9 +616,7 @@ process_message_channel_data(struct stream *s)
     in_uint16_le(s, chan_flags);
     in_uint16_le(s, length);
     in_uint32_le(s, total_length);
-    LOGM((LOG_LEVEL_DEBUG, "process_message_channel_data: chan_id %d "
-          "chan_flags %d", chan_id, chan_flags));
-    LOG(10, ("process_message_channel_data"));
+    log_trace("%s: chan_id=%d, chan_flags=%8.8x", __func__, chan_id, chan_flags);
     rv = send_channel_data_response_message();
 
     if (rv == 0)
@@ -772,7 +765,7 @@ my_trans_data_in(struct trans *trans)
         return 1;
     }
 
-    LOGM((LOG_LEVEL_DEBUG, "my_trans_data_in:"));
+    log_where_am_i();
     s = trans_get_in_s(trans);
     in_uint8s(s, 4); /* id */
     in_uint32_le(s, size);
@@ -815,8 +808,6 @@ my_api_trans_data_in(struct trans *trans)
             return 1;
         }
     }
-
-    LOGM((LOG_LEVEL_DEBUG, "my_api_trans_data_in:"));
 
     s = trans_get_in_s(trans);
     bytes_read = g_tcp_recv(trans->sck, s->data, 16, 0);
@@ -908,7 +899,7 @@ my_trans_conn_in(struct trans *trans, struct trans *new_trans)
         return 1;
     }
 
-    LOGM((LOG_LEVEL_DEBUG, "my_trans_conn_in:"));
+    log_where_am_i();
     g_con_trans = new_trans;
     g_con_trans->trans_data_in = my_trans_data_in;
     g_con_trans->header_size = 8;
@@ -936,8 +927,7 @@ my_api_trans_conn_in(struct trans *trans, struct trans *new_trans)
         return 1;
     }
 
-    LOGM((LOG_LEVEL_DEBUG, "my_api_trans_conn_in:"));
-    LOG(10, ("my_api_trans_conn_in: got incoming"));
+    log_where_am_i();
 
     s = trans_get_in_s(new_trans);
     s->end = s->data;
