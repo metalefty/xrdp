@@ -1067,18 +1067,18 @@ sound_process_wave_confirm(struct stream *s, int size)
         block_no--;
     }
 
-    log_trace_verbose("%s: "
-                      "wTimeStamp=%d, "
-                      "cConfirmedBlockNo=%d, "
-                      "time_diff=%d, "
-                      "cleared_count=%d, "
-                      "g_unacked_frames=%d",
-                      __func__,
-                      wTimeStamp,
-                      cConfirmedBlockNo,
-                      time_diff,
-                      cleared_count,
-                      g_unacked_frames);
+    log_trace("%s: "
+              "wTimeStamp=%d, "
+              "cConfirmedBlockNo=%d, "
+              "time_diff=%d, "
+              "cleared_count=%d, "
+              "g_unacked_frames=%d",
+              __func__,
+              wTimeStamp,
+              cConfirmedBlockNo,
+              time_diff,
+              cleared_count,
+              g_unacked_frames);
 
     g_unacked_frames -= cleared_count;
     return 0;
