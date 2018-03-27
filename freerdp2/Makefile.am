@@ -17,7 +17,7 @@ AM_CPPFLAGS = \
   -I/usr/local/include \
   $(FREERDP_CFLAGS)
 
-lib_LTLIBRARIES = \
+module_LTLIBRARIES = \
   libxrdpfreerdp2.la
 
 libxrdpfreerdp2_la_SOURCES = xrdp-freerdp.c xrdp-color.c
