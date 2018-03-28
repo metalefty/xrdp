@@ -24,6 +24,12 @@ EXTRA_DIST = \
   vrplayer \
   xorg
 
+if XRDP_FREERDP2
+FREERDPDIR = freerdp2
+else
+FREERDPDIR =
+endif
+
 if XRDP_NEUTRINORDP
 NEUTRINORDPDIR = neutrinordp
 else

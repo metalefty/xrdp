@@ -13,14 +13,14 @@ endif
 module_LTLIBRARIES = \
   libxrdpneutrinordp.la
 
-libxrdpneutrinordp_la_SOURCES = \
+libxrdpfreerdp2_la_SOURCES = \
   xrdp-color.c \
   xrdp-color.h \
-  xrdp-neutrinordp.c \
-  xrdp-neutrinordp.h
+  xrdp-freerdp2.c \
+  xrdp-freerdp2.h
 
-libxrdpneutrinordp_la_LIBADD = \
+libxrdpfreerdp2_la_LIBADD = \
   $(top_builddir)/common/libcommon.la \
   $(FREERDP_LIBS)
 
-libxrdpneutrinordp_la_LDFLAGS = -avoid-version -module
+libxrdpfreerdp2_la_LDFLAGS = -avoid-version -module

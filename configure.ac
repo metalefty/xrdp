@@ -103,6 +103,10 @@ AC_ARG_ENABLE(xrdpdebug, AS_HELP_STRING([--enable-xrdpdebug],
               [Build debug (default: no)]),
               [], [enable_xrdpdebug=no])
 AM_CONDITIONAL(XRDP_DEBUG, [test x$enable_xrdpdebug = xyes])
+AC_ARG_ENABLE(freerdp2, AS_HELP_STRING([--enable-freerdp2],
+              [Build freerdp2 module (default: no)]),
+              [], [enable_freerdp2=no])
+AM_CONDITIONAL(XRDP_FREERDP2, [test x$enable_freerdp2 = xyes])
 AC_ARG_ENABLE(neutrinordp, AS_HELP_STRING([--enable-neutrinordp],
               [Build neutrinordp module (default: no)]),
               [], [enable_neutrinordp=no])
@@ -229,6 +233,7 @@ then
   AC_DEFINE([USE_NOPAM],1,[Disable PAM])
 fi
 
+AS_IF( [test "x$enable_freerdp2" = "xyes"] , [PKG_CHECK_MODULES(FREERDP, freerdp >= 2.0.0)] )
 AS_IF( [test "x$enable_neutrinordp" = "xyes"] , [PKG_CHECK_MODULES(FREERDP, freerdp >= 1.0.0)] )
 
 # checking for libjpeg
@@ -354,6 +359,7 @@ AC_CONFIG_FILES([
   libxrdp/Makefile
   Makefile
   mc/Makefile
+  freerdp2/Makefile
   neutrinordp/Makefile
   pkgconfig/Makefile
   pkgconfig/xrdp.pc
