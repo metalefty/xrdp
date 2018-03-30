@@ -65,6 +65,7 @@ SUBDIRS = \
   xrdpapi \
   pkgconfig \
   $(XRDPVRDIR)
+  tests
 
 distclean-local:
 	-rm -f xrdp_configure_options.h
