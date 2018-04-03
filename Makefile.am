@@ -3,6 +3,8 @@ AM_DISTCHECK_CONFIGURE_FLAGS = \
   --without-systemdsystemunitdir \
   --enable-strict-locations
 
+# There're mixed contents automake and non-automake files/directories
+# under tests/ directory. List only non-automakes EXTRA_DIST.
 EXTRA_DIST = \
   COPYING \
   README.md \
@@ -20,7 +22,10 @@ EXTRA_DIST = \
   m4 \
   postinstall-pak \
   tcutils \
-  tests \
+  tests/gtcp_proxy \
+  tests/memtest \
+  tests/tcp_proxy \
+  tests/readme.txt \
   vrplayer
 
 if XRDP_NEUTRINORDP
