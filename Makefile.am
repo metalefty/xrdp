@@ -69,7 +69,7 @@ SUBDIRS = \
   genkeymap \
   xrdpapi \
   pkgconfig \
-  $(XRDPVRDIR)
+  $(XRDPVRDIR) \
   tests
 
 distclean-local:
