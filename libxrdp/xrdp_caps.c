@@ -783,22 +783,22 @@ xrdp_caps_send_demand_active(struct xrdp_rdp *self)
     out_uint8s(s, 4);
     caps_ptr = s->p;
 
-    /* Output share capability set */
+    /* 2.2.7.2.4 Share Capability Set (TS_SHARE_CAPABILITYSET) */
     caps_count++;
     out_uint16_le(s, CAPSTYPE_SHARE);
     out_uint16_le(s, CAPSTYPE_SHARE_LEN);
-    out_uint16_le(s, self->mcs_channel);
-    out_uint16_be(s, 0xb5e2); /* 0x73e1 */
+    out_uint16_le(s, self->mcs_channel); /* nodeId */
+    out_uint16_be(s, 0xb5e2); /* pad2Octets: what're these magic numbers? 0x73e1 */
 
-    /* Output general capability set */
+    /* 2.2.7.1.1 General Capability Set (TS_GENERAL_CAPABILITYSET) */
     caps_count++;
     out_uint16_le(s, CAPSTYPE_GENERAL);
     out_uint16_le(s, CAPSTYPE_GENERAL_LEN);
     out_uint16_le(s, OSMAJORTYPE_WINDOWS);
     out_uint16_le(s, OSMINORTYPE_WINDOWS_NT);
-    out_uint16_le(s, 0x200); /* Protocol version */
-    out_uint16_le(s, 0); /* pad */
-    out_uint16_le(s, 0); /* Compression types */
+    out_uint16_le(s, TS_CAPS_PROTOCOLVERSION);
+    out_uint16_le(s, 0); /* pad2octetsA */
+    out_uint16_le(s, 0); /* generalCompressionTypes */
     if (self->client_info.use_fast_path & 1)
     {
         out_uint16_le(s, NO_BITMAP_COMPRESSION_HDR | FASTPATH_OUTPUT_SUPPORTED);
@@ -807,46 +807,48 @@ xrdp_caps_send_demand_active(struct xrdp_rdp *self)
     {
         out_uint16_le(s, NO_BITMAP_COMPRESSION_HDR);
     }
-    out_uint16_le(s, 0); /* Update capability */
-    out_uint16_le(s, 0); /* Remote unshare capability */
-    out_uint16_le(s, 0); /* Compression level */
-    out_uint16_le(s, 0); /* Pad */
+    out_uint16_le(s, 0); /* updateCapabilityFlag */
+    out_uint16_le(s, 0); /* remoteUnshareFlag */
+    out_uint16_le(s, 0); /* generalCompressionLevel */
+    out_uint8(s, 0);     /* refreshRectSupport */
+    out_uint8(s, 0);     /* suppressOutputSupport */
 
-    /* Output bitmap capability set */
+    /* 2.2.7.1.2 Bitmap Capability Set (TS_BITMAP_CAPABILITYSET) */
     caps_count++;
     out_uint16_le(s, CAPSTYPE_BITMAP);
     out_uint16_le(s, CAPSTYPE_BITMAP_LEN);
-    out_uint16_le(s, self->client_info.bpp); /* Preferred BPP */
-    out_uint16_le(s, 1); /* Receive 1 BPP */
-    out_uint16_le(s, 1); /* Receive 4 BPP */
-    out_uint16_le(s, 1); /* Receive 8 BPP */
-    out_uint16_le(s, self->client_info.width); /* width */
-    out_uint16_le(s, self->client_info.height); /* height */
-    out_uint16_le(s, 0); /* Pad */
-    out_uint16_le(s, 1); /* Allow resize */
-    out_uint16_le(s, 1); /* bitmap compression */
-    out_uint16_le(s, 0); /* unknown */
-    out_uint16_le(s, 0); /* unknown */
-    out_uint16_le(s, 0); /* pad */
+    out_uint16_le(s, self->client_info.bpp); /* preferredBitsPerPixcel */
+    out_uint16_le(s, 1); /* receive1BitPerPixcel */
+    out_uint16_le(s, 1); /* receive2BitsPerPixcel */
+    out_uint16_le(s, 1); /* receive4BitsPerPixcel */
+    out_uint16_le(s, self->client_info.width); /* desktopWidth */
+    out_uint16_le(s, self->client_info.height); /* desktopHeight */
+    out_uint16_le(s, 0); /* pad2octets */
+    out_uint16_le(s, 1); /* desktopResizeFlag */
+    out_uint16_le(s, 1); /* bitmapCompressionFlag */
+    out_uint8(s, 0);     /* highColorFlags */
+    out_uint8(s, 0);     /* drawingFlags */
+    out_uint16_le(s, 0); /* multipleRectangleSupport */
+    out_uint16_le(s, 0); /* pad2OctetsB */
 
-    /* Output font capability set */
+    /* 2.2.7.2.5 Font Capability Set (TS_FONT_CAPABILITYSET) */
     caps_count++;
     out_uint16_le(s, CAPSTYPE_FONT);
     out_uint16_le(s, CAPSTYPE_FONT_LEN);
 
-    /* Output order capability set */
+    /* 2.2.7.1.3 Order Capability Set (TS_ORDER_CAPABILITYSET) */
     caps_count++;
     out_uint16_le(s, CAPSTYPE_ORDER);
     out_uint16_le(s, CAPSTYPE_ORDER_LEN);
     out_uint8s(s, 16);
-    out_uint32_be(s, 0x40420f00);
-    out_uint16_le(s, 1); /* Cache X granularity */
-    out_uint16_le(s, 20); /* Cache Y granularity */
-    out_uint16_le(s, 0); /* Pad */
-    out_uint16_le(s, 1); /* Max order level */
-    out_uint16_le(s, 0x2f); /* Number of fonts */
-    out_uint16_le(s, 0x22); /* Capability flags */
-    /* caps */
+    out_uint32_be(s, 0x40420f00); /* pad4OctetsA, must be ignored */
+    out_uint16_le(s, 1);          /* desktopSaveXGranularity */
+    out_uint16_le(s, 20);         /* desktopSaveYGranularity */
+    out_uint16_le(s, 0);          /* pad2OctetsA */
+    out_uint16_le(s, 1);          /* maximumOrderLevel */
+    out_uint16_le(s, 0x2f);       /* numberFonts, should be set to zero */
+    out_uint16_le(s, NEGOTIATEORDERSUPPORT | COLORINDEXSUPPORT); /* orderFlags */
+    /* orderSupport (32 bytes = 8 bits * 32) */
     out_uint8(s, 1); /* NEG_DSTBLT_INDEX                0x00 0 */
     out_uint8(s, 1); /* NEG_PATBLT_INDEX                0x01 1 */
     out_uint8(s, 1); /* NEG_SCRBLT_INDEX                0x02 2 */
@@ -879,48 +881,50 @@ xrdp_caps_send_demand_active(struct xrdp_rdp *self)
     out_uint8(s, 0); /* NEG_GLYPH_WLONGTEXTOUT_INDEX    0x1D 29 */
     out_uint8(s, 0); /* NEG_GLYPH_WLONGEXTTEXTOUT_INDEX 0x1E 30 */
     out_uint8(s, 0); /* unused                          0x1F 31 */
-    out_uint16_le(s, 0x6a1);
+    out_uint16_le(s, 0x6a1); /* testFlags, must be ignored */
     /* declare support of bitmap cache rev3 */
     out_uint16_le(s, XR_ORDERFLAGS_EX_CACHE_BITMAP_REV3_SUPPORT);
-    out_uint32_le(s, 0x0f4240); /* desk save */
-    out_uint32_le(s, 0x0f4240); /* desk save */
-    out_uint32_le(s, 1); /* ? */
-    out_uint32_le(s, 0); /* ? */
+    out_uint32_le(s, 0); /* pad4OctetsB */
+    out_uint32_le(s, 0x0f4240); /* desktopSaveSize 1_000_000 */
+    out_uint16_le(s, 0); /* pad2OctetsC */
+    out_uint16_le(s, 0); /* pad2OctetsD */
+    out_uint16_le(s, 0); /* textANSICodePage */
+    out_uint16_le(s, 0); /* pad2OctetsE */
 
-    /* Output bmpcodecs capability set */
+    /* 2.2.7.2.10.1 BitmapCodecs(TS_BITMAPCODECS) */
     caps_count++;
     out_uint16_le(s, CAPSSETTYPE_BITMAP_CODECS);
     codec_caps_size_ptr = s->p;
-    out_uint8s(s, 2); /* cap len set later */
+    out_uint8s(s, 2); /* lengthCapability set later*/
     codec_caps_count = 0;
     codec_caps_count_ptr = s->p;
     out_uint8s(s, 1); /* bitmapCodecCount set later */
-    /* nscodec */
+    /* NSCodec */
     codec_caps_count++;
     out_uint8a(s, XR_CODEC_GUID_NSCODEC, 16);
-    out_uint8(s, 1); /* codec id, must be 1 */
+    out_uint8(s, 1);     /* codecID, must be 1 (See 2.2.7.2.10.1.1) */
     out_uint16_le(s, 3); /* codecPropertiesLength */
-    out_uint8(s, 0x01); /* fAllowDynamicFidelity */
-    out_uint8(s, 0x01); /* fAllowSubsampling */
-    out_uint8(s, 0x03); /* colorLossLevel */
+    out_uint8(s, 0x01);  /* fAllowDynamicFidelity */
+    out_uint8(s, 0x01);  /* fAllowSubsampling */
+    out_uint8(s, 0x03);  /* colorLossLevel */
 #if defined(XRDP_RFXCODEC) || defined(XRDP_NEUTRINORDP)
-    /* remotefx */
+    /* RemoteFX */
     codec_caps_count++;
     out_uint8a(s, XR_CODEC_GUID_REMOTEFX, 16);
-    out_uint8(s, 0); /* codec id, client sets */
+    out_uint8(s, 0); /* codecID, client sets */
     out_uint16_le(s, 4); /* codecPropertiesLength */
     out_uint32_le(s, 0); /* reserved */
-    /* image remotefx */
+    /* Image RemoteFX */
     codec_caps_count++;
     out_uint8a(s, XR_CODEC_GUID_IMAGE_REMOTEFX, 16);
-    out_uint8(s, 0); /* codec id, client sets */
+    out_uint8(s, 0); /* codecID, client sets */
     out_uint16_le(s, 4); /* codecPropertiesLength */
     out_uint32_le(s, 0); /* reserved */
 #endif
-    /* jpeg */
+    /* JPEG */
     codec_caps_count++;
     out_uint8a(s, XR_CODEC_GUID_JPEG, 16);
-    out_uint8(s, 0); /* codec id, client sets */
+    out_uint8(s, 0); /* codecID, client sets */
     out_uint16_le(s, 1); /* codecPropertiesLength */
     out_uint8(s, 75); /* jpeg compression ratio */
     /* calculate and set size and count */
@@ -930,20 +934,20 @@ xrdp_caps_send_demand_active(struct xrdp_rdp *self)
     codec_caps_size_ptr[1] = codec_caps_size >> 8;
     codec_caps_count_ptr[0] = codec_caps_count;
 
-    /* Output color cache capability set */
+    /* MS-RDPGDI 2.2.1.1 Color Table Cache Capability Set (TS_COLORTABLE_CAPABILITYSET) */
     caps_count++;
     out_uint16_le(s, CAPSTYPE_COLORCACHE);
     out_uint16_le(s, CAPSTYPE_COLORCACHE_LEN);
-    out_uint16_le(s, 6); /* cache size */
-    out_uint16_le(s, 0); /* pad */
+    out_uint16_le(s, 6); /* colorTableCacheSize */
+    out_uint16_le(s, 0); /* pad2Octets */
 
-    /* Output pointer capability set */
+    /* 2.2.7.1.5 Pointer Capability Set (TS_POINTER_CAPABILITYSET) */
     caps_count++;
     out_uint16_le(s, CAPSTYPE_POINTER);
     out_uint16_le(s, CAPSTYPE_POINTER_LEN);
-    out_uint16_le(s, 1); /* Colour pointer */
-    out_uint16_le(s, 0x19); /* Cache size */
-    out_uint16_le(s, 0x19); /* Cache size */
+    out_uint16_le(s, 1); /* colorPointerFlag */
+    out_uint16_le(s, 0x19); /* colorPointerCacheSize */
+    out_uint16_le(s, 0x19); /* pointerCacheSize */
 
     /* Output input capability set */
     caps_count++;
