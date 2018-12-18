@@ -2622,7 +2622,7 @@ xrdp_orders_send_font(struct xrdp_orders *self,
                       struct xrdp_font_char *font_char,
                       int font_index, int char_index)
 {
-    if (self->rdp_layer->client_info.use_cache_glyph_v2)
+    if (self->rdp_layer->client_info.glyph_support_level == GLYPH_SUPPORT_ENCODE)
     {
         return xrdp_orders_cache_glyph_v2(self, font_char, font_index, char_index);
     }

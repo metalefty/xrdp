@@ -365,8 +365,6 @@ static int
 xrdp_caps_process_glyphcache(struct xrdp_rdp *self, struct stream *s,
                              int len)
 {
-    int glyph_support_level;
-
     if (len < 40 + 4 + 2 + 2) /* MS-RDPBCGR 2.2.7.1.8 */
     {
         g_writeln("xrdp_caps_process_glyphcache: error");
@@ -375,15 +373,11 @@ xrdp_caps_process_glyphcache(struct xrdp_rdp *self, struct stream *s,
 
     in_uint8s(s, 40);  /* glyph cache */
     in_uint8s(s, 4);   /* frag cache */
-    in_uint16_le(s, glyph_support_level);
+    in_uint16_le(s, self->client_info.glyph_support_level);
     in_uint8s(s, 2);   /* pad */
 
-    if (glyph_support_level == GLYPH_SUPPORT_ENCODE)
-    {
-        self->client_info.use_cache_glyph_v2 = 1;
-    }
     g_writeln("xrdp_caps_process_glyphcache: support level %d ",
-              glyph_support_level);
+              self->client_info.glyph_support_level);
     return 0;
 }
 
