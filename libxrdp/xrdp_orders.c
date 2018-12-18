@@ -2622,12 +2622,28 @@ xrdp_orders_send_font(struct xrdp_orders *self,
                       struct xrdp_font_char *font_char,
                       int font_index, int char_index)
 {
-    if (self->rdp_layer->client_info.glyph_support_level == GLYPH_SUPPORT_ENCODE)
-    {
-        return xrdp_orders_cache_glyph_v2(self, font_char, font_index, char_index);
-    }
 
-    return xrdp_orders_cache_glyph(self, font_char, font_index, char_index);
+    switch (self->rdp_layer->client_info.glyph_support_level)
+    {
+        case GLYPH_SUPPORT_ENCODE:
+        {
+            return xrdp_orders_cache_glyph_v2(self, font_char, font_index, char_index);
+            break;
+        }
+        case GLYPH_SUPPORT_FULL:
+        case GLYPH_SUPPORT_PARTIAL:
+        {
+            return xrdp_orders_cache_glyph(self, font_char, font_index, char_index);
+            break;
+        }
+        case GLYPH_SUPPORT_NONE:
+        {
+            /* TODO */
+            printf("SHOULD NOT DO GLYPH CACHE\n");
+            return 0;
+            break;
+        }
+    }
 }
 
 /*****************************************************************************/
