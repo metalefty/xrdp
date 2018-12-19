@@ -232,12 +232,14 @@
 #define XR_CHANNEL_OPTION_INITIALIZED   0x80000000
 
 /* RDPDR: Device Announce Header: DeviceType (MS-RDPEFS 2.2.1.3) */
-/* TODO: to be renamed */
-#define DEVICE_TYPE_SERIAL             0x01
-#define DEVICE_TYPE_PARALLEL           0x02
-#define DEVICE_TYPE_PRINTER            0x04
-#define DEVICE_TYPE_DISK               0x08
-#define DEVICE_TYPE_SCARD              0x20
+/* same macros are defined in sesman/chansrv/devredir.h */
+/*
+#define RDPDR_DTYP_SERIAL               0x00000001
+#define RDPDR_DTYP_PARALLEL             0x00000002
+#define RDPDR_DTYP_PRINT                0x00000004
+#define RDPDR_DTYP_FILESYSTEM           0x00000008
+#define RDPDR_DTYP_SMARTCARD            0x00000020
+*/
 
 /* Order Capability Set: orderSupportExFlags (MS-RDPBCGR 2.2.7.1.3)  */
 #define XR_ORDERFLAGS_EX_CACHE_BITMAP_REV3_SUPPORT   0x0002
@@ -346,27 +348,30 @@
 
 /* RDP5 disconnect PDU */
 /* Set Error Info PDU Data: errorInfo (MS-RDPBCGR 2.2.5.1.1) */
-/* TODO: to be renamed */
-#define exDiscReasonNoInfo                            0x0000
-#define exDiscReasonAPIInitiatedDisconnect            0x0001
-#define exDiscReasonAPIInitiatedLogoff                0x0002
-#define exDiscReasonServerIdleTimeout                 0x0003
-#define exDiscReasonServerLogonTimeout                0x0004
-#define exDiscReasonReplacedByOtherConnection         0x0005
-#define exDiscReasonOutOfMemory                       0x0006
-#define exDiscReasonServerDeniedConnection            0x0007
-#define exDiscReasonServerDeniedConnectionFips        0x0008
-#define exDiscReasonLicenseInternal                   0x0100
-#define exDiscReasonLicenseNoLicenseServer            0x0101
-#define exDiscReasonLicenseNoLicense                  0x0102
-#define exDiscReasonLicenseErrClientMsg               0x0103
-#define exDiscReasonLicenseHwidDoesntMatchLicense     0x0104
-#define exDiscReasonLicenseErrClientLicense           0x0105
-#define exDiscReasonLicenseCantFinishProtocol         0x0106
-#define exDiscReasonLicenseClientEndedProtocol        0x0107
-#define exDiscReasonLicenseErrClientEncryption        0x0108
-#define exDiscReasonLicenseCantUpgradeLicense         0x0109
-#define exDiscReasonLicenseNoRemoteConnections        0x010a
+/* Protocol Independent */
+#define ERRINFO_NONE                                 0x0000
+#define ERRINFO_RPC_INITIATED_DISCONNECT             0x0001
+#define ERRINFO_RPC_INITIATED_LOGOFF                 0x0002
+#define ERRINFO_IDLE_TIMEOUT                         0x0003
+#define ERRINFO_LOGON_TIMEOUT                        0x0004
+#define ERRINFO_DISCONNECTED_BY_OTHERCONNECTION      0x0005
+#define ERRINFO_OUT_OF_MEMORY                        0x0006
+#define ERRINFO_SERVER_DENIED_CONNECTION             0x0007
+#define exDiscReasonServerDeniedConnectionFips       0x0008 /* where are you from? */
+/* Licensing */
+#define ERRINFO_LICENSE_INTERNAL                     0x0100
+#define ERRINFO_LICENSE_NO_LICENSE_SERVER            0x0101
+#define ERRINFO_LICENSE_NO_LICENSE                   0x0102
+#define ERRINFO_LICENSE_BAD_CLIENT_MSG               0x0103
+#define ERRINFO_LICENSE_HWID_DOESNTMATCH_LICENSE     0x0104
+#define ERRINFO_LICENSE_BAD_CLIENT_LICENSE           0x0105
+#define ERRINFO_LICENSE_CANT_FINISH_PROTOCOL         0x0106
+#define ERRINFO_LICENSE_CLIENT_ENDED_PROTOCOL        0x0107
+#define ERRINFO_LICENSE_BAD_CLIENT_ENCRYPTION        0x0108
+#define ERRINFO_LICENSE_CANT_UPGRADE_LICENSE         0x0109
+#define ERRINFO_LICENSE_NO_REMOTE_CONNECTIONS        0x010a
+/* Connection Broker */
+/* RDP specific */
 
 /* Info Packet (TS_INFO_PACKET): flags (MS-RDPBCGR 2.2.1.11.1.1) */
 /* TODO: to be renamed */
