@@ -561,6 +561,7 @@
 #define PDUTYPE2_ARC_STATUS_PDU                 0x32
 #define PDUTYPE2_STATUS_INFO_PDU                0x32
 #define PDUTYPE2_MONITOR_LAYOUT_PDU             0x37
+#define PDUTYPE2_FRAME_ACKNOWLEDGE              0x38 /* MS-RDPRFX 2.2.3.1 */
 
 /* Control PDU Data: action (MS-RDPBCGR 2.2.1.15.1) */
 /* TODO: to be renamed */

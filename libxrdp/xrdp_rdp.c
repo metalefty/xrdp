@@ -896,7 +896,7 @@ xrdp_rdp_process_data_pointer(struct xrdp_rdp *self, struct stream *s)
 }
 
 /*****************************************************************************/
-/* RDP_DATA_PDU_INPUT */
+/* PDUTYPE2_INPUT */
 static int
 xrdp_rdp_process_data_input(struct xrdp_rdp *self, struct stream *s)
 {
@@ -966,7 +966,7 @@ xrdp_rdp_send_synchronise(struct xrdp_rdp *self)
     out_uint16_le(s, 1002); /* targetUser (2 bytes) */
     s_mark_end(s);
 
-    if (xrdp_rdp_send_data(self, s, RDP_DATA_PDU_SYNCHRONISE) != 0)
+    if (xrdp_rdp_send_data(self, s, PDUTYPE2_SYNCHRONIZE) != 0)
     {
         free_stream(s);
         return 1;
@@ -1133,7 +1133,8 @@ xrdp_rdp_process_data_font(struct xrdp_rdp *self, struct stream *s)
 }
 
 /*****************************************************************************/
-/* sent 37 pdu */
+/* send Shutdown Request Denied PDU */
+/* xrdp_rdp_send_shutdown_denied will be a more appropriate name */
 static int
 xrdp_rdp_send_disconnect_query_response(struct xrdp_rdp *self)
 {
@@ -1150,7 +1151,7 @@ xrdp_rdp_send_disconnect_query_response(struct xrdp_rdp *self)
 
     s_mark_end(s);
 
-    if (xrdp_rdp_send_data(self, s, 37) != 0)
+    if (xrdp_rdp_send_data(self, s, PDUTYPE2_SHUTDOWN_DENIED) != 0)
     {
         free_stream(s);
         return 1;
@@ -1225,37 +1226,37 @@ xrdp_rdp_process_data(struct xrdp_rdp *self, struct stream *s)
 
     switch (data_type)
     {
-        case PDUTYPE2_POINTER: /* 27(0x1b) */
+        case PDUTYPE2_POINTER:
             xrdp_rdp_process_data_pointer(self, s);
             break;
-        case PDUTYPE2_INPUT: /* 28(0x1c) */
+        case PDUTYPE2_INPUT:
             xrdp_rdp_process_data_input(self, s);
             break;
-        case PDUTYPE2_CONTROL: /* 20(0x14) */
+        case PDUTYPE2_CONTROL:
             xrdp_rdp_process_data_control(self, s);
             break;
-        case RDP_DATA_PDU_SYNCHRONISE: /* 31(0x1f) */
+        case PDUTYPE2_SYNCHRONIZE:
             xrdp_rdp_process_data_sync(self);
             break;
-        case 33: /* 33(0x21) ?? Invalidate an area I think */
+        case PDUTYPE2_REFRESH_RECT: /* ?? Invalidate an area I think */
             xrdp_rdp_process_screen_update(self, s);
             break;
-        case 35: /* 35(0x23) */
-            /* 35 ?? this comes when minimizing a full screen mstsc.exe 2600 */
+        case PDUTYPE2_SUPRESS_OUTPUT:
+            /* this comes when minimizing a full screen mstsc.exe 2600 */
             /* I think this is saying the client no longer wants screen */
-            /* updates and it will issue a 33 above to catch up */
+            /* updates and it will issue a PDUTYPE2_REFRESH_RECT above to catch up */
             /* so minimized apps don't take bandwidth */
             break;
-        case 36: /* 36(0x24) ?? disconnect query? */
-            /* when this message comes, send a 37 back so the client */
-            /* is sure the connection is alive and it can ask if user */
-            /* really wants to disconnect */
-            xrdp_rdp_send_disconnect_query_response(self); /* send a 37 back */
+        case PDUTYPE2_SHUTDOWN_REQUEST:
+            /* when this message comes, send a PDUTYPE2_SHUTDOWN_DENIED */
+            /* back so the client  is sure the connection is alive and it */
+            /* can ask if user really wants to disconnect */
+            xrdp_rdp_send_disconnect_query_response(self);
             break;
-        case PDUTYPE2_FONTLIST: /* 39(0x27) */
+        case PDUTYPE2_FONTLIST:
             xrdp_rdp_process_data_font(self, s);
             break;
-        case 56: /* PDUTYPE2_FRAME_ACKNOWLEDGE 0x38 */
+        case PDUTYPE2_FRAME_ACKNOWLEDGE:
             xrdp_rdp_process_frame_ack(self, s);
             break;
         default:
