@@ -734,13 +734,13 @@ libxrdp_send_pointer(struct xrdp_session *session, int cache_idx,
         xrdp_rdp_init_data((struct xrdp_rdp *)session->rdp, s);
         if ((session->client_info->pointer_flags & 1) == 0)
          {
-             out_uint16_le(s, RDP_POINTER_COLOR);
+             out_uint16_le(s, TS_PTRMSGTYPE_COLOR);
              out_uint16_le(s, 0); /* pad */
              data_bytes = 3072;
          }
          else
          {
-             out_uint16_le(s, RDP_POINTER_POINTER);
+             out_uint16_le(s, TS_PTRMSGTYPE_POINTER);
              out_uint16_le(s, 0); /* pad */
              out_uint16_le(s, bpp);
              data_bytes = ((bpp + 7) / 8) * 32 * 32;

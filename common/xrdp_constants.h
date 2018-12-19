@@ -551,12 +551,11 @@
 #define RDP_UPDATE_SYNCHRONIZE         3
 
 /* Server Pointer Update PDU: messageType (MS-RDPBCGR 2.2.9.1.1.4) */
-/* TODO: to be renamed */
-#define RDP_POINTER_SYSTEM             1 /* TS_PTRMSGTYPE_SYSTEM */
-#define RDP_POINTER_MOVE               3
-#define RDP_POINTER_COLOR              6
-#define RDP_POINTER_CACHED             7
-#define RDP_POINTER_POINTER            8
+#define TS_PTRMSGTYPE_SYSTEM           0x0001
+#define TS_PTRMSGTYPE_POSITION         0x0003
+#define TS_PTRMSGTYPE_COLOR            0x0006
+#define TS_PTRMSGTYPE_CACHED           0x0007
+#define TS_PTRMSGTYPE_POINTER          0x0008
 
 /* System Pointer Update: systemPointerType (MS-RDPBCGR 2.2.9.1.1.4.3) */
 #define RDP_NULL_POINTER               0
@@ -571,10 +570,9 @@
 #define KBD_FLAG_UP                    0x8000
 
 /* Synchronize Event: toggleFlags (MS-RDPBCGR 2.2.8.1.1.3.1.1.5) */
-/* TODO: to be renamed */
-#define KBD_FLAG_SCROLL                0x0001 /* TS_SYNC_SCROLL_LOCK */
-#define KBD_FLAG_NUMLOCK               0x0002
-#define KBD_FLAG_CAPITAL               0x0004
+#define TS_SYNC_SCROLL_LOCK            0x0001
+#define TS_SYNC_NUM_LOCK               0x0002
+#define TS_SYNC_CAPS_LOCK              0x0004
 #define TS_SYNC_KANA_LOCK              0x0008
 
 /* Glyph Cache Capability Set: GlyphSupportLevel (MS-RDPBCGR 2.2.7.1.8) */
