@@ -166,7 +166,7 @@ xrdp_orders_send(struct xrdp_orders *self)
             else
             {
                 if (xrdp_rdp_send_data(self->rdp_layer, self->out_s,
-                                       RDP_DATA_PDU_UPDATE) != 0)
+                                       PDUTYPE2_UPDATE) != 0)
                 {
                     rv = 1;
                 }
@@ -202,7 +202,7 @@ xrdp_orders_force_send(struct xrdp_orders *self)
         else
         {
             if (xrdp_rdp_send_data(self->rdp_layer, self->out_s,
-                                   RDP_DATA_PDU_UPDATE) != 0)
+                                   PDUTYPE2_UPDATE) != 0)
             {
                 return 1;
             }

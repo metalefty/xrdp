@@ -537,16 +537,30 @@
 #define LICENCE_TAG_HOST               0x0010 /* BB_CLIENT_MACHINE_NAME_BLOB */
 
 /* Share Data Header: pduType2 (MS-RDPBCGR 2.2.8.1.1.1.2) */
-/* TODO: to be renamed */
-#define RDP_DATA_PDU_UPDATE            2   /* PDUTYPE2_UPDATE */
-#define RDP_DATA_PDU_CONTROL           20
-#define RDP_DATA_PDU_POINTER           27
-#define RDP_DATA_PDU_INPUT             28
-#define RDP_DATA_PDU_SYNCHRONISE       31
-#define RDP_DATA_PDU_PLAY_SOUND        34
-#define RDP_DATA_PDU_LOGON             38
-#define RDP_DATA_PDU_FONT2             39
-#define RDP_DATA_PDU_DISCONNECT        47
+#define PDUTYPE2_UPDATE                         0x02
+#define PDUTYPE2_CONTROL                        0x14
+#define PDUTYPE2_POINTER                        0x1B
+#define PDUTYPE2_INPUT                          0x1C
+#define PDUTYPE2_SYNCHRONIZE                    0x1F
+#define PDUTYPE2_REFRESH_RECT                   0x21
+#define PDUTYPE2_PLAY_SOUND                     0x22
+#define PDUTYPE2_SUPRESS_OUTPUT                 0x23
+#define PDUTYPE2_SHUTDOWN_REQUEST               0x24
+#define PDUTYPE2_SHUTDOWN_DENIED                0x25
+#define PDUTYPE2_SAVE_SESSION_INFO              0x26
+#define PDUTYPE2_FONTLIST                       0x27
+#define PDUTYPE2_FONTMAP                        0x28
+#define PDUTYPE2_SET_KEYBOARD_INDICAORS         0x29
+#define PDUTYPE2_SET_KEYBOARD_PERSISTENT_LIST   0x2B
+#define PDUTYPE2_BITMAPCACHE_ERROR_PDU          0x2C
+#define PDUTYPE2_SET_KEYBOARD_IME_STATUS        0x2D
+#define PDUTYPE2_OFFSCRCACHE_ERROR_PDU          0x2E
+#define PDUTYPE2_SET_ERROR_INFO_PDU             0x2F
+#define PDUTYPE2_DRAWNINEGRID_ERROR_PDU         0x30
+#define PDUTYPE2_DRAWGDIPLUS_ERROR_PDU          0x31
+#define PDUTYPE2_ARC_STATUS_PDU                 0x32
+#define PDUTYPE2_STATUS_INFO_PDU                0x32
+#define PDUTYPE2_MONITOR_LAYOUT_PDU             0x37
 
 /* Control PDU Data: action (MS-RDPBCGR 2.2.1.15.1) */
 /* TODO: to be renamed */

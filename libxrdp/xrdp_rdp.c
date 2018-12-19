@@ -830,7 +830,7 @@ xrdp_rdp_send_data_update_sync(struct xrdp_rdp *self)
     }
     else /* slowpath */
     {
-        if (xrdp_rdp_send_data(self, s, RDP_DATA_PDU_UPDATE) != 0)
+        if (xrdp_rdp_send_data(self, s, PDUTYPE2_UPDATE) != 0)
         {
             DEBUG(("out xrdp_rdp_send_data_update_sync error"));
             free_stream(s);
@@ -996,7 +996,7 @@ xrdp_rdp_send_control(struct xrdp_rdp *self, int action)
     out_uint32_le(s, 1002); /* control id */
     s_mark_end(s);
 
-    if (xrdp_rdp_send_data(self, s, RDP_DATA_PDU_CONTROL) != 0)
+    if (xrdp_rdp_send_data(self, s, PDUTYPE2_CONTROL) != 0)
     {
         free_stream(s);
         return 1;
@@ -1180,7 +1180,7 @@ xrdp_rdp_send_disconnect_reason(struct xrdp_rdp *self, int reason)
     out_uint32_le(s, reason);
     s_mark_end(s);
 
-    if (xrdp_rdp_send_data(self, s, RDP_DATA_PDU_DISCONNECT) != 0)
+    if (xrdp_rdp_send_data(self, s, PDUTYPE2_SET_ERROR_INFO_PDU) != 0)
     {
         free_stream(s);
         return 1;
@@ -1225,13 +1225,13 @@ xrdp_rdp_process_data(struct xrdp_rdp *self, struct stream *s)
 
     switch (data_type)
     {
-        case RDP_DATA_PDU_POINTER: /* 27(0x1b) */
+        case PDUTYPE2_POINTER: /* 27(0x1b) */
             xrdp_rdp_process_data_pointer(self, s);
             break;
-        case RDP_DATA_PDU_INPUT: /* 28(0x1c) */
+        case PDUTYPE2_INPUT: /* 28(0x1c) */
             xrdp_rdp_process_data_input(self, s);
             break;
-        case RDP_DATA_PDU_CONTROL: /* 20(0x14) */
+        case PDUTYPE2_CONTROL: /* 20(0x14) */
             xrdp_rdp_process_data_control(self, s);
             break;
         case RDP_DATA_PDU_SYNCHRONISE: /* 31(0x1f) */
@@ -1252,7 +1252,7 @@ xrdp_rdp_process_data(struct xrdp_rdp *self, struct stream *s)
             /* really wants to disconnect */
             xrdp_rdp_send_disconnect_query_response(self); /* send a 37 back */
             break;
-        case RDP_DATA_PDU_FONT2: /* 39(0x27) */
+        case PDUTYPE2_FONTLIST: /* 39(0x27) */
             xrdp_rdp_process_data_font(self, s);
             break;
         case 56: /* PDUTYPE2_FRAME_ACKNOWLEDGE 0x38 */
@@ -1337,7 +1337,7 @@ xrdp_rdp_send_session_info(struct xrdp_rdp *self, const char *data,
 
     s_mark_end(s);
 
-    if (xrdp_rdp_send_data(self, s, RDP_DATA_PDU_LOGON) != 0)
+    if (xrdp_rdp_send_data(self, s, PDUTYPE2_SAVE_SESSION_INFO) != 0)
     {
         free_stream(s);
         return 1;

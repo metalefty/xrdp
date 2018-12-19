@@ -337,7 +337,7 @@ libxrdp_send_palette(struct xrdp_session *session, int *palette)
     else
     {
        xrdp_rdp_send_data((struct xrdp_rdp *)session->rdp, s,
-                           RDP_DATA_PDU_UPDATE);
+                           PDUTYPE2_UPDATE);
     }
     free_stream(s);
 
@@ -376,7 +376,7 @@ libxrdp_send_bell(struct xrdp_session *session)
     out_uint32_le(s, 100); /* duration (ms) */
     s_mark_end(s);
 
-    if (xrdp_rdp_send_data((struct xrdp_rdp *)session->rdp, s, RDP_DATA_PDU_PLAY_SOUND) != 0)
+    if (xrdp_rdp_send_data((struct xrdp_rdp *)session->rdp, s, PDUTYPE2_PLAY_SOUND) != 0)
     {
         free_stream(s);
         return 1;
@@ -559,7 +559,7 @@ libxrdp_send_bitmap(struct xrdp_session *session, int width, int height,
             p_num_updates[0] = num_updates;
             p_num_updates[1] = num_updates >> 8;
             xrdp_rdp_send_data((struct xrdp_rdp *)session->rdp, s,
-                               RDP_DATA_PDU_UPDATE);
+                               PDUTYPE2_UPDATE);
 
             if (total_bufsize > MAX_BITMAP_BUF_SIZE)
             {
@@ -663,7 +663,7 @@ libxrdp_send_bitmap(struct xrdp_session *session, int width, int height,
 
                 s_mark_end(s);
                 xrdp_rdp_send_data((struct xrdp_rdp *)session->rdp, s,
-                                   RDP_DATA_PDU_UPDATE);
+                                   PDUTYPE2_UPDATE);
                 i = i + lines_sending;
             }
         }
@@ -825,7 +825,7 @@ libxrdp_send_pointer(struct xrdp_session *session, int cache_idx,
     else
     {
         xrdp_rdp_send_data((struct xrdp_rdp *)session->rdp, s,
-                          RDP_DATA_PDU_POINTER);
+                          PDUTYPE2_POINTER);
     }
     free_stream(s);
     return 0;
@@ -855,7 +855,7 @@ libxrdp_set_pointer(struct xrdp_session *session, int cache_idx)
     {
         LLOGLN(10, ("libxrdp_send_pointer: slowpath"));
         xrdp_rdp_init_data((struct xrdp_rdp *)session->rdp, s);
-        out_uint16_le(s, RDP_POINTER_CACHED);
+        out_uint16_le(s, TS_PTRMSGTYPE_CACHED);
         out_uint16_le(s, 0); /* pad */
     }
 
@@ -874,7 +874,7 @@ libxrdp_set_pointer(struct xrdp_session *session, int cache_idx)
     else
     {
         xrdp_rdp_send_data((struct xrdp_rdp *)session->rdp, s,
-                            RDP_DATA_PDU_POINTER);
+                            PDUTYPE2_POINTER);
     }
     free_stream(s);
     return 0;
