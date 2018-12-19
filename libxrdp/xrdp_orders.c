@@ -127,7 +127,7 @@ xrdp_orders_init(struct xrdp_orders *self)
             {
                 return 1;
             }
-            out_uint16_le(self->out_s, RDP_UPDATE_ORDERS);
+            out_uint16_le(self->out_s, UPDATETYPE_ORDERS);
             out_uint8s(self->out_s, 2); /* pad */
             self->order_count_ptr = self->out_s->p;
             out_uint8s(self->out_s, 2); /* number of orders, set later */

@@ -813,7 +813,7 @@ xrdp_rdp_send_data_update_sync(struct xrdp_rdp *self)
             free_stream(s);
             return 1;
         }
-        out_uint16_le(s, RDP_UPDATE_SYNCHRONIZE);
+        out_uint16_le(s, UPDATETYPE_SYNCHRONIZE);
         out_uint16_le(s, 0); /* pad */
     }
 
@@ -1017,15 +1017,15 @@ xrdp_rdp_process_data_control(struct xrdp_rdp *self, struct stream *s)
     in_uint8s(s, 2); /* user id */
     in_uint8s(s, 4); /* control id */
 
-    if (action == RDP_CTL_REQUEST_CONTROL)
+    if (action == CTRLACTION_REQUEST_CONTROL)
     {
-        DEBUG(("xrdp_rdp_process_data_control got RDP_CTL_REQUEST_CONTROL"));
+        DEBUG(("xrdp_rdp_process_data_control got CTRLACTION_REQUEST_CONTROL"));
         DEBUG(("xrdp_rdp_process_data_control calling xrdp_rdp_send_synchronise"));
         xrdp_rdp_send_synchronise(self);
-        DEBUG(("xrdp_rdp_process_data_control sending RDP_CTL_COOPERATE"));
-        xrdp_rdp_send_control(self, RDP_CTL_COOPERATE);
-        DEBUG(("xrdp_rdp_process_data_control sending RDP_CTL_GRANT_CONTROL"));
-        xrdp_rdp_send_control(self, RDP_CTL_GRANT_CONTROL);
+        DEBUG(("xrdp_rdp_process_data_control sending CTRLACTION_COOPERATE"));
+        xrdp_rdp_send_control(self, CTRLACTION_COOPERATE);
+        DEBUG(("xrdp_rdp_process_data_control sending CTRLACTION_GRANTED_CONTROL"));
+        xrdp_rdp_send_control(self, CTRLACTION_GRANTED_CONTROL);
     }
     else
     {

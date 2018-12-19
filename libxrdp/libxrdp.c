@@ -311,7 +311,7 @@ libxrdp_send_palette(struct xrdp_session *session, int *palette)
     }
 
     /* TS_UPDATE_PALETTE_DATA */
-    out_uint16_le(s, RDP_UPDATE_PALETTE);
+    out_uint16_le(s, UPDATETYPE_PALETTE);
     out_uint16_le(s, 0);
     out_uint16_le(s, 256); /* # of colors */
     out_uint16_le(s, 0);
@@ -455,7 +455,7 @@ libxrdp_send_bitmap(struct xrdp_session *session, int width, int height,
             total_bufsize = 0;
             num_updates = 0;
             xrdp_rdp_init_data((struct xrdp_rdp *)session->rdp, s);
-            out_uint16_le(s, RDP_UPDATE_BITMAP);
+            out_uint16_le(s, UPDATETYPE_BITMAP);
             p_num_updates = s->p;
             out_uint8s(s, 2); /* num_updates set later */
 
@@ -597,7 +597,7 @@ libxrdp_send_bitmap(struct xrdp_session *session, int width, int height,
 
                 p += server_line_bytes * lines_sending;
                 xrdp_rdp_init_data((struct xrdp_rdp *)session->rdp, s);
-                out_uint16_le(s, RDP_UPDATE_BITMAP);
+                out_uint16_le(s, UPDATETYPE_BITMAP);
                 out_uint16_le(s, 1); /* num updates */
                 out_uint16_le(s, x);
                 out_uint16_le(s, y + i);

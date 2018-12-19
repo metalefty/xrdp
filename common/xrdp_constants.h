@@ -540,18 +540,16 @@
 #define LICENCE_TAG_HOST               0x0010 /* BB_CLIENT_MACHINE_NAME_BLOB */
 
 /* Control PDU Data: action (MS-RDPBCGR 2.2.1.15.1) */
-/* TODO: to be renamed */
-#define RDP_CTL_REQUEST_CONTROL        1 /* CTRLACTION_REQUEST_CONTROL */
-#define RDP_CTL_GRANT_CONTROL          2
-#define RDP_CTL_DETACH                 3
-#define RDP_CTL_COOPERATE              4
+#define CTRLACTION_REQUEST_CONTROL     0x0001
+#define CTRLACTION_GRANTED_CONTROL     0x0002
+#define CTRLACTION_DETACH              0x0003
+#define CTRLACTION_COOPERATE           0x0004
 
 /* Slow-Path Graphics Update: updateType (MS-RDPBCGR 2.2.9.1.1.3.1) */
-/* TODO: to be renamed */
-#define RDP_UPDATE_ORDERS              0
-#define RDP_UPDATE_BITMAP              1
-#define RDP_UPDATE_PALETTE             2
-#define RDP_UPDATE_SYNCHRONIZE         3
+#define UPDATETYPE_ORDERS              0x0000
+#define UPDATETYPE_BITMAP              0x0001
+#define UPDATETYPE_PALETTE             0x0002
+#define UPDATETYPE_SYNCHRONIZE         0x0003
 
 /* Server Pointer Update PDU: messageType (MS-RDPBCGR 2.2.9.1.1.4) */
 #define TS_PTRMSGTYPE_SYSTEM           0x0001
