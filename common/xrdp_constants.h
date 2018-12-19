@@ -378,11 +378,9 @@
 #define RDP_LOGON_RAIL                 0x8000
 
 /* Compression Flags (MS-RDPBCGR 3.1.8.2.1) */
-/* TODO: to be renamed, not used anywhere */
-#define RDP_MPPC_COMPRESSED            0x20
-#define RDP_MPPC_RESET                 0x40
-#define RDP_MPPC_FLUSH                 0x80
-#define RDP_MPPC_DICT_SIZE             8192 /* RDP 4.0 | MS-RDPBCGR 3.1.8 */
+#define PACKET_COMPRESSED               0x20
+#define PACKET_AT_FRONT                 0x40
+#define PACKET_FLUSHED                  0x80
 
 /* Drawing Order: controlFlags (MS-RDPEGDI 2.2.2.2.1, ) */
 #define TS_STANDARD                     0x01
