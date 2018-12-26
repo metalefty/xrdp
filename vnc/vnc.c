@@ -1319,16 +1319,37 @@ lib_mod_connect(struct vnc *v)
 
     if (error == 0)
     {
-        /* SetEncodings */
         init_stream(s, 8192);
-        out_uint8(s, 2);
-        out_uint8(s, 0);
-        out_uint16_be(s, 4);
+        out_uint8(s, 2);     /* SetEncodings */
+        out_uint8(s, 0);     /* padding */
+        out_uint16_be(s, 5); /* number of encodings */
         out_uint32_be(s, 0); /* raw */
         out_uint32_be(s, 1); /* copy rect */
         out_uint32_be(s, 0xffffff11); /* cursor */
         out_uint32_be(s, 0xffffff21); /* desktop size */
+        out_uint32_be(s, 0xfffffecc); /* extended desktop size */
         v->server_msg(v, "VNC sending encodings", 0);
+        s_mark_end(s);
+        error = trans_force_write_s(v->trans, s);
+    }
+
+    if (error == 0)
+    {
+        init_stream(s, 8192);
+        out_uint8(s, 251); /* SetDesktopSize, TODO: to be constified */
+        out_uint8(s, 0); /* padding */
+        out_uint16_be(s, v->server_width);
+        out_uint16_be(s, v->server_height);
+        out_uint8(s, 1); /* num screen */
+        out_uint8(s, 0); /* padding */
+        /* TODO: multimon support */
+        out_uint32_be(s, 1); /* screen id */
+        out_uint16_be(s, 0); /* offset x */
+        out_uint16_be(s, 0); /* offset y */
+        out_uint16_be(s, v->server_width);
+        out_uint16_be(s, v->server_height);
+        out_uint32_be(s, 0); /* flags, what's this? fill with 0 so far */
+        v->server_msg(v, "VNC sending desktop size", 0);
         s_mark_end(s);
         error = trans_force_write_s(v->trans, s);
     }
