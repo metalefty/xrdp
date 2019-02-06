@@ -59,6 +59,7 @@
 #define ENCODING_ZRLE                     16
 #define ENCODING_CURSOR_PSEUDO          -239
 #define ENCODING_DESKTOP_SIZE_PSEUDO    -223
+#define ENCODING_EXTENDED_DESKTOP_SIZE  -308
 
 struct vnc
 {

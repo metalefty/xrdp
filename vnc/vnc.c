@@ -652,7 +652,7 @@ lib_framebuffer_update(struct vnc *v)
             in_uint16_be(s, cy);
             in_uint32_be(s, encoding);
 
-            if (encoding == 0) /* raw */
+            if (encoding == ENCODING_RAW)
             {
                 need_size = cx * cy * Bpp;
                 init_stream(pixel_s, need_size);
@@ -663,7 +663,7 @@ lib_framebuffer_update(struct vnc *v)
                     error = v->server_paint_rect(v, x, y, cx, cy, pixel_s->data, cx, cy, 0, 0);
                 }
             }
-            else if (encoding == 1) /* copy rect */
+            else if (encoding == ENCODING_COPYRECT)
             {
                 init_stream(s, 8192);
                 error = trans_force_read_s(v->trans, s, 4);
@@ -675,7 +675,7 @@ lib_framebuffer_update(struct vnc *v)
                     error = v->server_screen_blt(v, x, y, cx, cy, srcx, srcy);
                 }
             }
-            else if (encoding == 0xffffff11) /* cursor */
+            else if (encoding == ENCODING_CURSOR_PSEUDO)
             {
                 g_memset(cursor_data, 0, 32 * (32 * 3));
                 g_memset(cursor_mask, 0, 32 * (32 / 8));
@@ -720,11 +720,26 @@ lib_framebuffer_update(struct vnc *v)
                     error = v->server_set_cursor(v, x, y, cursor_data, cursor_mask);
                 }
             }
-            else if (encoding == 0xffffff21) /* desktop size */
+            else if (encoding == ENCODING_DESKTOP_SIZE_PSEUDO)
             {
                 v->mod_width = cx;
                 v->mod_height = cy;
                 error = v->server_reset(v, cx, cy, v->mod_bpp);
+            }
+            else if (encoding == ENCODING_EXTENDED_DESKTOP_SIZE)
+            {
+                init_stream(s, 8192);
+                error = trans_force_read_s(v->trans, s, 4);
+
+                if (error == 0)
+                {
+                    int number_of_screens = 0;
+                    in_uint8(s, number_of_screens);
+                    in_uint8s(s, 1); /* pad */
+
+                    g_snprintf(text, "number_of_screens=%d", number_of_screens);
+
+                }
             }
             else
             {
@@ -1319,15 +1334,16 @@ lib_mod_connect(struct vnc *v)
 
     if (error == 0)
     {
+        /* SetEncodings */
         init_stream(s, 8192);
-        out_uint8(s, 2);     /* SetEncodings */
+        out_uint8(s, msgTypeSetEncodings);
         out_uint8(s, 0);     /* padding */
         out_uint16_be(s, 5); /* number of encodings */
-        out_uint32_be(s, 0); /* raw */
-        out_uint32_be(s, 1); /* copy rect */
-        out_uint32_be(s, 0xffffff11); /* cursor */
-        out_uint32_be(s, 0xffffff21); /* desktop size */
-        out_uint32_be(s, 0xfffffecc); /* extended desktop size */
+        out_uint32_be(s, ENCODING_RAW);
+        out_uint32_be(s, ENCODING_COPYRECT);
+        out_uint32_be(s, ENCODING_CURSOR_PSEUDO);
+        out_uint32_be(s, ENCODING_DESKTOP_SIZE_PSEUDO);
+        out_uint32_be(s, ENCODING_EXTENDED_DESKTOP_SIZE);
         v->server_msg(v, "VNC sending encodings", 0);
         s_mark_end(s);
         error = trans_force_write_s(v->trans, s);
@@ -1336,7 +1352,7 @@ lib_mod_connect(struct vnc *v)
     if (error == 0)
     {
         init_stream(s, 8192);
-        out_uint8(s, 251); /* SetDesktopSize, TODO: to be constified */
+        out_uint8(s, msgTypeSetDesktopSize);
         out_uint8(s, 0); /* padding */
         out_uint16_be(s, v->server_width);
         out_uint16_be(s, v->server_height);
