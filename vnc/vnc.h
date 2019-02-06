@@ -26,6 +26,40 @@
 
 #define CURRENT_MOD_VER 3
 
+/*
+ * message types from TigerVNC
+ */
+
+/* server to client */
+#define msgTypeFramebufferUpdate              0
+#define msgTypeSetColourMapEntries            1
+#define msgTypeBell                           2
+#define msgTypeServerCutText                  3
+#define msgTypeEndOfContinuousUpdates       150
+#define msgTypeServerFence                  248
+
+/* client to server */
+#define msgTypeSetPixelFormat                 0
+#define msgTypeFixColourMapEntries            1
+#define msgTypeSetEncodings                   2
+#define msgTypeFramebufferUpdateRequest       3
+#define msgTypeKeyEvent                       4
+#define msgTypePointerEvent                   5
+#define msgTypeClientCutText                  6
+#define msgTypeEnableContinuousUpdates      150
+#define msgTypeClientFence                  248
+#define msgTypeSetDesktopSize               251
+
+/* RFC6143 7.7 Encodings */
+#define ENCODING_RAW                       0
+#define ENCODING_COPYRECT                  1
+#define ENCODING_RRE                       2
+#define ENCODING_HEXTILE                   5
+#define ENCODING_TRLE                     15
+#define ENCODING_ZRLE                     16
+#define ENCODING_CURSOR_PSEUDO          -239
+#define ENCODING_DESKTOP_SIZE_PSEUDO    -223
+
 struct vnc
 {
   int size; /* size of this struct */
