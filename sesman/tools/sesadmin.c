@@ -198,8 +198,10 @@ print_session(const struct SCP_DISCONNECTED_SESSION *s)
     printf("\tSession type: %d\n", s->type);
     printf("\tScreen size: %dx%d, color depth %d\n",
            s->width, s->height, s->bpp);
+#if 0 /* not implented yet */
     printf("\tIdle time: %d day(s) %d hour(s) %d minute(s)\n",
            s->idle_days, s->idle_hours, s->idle_minutes);
+#endif
     printf("\tConnected: %04d/%02d/%02d %02d:%02d\n",
            s->conn_year, s->conn_month, s->conn_day, s->conn_hour,
            s->conn_minute);
