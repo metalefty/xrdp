@@ -104,7 +104,6 @@ session_get_bydata(const char *name, int width, int height, int bpp, int type,
     switch (type)
     {
         case SCP_SESSION_TYPE_XVNC: /* 0 */
-        case SCP_SESSION_TYPE_RESIZABLE_XVNC:
             type = SESMAN_SESSION_TYPE_XVNC; /* 2 */
             break;
         case SCP_SESSION_TYPE_XRDP: /* 1 */
