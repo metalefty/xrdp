@@ -1869,10 +1869,6 @@ lib_mod_set_param(struct vnc *v, const char *name, const char *value)
         v->got_guid = 1;
         g_memcpy(v->guid, value, 16);
     }
-    else if (g_strcasecmp(name, "code") == 0)
-    {
-        v->resizeable_mode = (g_atoi(value) == 1);
-    }
     else if (g_strcasecmp(name, "client_info") == 0)
     {
         const struct xrdp_client_info *client_info =
