@@ -47,7 +47,6 @@
  * XRDP sends this command to let sesman verify if the user is allowed
  * to use the gateway */
 #define SCP_GW_AUTHENTICATION              0x04
-#define SCP_SESSION_TYPE_RESIZABLE_XVNC    0x05
 
 #define SCP_ADDRESS_TYPE_IPV4 0x00
 #define SCP_ADDRESS_TYPE_IPV6 0x01
