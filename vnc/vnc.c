@@ -1733,16 +1733,8 @@ lib_mod_connect(struct vnc *v)
         out_uint32_be(s, ENC_RAW);
         out_uint32_be(s, ENC_COPY_RECT);
         out_uint32_be(s, ENC_CURSOR);
-        if (v->resizeable_mode)
-        {
-            v->server_msg(v, "VNC with ExtendedDesktopSize pseudo-encoding", 0);
-            out_uint32_be(s, ENC_EXTENDED_DESKTOP_SIZE);
-        }
-        else
-        {
-            v->server_msg(v, "VNC with DesktopSize pseudo-encoding", 0);
-            out_uint32_be(s, ENC_DESKTOP_SIZE);
-        }
+        v->server_msg(v, "VNC with ExtendedDesktopSize pseudo-encoding", 0);
+        out_uint32_be(s, ENC_EXTENDED_DESKTOP_SIZE);
         v->server_msg(v, "VNC sending encodings", 0);
         s_mark_end(s);
         error = trans_force_write_s(v->trans, s);
