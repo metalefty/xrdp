@@ -1585,7 +1585,7 @@ lib_mod_connect(struct vnc *v)
         /* In resizeable mode, we're not interested at this stage how
          * big the X server is, as we're going to go for the size set
          * by the "client_info" param */
-        if (!v->resizeable_mode)
+        if (1 || !v->resizeable_mode)
         {
             in_uint16_be(s, v->mod_width);
             in_uint16_be(s, v->mod_height);
