@@ -210,7 +210,7 @@ g_printf(const char *format, ...)
     va_list ap;
 
     va_start(ap, format);
-    vfprintf(stdout, format, ap);
+    vprintf(format, ap);
     va_end(ap);
 }
 
@@ -246,7 +246,7 @@ g_writeln(const char *format, ...)
     va_list ap;
 
     va_start(ap, format);
-    vfprintf(stdout, format, ap);
+    vprintf(format, ap);
     va_end(ap);
 #if defined(_WIN32)
     g_printf("\r\n");
@@ -262,7 +262,7 @@ g_write(const char *format, ...)
     va_list ap;
 
     va_start(ap, format);
-    vfprintf(stdout, format, ap);
+    vprintf(format, ap);
     va_end(ap);
 }
 
