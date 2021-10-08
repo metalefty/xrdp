@@ -7,12 +7,12 @@ and now developed community-driven.
 
  (most active in past 5 years):
 
- |Name|Call me|GitHub account|Role in project|Other affiliation|
- |-|-|-|-|-|
- |Jay Sorg||@jsorg71|Founder, Owner||
- |Koichiro Iwao|meta, metalefty|@metalefty|Release management, Developer|FreeBSD Project|
- |matt335672| |@matt335672|Developer, Issue triage||
- |Idan Freiberg||@speidy|Developer||
+ |Name|GitHub account|Role in project|
+ |-|-|-|
+ |Jay Sorg|@jsorg71|Founder, Owner|
+ |Koichiro Iwao (call me meta, metalefty)|@metalefty|Release management, Developer|
+ |matt335672|@matt335672|Developer, Issue triage|
+ |Idan Freiberg|@speidy|Developer|
 
 ## Organization Contributors
 
@@ -26,9 +26,7 @@ and now developed community-driven.
  ## Contributors
 
 If you think you made significant contribution, feel free to make a pull
-request to add yourself to the contributors list. Here "contribution"
-means not only writing code but also includes activities such as
-answering questions, writing documents, testing pull requests, etc.
+request to add yourself to the contributors list.
 
  <!--
  The name does not have to be a legal name. You can fill out your most
