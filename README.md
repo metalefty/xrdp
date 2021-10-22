@@ -23,6 +23,11 @@ RDP transport is encrypted using TLS by default.
 
 ![demo](https://github.com/neutrinolabs/xrdp/raw/gh-pages/xrdp_demo.gif)
 
+## Authors
+
+xrdp and its auxuary softwares are originally developed by [Jay Sorg](https://github.com/jsorg71)
+and now developed by community-driven.  See [AUTHORS.md](AUTHORS.md) for details.
+
 ## Features
 
 ### Remote Desktop Access
