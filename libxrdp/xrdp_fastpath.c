@@ -174,7 +174,7 @@ xrdp_fastpath_process_EVENT_SCANCODE(struct xrdp_fastpath *self,
         return 1;
     }
     in_uint8(s, code); /* keyCode (1 byte) */
-    LOG_DEVEL(LOG_LEVEL_TRACE, "Received [MS-RDPBCGR] TS_FP_KEYBOARD_EVENT "
+    LOG(LOG_LEVEL_DEBUG, "Received [MS-RDPBCGR] TS_FP_KEYBOARD_EVENT "
               "eventHeader.eventFlags 0x%2.2x, eventHeader.eventCode (ignored), "
               "keyCode %d", eventFlags, code);
 
