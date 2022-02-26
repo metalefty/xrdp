@@ -1017,7 +1017,7 @@ xrdp_rdp_process_data_input(struct xrdp_rdp *self, struct stream *s)
                           "toggleFlags 0x%8.8x", ((param2 << 16) | param1));
                 break;
             case RDP_INPUT_SCANCODE:
-                LOG_DEVEL(LOG_LEVEL_TRACE, "With field [MS-RDPBCGR] TS_INPUT_EVENT - TS_KEYBOARD_EVENT "
+                LOG(LOG_LEVEL_DEBUG, "With field [MS-RDPBCGR] TS_INPUT_EVENT - TS_KEYBOARD_EVENT "
                           "keyboardFlags 0x%4.4x, keyCode %d", device_flags, param1);
                 break;
             case RDP_INPUT_UNICODE:
