@@ -7,26 +7,36 @@
 
 #include "xrdp.h"
 
+
+#define DEBUG printf("DEBUG: %s:%d\n", __FILE__, __LINE__);
+
 START_TEST(test_keymap_load__ini_vs_toml)
 {
     struct xrdp_keymap *keymap_ini;
     struct xrdp_keymap *keymap_toml;
     struct xrdp_keymap *keymap_zero;
 
+    DEBUG
     keymap_ini = g_malloc(sizeof(struct xrdp_keymap), 1);
     keymap_toml = g_malloc(sizeof(struct xrdp_keymap), 1);
     keymap_zero = g_malloc(sizeof(struct xrdp_keymap), 1);
 
+    DEBUG
     km_load_file("../../instfiles/km-00000411.ini", keymap_ini);
+    DEBUG
     km_load_file_toml("../../instfiles/km-00000411.toml", keymap_toml);
 
     /* check if keymap is loaded */
+    DEBUG
     ck_assert_mem_ne(keymap_zero, keymap_ini, sizeof(struct xrdp_keymap));
+    DEBUG
     ck_assert_mem_ne(keymap_zero, keymap_toml, sizeof(struct xrdp_keymap));
 
     /* check TOML loader returns the identical result to INI loader */
     /* NOTE: For strict comparsion, we should create a compare function */
-    //ck_assert_mem_eq(keymap_ini, keymap_toml, sizeof(struct xrdp_keymap));
+    DEBUG
+    ck_assert_mem_eq(keymap_ini, keymap_toml, sizeof(struct xrdp_keymap));
+    DEBUG
 
 }
 END_TEST
