@@ -3,6 +3,7 @@
 #endif
 
 
+#include <stdio.h>
 #include "test_xrdp.h"
 
 #include "xrdp.h"
