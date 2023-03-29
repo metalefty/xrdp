@@ -5,3 +5,5 @@ libtoml_la_SOURCES = toml.c toml.h
 libtoml_la_LDFLAGS = -version-info 1:0
 
 include_headers = toml.h
+
+EXTRA_DIST = LICENSE
