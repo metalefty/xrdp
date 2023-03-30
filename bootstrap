@@ -43,14 +43,9 @@ then
   git submodule update --init ulalaca
 fi
 
-if ! test -f third_party/tomlc99/LICENSE
+if ! test -f third_party/tomlc99/src/LICENSE
 then
-  git submodule update --init third_party/tomlc99
-fi
-
-if ! test -f third_party/tomlc99/Makefile.am
-then
-  cp third_party/Makefile.am.tomlc99 third_party/tomlc99/Makefile.am
+  git submodule update --init third_party/tomlc99/src
 fi
 
 autoreconf -fvi
