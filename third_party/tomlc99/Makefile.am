@@ -16,13 +16,13 @@ libtoml_la_LDFLAGS = -version-info 1:0
 include_headers = toml.h
 
 toml.h : src/toml.h
-	ln $< .
+	ln src/toml.h .
 
 toml.c : src/toml.c toml.h
-	ln $< .
+	ln src/toml.c .
 
 LICENSE : src/LICENSE
-	ln $< .
+	ln src/LICENSE .
 
 clean::
 	rm -f toml.h toml.c LICENSE
