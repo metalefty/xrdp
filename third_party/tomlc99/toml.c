@@ -1913,8 +1913,10 @@ toml_array_t *toml_array_in(const toml_table_t *tab, const char *key) {
 toml_table_t *toml_table_in(const toml_table_t *tab, const char *key) {
   int i; 
   DEBUG
+  printf("ntab=%d\n", tab->ntab);
   for (i = 0; i < tab->ntab; i++) {
       DEBUG
+          print("i=%d\n", i);
     if (0 == strcmp(key, tab->tab[i]->key)) {
        DEBUG
       return tab->tab[i];
