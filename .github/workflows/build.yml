@@ -146,7 +146,7 @@ jobs:
         run: make -j $(nproc)
       - name: unittests
         if: ${{ matrix.unittests }}
-        run: make check -j $(nproc)
+        run: make check -j $(nproc) || cat -n  ${{ github.workspace }}/xrdp-*/_build/sub/tests/xrdp/test-suite.log
       - name: distcheck
         id: dist_check
         if: ${{ matrix.DISTCHECK }}
