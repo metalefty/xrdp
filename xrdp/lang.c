@@ -244,6 +244,7 @@ km_read_section_toml(toml_table_t *conf, const char *section_name, struct xrdp_k
         return 1;
     }
     DEBUG
+    printf("section_name=%s\n", section_name);
     modifier = toml_table_in(conf, section_name);
     DEBUG
     if (!modifier)
