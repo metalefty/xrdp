@@ -35,6 +35,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define DEBUG printf("DEBUG: %s:%d\n", __FILE__, __LINE__);
+
 static void *(*ppmalloc)(size_t) = malloc;
 static void (*ppfree)(void *) = free;
 
@@ -1909,10 +1911,14 @@ toml_array_t *toml_array_in(const toml_table_t *tab, const char *key) {
 }
 
 toml_table_t *toml_table_in(const toml_table_t *tab, const char *key) {
-  int i;
+  int i; 
+  DEBUG
   for (i = 0; i < tab->ntab; i++) {
-    if (0 == strcmp(key, tab->tab[i]->key))
+      DEBUG
+    if (0 == strcmp(key, tab->tab[i]->key)) {
+       DEBUG
       return tab->tab[i];
+    }
   }
   return 0;
 }
