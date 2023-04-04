@@ -23,9 +23,9 @@ START_TEST(test_keymap_load__ini_vs_toml)
     keymap_zero = g_malloc(sizeof(struct xrdp_keymap), 1);
 
     DEBUG
-    km_load_file("../../instfiles/km-00000411.ini", keymap_ini);
+    km_load_file("../../instfiles/km-00000409.ini", keymap_ini);
     DEBUG
-    km_load_file_toml("../../instfiles/km-00000411.toml", keymap_toml);
+    km_load_file_toml("../../instfiles/km-00000409.toml", keymap_toml);
 
     /* check if keymap is loaded */
     DEBUG
