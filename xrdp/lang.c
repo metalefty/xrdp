@@ -390,8 +390,8 @@ km_load_file_toml(const char *filename, struct xrdp_keymap *keymap)
         return 1;
     }
     DEBUG
-    km_read_section_toml(conf, "noshift", keymap->keys_noshift);
     km_read_section_toml(conf, "shift", keymap->keys_shift);
+    km_read_section_toml(conf, "noshift", keymap->keys_noshift);
     km_read_section_toml(conf, "altgr", keymap->keys_altgr);
     km_read_section_toml(conf, "shiftaltgr", keymap->keys_shiftaltgr);
     km_read_section_toml(conf, "capslock", keymap->keys_capslock);
