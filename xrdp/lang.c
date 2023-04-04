@@ -28,6 +28,7 @@
 #include "log.h"
 #include "string_calls.h"
 #include "toml.h"
+#define DEBUG printf("DEBUG: %s:%d\n", __FILE__, __LINE__);
 
 /* map for rdp to x11 scancodes
    code1 is regular scancode, code2 is extended scancode */
@@ -234,23 +235,23 @@ km_read_section_toml(toml_table_t *conf, const char *section_name, struct xrdp_k
 {
     toml_table_t *modifier; /* noshift, shift, altgr, ... */
     char keyname[8]; /* key8, key9, key10, ... */
-
+    DEBUG
     LOG(LOG_LEVEL_TRACE, "%s: processing section [%s]", __func__, section_name);
-
+    DEBUG
     if (!conf)
     {
         LOG(LOG_LEVEL_ERROR, "%s: failed to process section [%s]", __func__, section_name);
         return 1;
     }
-
+    DEBUG
     modifier = toml_table_in(conf, section_name);
-
+    DEBUG
     if (!modifier)
     {
         LOG(LOG_LEVEL_ERROR, "%s: section [%s] not found, skipping...", __func__, section_name);
         return 1;
     }
-
+    DEBUG
     for (int i = 0; i < 256; i++)
     {
         g_snprintf(keyname, sizeof(keyname), "key%d", i);
@@ -274,7 +275,7 @@ km_read_section_toml(toml_table_t *conf, const char *section_name, struct xrdp_k
         keyinfo[i].chr = chr.u.i;
         LOG(LOG_LEVEL_TRACE, "%s: key%d = [%d, %d]", __func__, i, (int) sym.u.i, (int) chr.u.i);
     }
-
+    DEBUG
     toml_free(modifier);
 
     return 0;
@@ -387,7 +388,7 @@ km_load_file_toml(const char *filename, struct xrdp_keymap *keymap)
         fclose(fp);
         return 1;
     }
-
+    DEBUG
     km_read_section_toml(conf, "noshift", keymap->keys_noshift);
     km_read_section_toml(conf, "shift", keymap->keys_shift);
     km_read_section_toml(conf, "altgr", keymap->keys_altgr);
