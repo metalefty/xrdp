@@ -50,8 +50,8 @@ jobs:
             feature_set: max
             arch: amd64
             os: ubuntu-latest
-            unittests: false
-            DISTCHECK: false
+            unittests: true
+            DISTCHECK: true 
 
           - CC: clang
             feature_set: max
@@ -85,7 +85,7 @@ jobs:
             feature_set: max
             arch: i386
             os: ubuntu-latest
-            unittests: false
+            unittests: true
             DISTCHECK: false
             name_extra: for 32-bit arch (legacy OS)
 
