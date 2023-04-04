@@ -230,7 +230,7 @@ km_read_section(int fd, const char *section_name, struct xrdp_key_info *keymap)
 
 /*****************************************************************************/
 static int
-km_read_section_toml(toml_table_t *conf, const char *section_name, struct xrdp_key_info *keyinfo)
+km_read_section_toml(const toml_table_t *conf, const char *section_name, struct xrdp_key_info *keyinfo)
 {
     toml_table_t *modifier; /* noshift, shift, altgr, ... */
     char keyname[8]; /* key8, key9, key10, ... */
