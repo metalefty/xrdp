@@ -8,6 +8,7 @@ After=network.target xrdp-sesman.service
 Type=exec
 EnvironmentFile=-@sysconfdir@/sysconfig/xrdp
 EnvironmentFile=-@sysconfdir@/default/xrdp
+RuntimeDirectory=xrdp
 ExecStart=@sbindir@/xrdp $XRDP_OPTIONS --nodaemon
 SystemCallArchitectures=native
 SystemCallFilter=@basic-io @file-system @io-event @ipc @network-io @process

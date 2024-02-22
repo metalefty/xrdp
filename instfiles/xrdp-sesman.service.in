@@ -9,6 +9,7 @@ BindsTo=xrdp.service
 Type=exec
 EnvironmentFile=-@sysconfdir@/sysconfig/xrdp
 EnvironmentFile=-@sysconfdir@/default/xrdp
+RuntimeDirectory=xrdp
 ExecStart=@sbindir@/xrdp-sesman $SESMAN_OPTIONS --nodaemon
 ExecReload=kill -HUP $MAINPID
 
