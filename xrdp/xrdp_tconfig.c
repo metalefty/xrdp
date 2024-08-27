@@ -217,8 +217,8 @@ static int tconfig_load_gfx_order(toml_table_t *tfile, struct xrdp_tconfig_gfx *
     toml_table_t *codec;
     toml_array_t *order;
 
-    if ((codec = toml_table_in(tfile, "codec") != (toml_table_t *) NULL) &&
-            (order = toml_array_in(codec, "order") != (toml_table_t *) NULL))
+    if ((int)(codec = toml_table_in(tfile, "codec") != NULL) &&
+            (int)(order = toml_array_in(codec, "order") != NULL))
     {
         for (int i = 0; ; i++)
         {
