@@ -10,8 +10,9 @@
 
 
 **xrdp** provides a graphical login to remote machines using Microsoft Remote
-Desktop Protocol (RDP). The **"x"** of xrdp is meant to mean whatever, not Xorg
-or X11.
+Desktop Protocol (RDP).
+
+The **"x"** of xrdp is meant to mean whatever, not Xorg or X11.
 
 xrdp accepts connections from a variety of RDP clients:
   * FreeRDP
