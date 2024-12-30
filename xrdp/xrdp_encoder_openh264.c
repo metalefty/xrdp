@@ -197,6 +197,7 @@ xrdp_encoder_openh264_encode(void *handle, int session, int left, int top,
                 encParamExt.iTargetBitrate = og->openh264_param[ct].TargetBitrate;
                 encParamExt.iMaxBitrate = og->openh264_param[ct].MaxBitrate;
                 encParamExt.fMaxFrameRate = og->openh264_param[ct].MaxFrameRate;
+                encParamExt.iMultipleThreadIdc = 4;
                 /* defaults to INCREASING_ID, Mac client needs CONSTANT_ID */
                 encParamExt.eSpsPpsIdStrategy = CONSTANT_ID;
                 slc = encParamExt.sSpatialLayers + 0;
