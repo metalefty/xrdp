@@ -209,6 +209,8 @@ xrdp_encoder_openh264_encode(void *handle, int session, int left, int top,
                              oe->openh264_enc_han, &encParamExt);
                 LOG(LOG_LEVEL_INFO, "xrdp_encoder_openh264_encode: "
                     "InitializeExt rv %d", status);
+                LOG(LOG_LEVEL_INFO, "xrdp_encoder_openh264_encode: "
+                    "threads=%d", encParamExt.iMultipleThreadIdc);
             }
             oe->yuvdata = g_new(char, (width + 16) * (height + 16) * 2);
             if (oe->yuvdata == NULL)
