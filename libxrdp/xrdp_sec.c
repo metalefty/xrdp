@@ -29,6 +29,12 @@
 #include "log.h"
 #include "string_calls.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#define MAYBE_UNUSED __attribute__((unused))
+#else
+#define MAYBE_UNUSED
+#endif
+
 /* some compilers need unsigned char to avoid warnings */
 static tui8 g_pad_54[40] =
 {
@@ -960,7 +966,8 @@ xrdp_sec_check_sig(struct xrdp_sec *self, const char *sig, int sig_len,
 
 /*****************************************************************************/
 /* Function to return a 64-bit int from an 64 bit signature */
-static uint64_t
+
+MAYBE_UNUSED static uint64_t
 sig64_to_uint64(const char sig[], int sig_len)
 {
     uint64_t rv;
